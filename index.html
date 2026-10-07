@@ -1,0 +1,2978 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="description" content="Tre blikk: eleven, hjemmet og skolen svarer hver for seg på de samme spørsmålene og ser hvor de ser det likt og ulikt. Ingen diagnoser, ingen lagring av svar.">
+<meta name="theme-color" content="#13232E">
+<title>Tre blikk</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2313232E'/%3E%3Ccircle cx='9' cy='16' r='5' fill='%23F2B705'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%23E57B67'/%3E%3Ccircle cx='23' cy='16' r='5' fill='%2357BFA1'/%3E%3C/svg%3E">
+<style>
+:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+/* Layout: én smal kolonne som en telefonapp. Værskalaen (torden til sol) er den eneste aksen og går igjen i spørsmål og resultat. */
+:root{
+  --sky:#E8EFF3; --paper:#FAFCFD; --wash:#DAE5EB; --line:#C2D1DA;
+  --ink:#13232E; --ink-2:#4B5F6C;
+  --sun:#F2B705; --on-sun:#13232E;
+  --home:#A93A2C; --on-home:#FFFFFF;
+  --school:#1D6B58; --on-school:#FFFFFF;
+  --rain:#2F6384; --cloud:#93A9B7; --cloud-2:#5E7686;
+  --font-display:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;
+  --font-body:"Atkinson Hyperlegible",Verdana,system-ui,sans-serif;
+  --r:14px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --sky:#0E1920; --paper:#16242E; --wash:#1E303C; --line:#2E424F;
+    --ink:#E9F1F5; --ink-2:#9FB3BF;
+    --sun:#F5C427; --on-sun:#13232E;
+    --home:#E57B67; --on-home:#13232E;
+    --school:#57BFA1; --on-school:#13232E;
+    --rain:#84B6D2; --cloud:#A9BECB; --cloud-2:#7C95A4;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --sky:#0E1920; --paper:#16242E; --wash:#1E303C; --line:#2E424F;
+  --ink:#E9F1F5; --ink-2:#9FB3BF;
+  --sun:#F5C427; --on-sun:#13232E;
+  --home:#E57B67; --on-home:#13232E;
+  --school:#57BFA1; --on-school:#13232E;
+  --rain:#84B6D2; --cloud:#A9BECB; --cloud-2:#7C95A4;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--sky);color:var(--ink);font-family:var(--font-body);font-size:17px;line-height:1.5}
+.wrap{max-width:660px;margin:0 auto;padding-inline:18px;padding-block:20px 48px;display:flex;flex-direction:column;gap:28px}
+h1,h2,h3{font-family:var(--font-display);text-wrap:balance;margin:0;line-height:1.12}
+h1{font-size:clamp(28px,7.4vw,38px);font-weight:800;letter-spacing:-.015em}
+h2{font-size:22px;font-weight:700}
+h3{font-size:17px;font-weight:700}
+p{margin:0}
+a{color:var(--rain)}
+:focus-visible{outline:3px solid var(--rain);outline-offset:2px}
+#app{display:flex;flex-direction:column;gap:28px;outline:none}
+section{display:flex;flex-direction:column;gap:12px}
+.muted{color:var(--ink-2)}
+.small{font-size:15px}
+.eyebrow{font-family:var(--font-display);font-weight:700;font-size:13px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-2)}
+
+/* språk med andre skrifttegn: ingen sperring, mer luft mellom linjene */
+html[lang="ar"] .eyebrow,html[lang="hi"] .eyebrow,html[lang="ar"] .ad-l,html[lang="hi"] .ad-l,html[lang="ar"] h1,html[lang="hi"] h1{letter-spacing:0}
+html[lang="ar"] h1,html[lang="ar"] h2,html[lang="ar"] h3,html[lang="hi"] h1,html[lang="hi"] h2,html[lang="hi"] h3{line-height:1.4}
+html[lang="zh-Hans"] h1,html[lang="zh-Hans"] h2,html[lang="zh-Hans"] h3{line-height:1.3;letter-spacing:0}
+html[lang="ar"] body{font-size:18px;line-height:1.7}
+html[lang="hi"] body{line-height:1.65}
+
+/* toppen */
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-weight:800;font-size:20px;background:none;border:0;color:var(--ink);padding:6px 0;cursor:pointer}
+.dots{display:flex}
+.dots i{width:16px;height:16px;border-radius:50%;border:2px solid var(--sky);margin-inline-start:-6px}
+.dots i:first-child{margin-inline-start:0;background:var(--sun)}
+.dots i:nth-child(2){background:var(--home)}
+.dots i:nth-child(3){background:var(--school)}
+.langpick{display:inline-flex;align-items:center;gap:6px;color:var(--ink-2);min-width:0}
+.langpick svg{flex:none}
+.langpick select{min-height:42px;max-width:160px;padding:6px 10px;border-radius:999px;border:2px solid var(--line);background:var(--paper);color:var(--ink);font:700 15px var(--font-body)}
+
+/* knapper */
+.btn{font:700 17px var(--font-body);min-height:48px;padding:10px 20px;border-radius:26px;border:2px solid var(--ink);background:var(--sun);color:var(--on-sun);cursor:pointer}
+.btn[disabled]{background:var(--wash);color:var(--ink-2);border-color:var(--line);cursor:not-allowed}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btnrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+
+/* merker for de tre rollene */
+.mk{display:inline-grid;place-items:center;flex:none;width:26px;height:26px;border:2px solid var(--paper)}
+.mk svg{display:block}
+.mk-E{background:var(--sun);color:var(--on-sun);border-radius:50%}
+.mk-H{background:var(--home);color:var(--on-home);border-radius:8px}
+.mk-S{background:var(--school);color:var(--on-school);border-radius:13px 13px 13px 3px}
+.mk.big{width:38px;height:38px;border-color:transparent}
+.mk-H.big{border-radius:11px}
+.mk-S.big{border-radius:19px 19px 19px 5px}
+
+/* innledning: vilkår som en voksen bekrefter */
+.terms{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:16px}
+.terms li{display:flex;flex-direction:column;gap:2px;max-width:62ch}
+.terms b{font-family:var(--font-display);font-size:19px;line-height:1.25}
+.agree{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:16px;gap:14px}
+
+/* forside */
+.hero{gap:14px}
+.lead{font-size:18px;max-width:58ch}
+.sample{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:14px 14px 12px;gap:8px}
+.seg{display:flex;flex-wrap:wrap;gap:8px}
+.segb{flex:1 1 96px;min-height:48px;padding:8px 12px;border-radius:999px;border:2px solid var(--line);background:transparent;color:var(--ink);font:700 16px var(--font-body);cursor:pointer;white-space:nowrap}
+.segb[aria-pressed="true"]{border-color:var(--ink);background:var(--paper);box-shadow:inset 0 0 0 1px var(--ink)}
+.roles{display:grid;grid-template-columns:1fr;gap:10px}
+@media (min-width:600px){.roles{grid-template-columns:repeat(3,1fr)}}
+.role{display:flex;align-items:center;gap:12px;text-align:start;min-width:0;padding:14px;background:var(--paper);border:2px solid var(--line);border-radius:var(--r);color:var(--ink);font:inherit;cursor:pointer}
+.role:hover{border-color:var(--ink)}
+.role > span:last-child{min-width:0}
+.role b{display:block;font-family:var(--font-display);font-size:18px}
+.role span.sub{display:block;font-size:14px;color:var(--ink-2)}
+.role .done{display:inline-block;margin-top:4px;font-size:13px;font-weight:700;color:var(--school)}
+@media (min-width:600px){.role{flex-direction:column;align-items:flex-start}}
+.codeform{display:flex;flex-wrap:wrap;gap:10px}
+.codeform input{flex:1 1 180px;min-width:0;min-height:48px;padding:10px 14px;border:2px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);font:700 17px var(--font-display);letter-spacing:.06em;font-variant-numeric:tabular-nums}
+.msg{font-size:15px;font-weight:700}
+.msg.bad{color:var(--home)}
+.msg.ok{color:var(--school)}
+
+/* spørsmål */
+.who{display:flex;align-items:center;gap:10px;font-size:15px;color:var(--ink-2)}
+.steps{display:flex;gap:4px;margin-inline-start:auto}
+.steps i{width:14px;height:5px;border-radius:3px;background:var(--line)}
+.steps i.on{background:var(--ink)}
+.opts{display:grid;gap:8px}
+.opt{display:flex;align-items:center;gap:12px;min-height:56px;padding:8px 14px;text-align:start;background:var(--paper);border:2px solid var(--line);border-radius:var(--r);color:var(--ink);font:inherit;cursor:pointer}
+.opt svg{flex:none}
+.opt b{font-family:var(--font-display);font-size:18px}
+.opt .hint{color:var(--ink-2);font-size:15px}
+.opt .tick{margin-inline-start:auto;font-weight:700;visibility:hidden}
+.opt[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 2px var(--ink);background:var(--wash)}
+.opt[aria-pressed="true"] .tick{visibility:visible}
+.opt.plain{min-height:48px;border-style:dashed}
+.keep{display:flex;gap:10px;align-items:flex-start;font-size:16px}
+.keep input{width:22px;height:22px;margin:2px 0 0;flex:none;accent-color:var(--rain)}
+
+/* ferdig */
+.codebox{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:14px;background:var(--paper);border:1px solid var(--line);border-radius:var(--r)}
+.code{font:800 22px var(--font-display);letter-spacing:.06em;font-variant-numeric:tabular-nums;user-select:all;-webkit-user-select:all;margin-inline-end:auto;overflow-wrap:anywhere;min-width:0}
+.callout{padding:14px 16px;border-radius:var(--r);border:2px solid var(--rain);background:var(--paper);display:flex;flex-direction:column;gap:6px}
+
+/* annonseplass: bare på de voksnes skjermer */
+.ad{display:flex;flex-direction:column;gap:2px;padding:12px 14px;border:1.5px dashed var(--line);border-radius:var(--r);background:var(--wash);font-size:15px}
+.ad .ad-l{font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2)}
+.ad a{color:var(--ink);text-decoration:none;display:flex;flex-direction:column;gap:2px}
+.ad .ad-by{font-size:13.5px;color:var(--ink-2)}
+
+/* resultat */
+.banner{padding:10px 14px;border:2px dashed var(--line);border-radius:var(--r);font-size:15px}
+.first{background:var(--ink);color:var(--sky);border-radius:var(--r);padding:18px;gap:8px}
+.first .eyebrow{color:var(--sun)}
+.first h2{font-size:24px}
+.first .ask{font-family:var(--font-display);font-size:19px;font-weight:600;line-height:1.3}
+.chart{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:14px;gap:0}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:14px;color:var(--ink-2);padding-bottom:12px}
+.legend > span{display:inline-flex;align-items:center;gap:6px}
+.scale{display:grid;grid-template-columns:repeat(5,1fr);padding-bottom:6px}
+.scale div{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11.5px;line-height:1.2;text-align:center;color:var(--ink-2);min-width:0;overflow-wrap:anywhere;padding-inline:1px}
+.row{display:flex;flex-direction:column;gap:8px;padding-block:14px;border-top:1px solid var(--line)}
+.row-h{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 10px}
+.row-h h3{min-width:0}
+.track{position:relative;display:grid;grid-template-columns:repeat(5,1fr)}
+.track::before{content:"";position:absolute;left:10%;right:10%;top:50%;height:2px;background:var(--line)}
+.cell{position:relative;display:flex;justify-content:center;align-items:center;min-height:32px}
+.cell::before{content:"";position:absolute;width:8px;height:8px;border-radius:50%;background:var(--line)}
+.cell .mk{position:relative}
+.cell .mk + .mk{margin-inline-start:-5px}
+.row-t{font-size:15.5px}
+.row-ask{font-size:15.5px;color:var(--ink-2)}
+.row-miss{font-size:14px;color:var(--ink-2);font-style:italic}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;padding:3px 10px 3px 8px;border-radius:999px;border:1.5px solid var(--line);max-width:100%}
+.chip i{font-style:normal;font-family:var(--font-display);font-weight:800}
+.chip-elevlav{background:var(--sun);color:var(--on-sun);border-color:var(--ink)}
+.chip-felles{background:var(--rain);color:var(--paper);border-color:var(--rain)}
+.chip-ulikt{border-color:var(--ink);color:var(--ink)}
+.chip-skjult,.chip-blind,.chip-en{border-style:dashed;color:var(--ink-2)}
+.chip-likt{color:var(--ink-2)}
+
+/* tips */
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tab{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:6px 14px 6px 8px;border-radius:999px;border:2px solid var(--line);background:transparent;color:var(--ink);font:700 15px var(--font-body);cursor:pointer}
+.tab[aria-selected="true"]{border-color:var(--ink);background:var(--paper)}
+.tips{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.tips li{display:flex;flex-direction:column;gap:2px;padding-inline-start:14px;border-inline-start:3px solid var(--line)}
+.tips li .eyebrow{font-size:12px}
+.ladder{margin:0;padding-inline-start:24px;display:flex;flex-direction:column;gap:10px}
+.ladder li::marker{font-family:var(--font-display);font-weight:800}
+
+/* bunn */
+.foot{border-top:2px solid var(--line);padding-top:24px;display:flex;flex-direction:column;gap:24px}
+.help{display:grid;gap:12px}
+.help div{display:grid;grid-template-columns:118px 1fr;gap:12px;align-items:baseline}
+.help b{font:800 20px var(--font-display);font-variant-numeric:tabular-nums;user-select:all;-webkit-user-select:all;white-space:nowrap}
+.nots{margin:0;padding-inline-start:20px;display:flex;flex-direction:column;gap:6px}
+.src{font-size:14px;color:var(--ink-2)}
+.w-sun{fill:var(--sun)} .w-ray{stroke:var(--sun);stroke-width:1.7;stroke-linecap:round;fill:none}
+.w-cloud{fill:var(--cloud)} .w-cloud2{fill:var(--cloud-2)}
+.w-drop{stroke:var(--rain);stroke-width:1.8;stroke-linecap:round;fill:none}
+@media (prefers-reduced-motion:no-preference){.opt,.role,.btn,.tab,.segb{transition:border-color .12s,background-color .12s}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <button class="brand" id="brand" data-act="home"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>Tre blikk</button>
+    <label class="langpick" for="sprak"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false"><circle cx="9" cy="9" r="7"/><path d="M2 9h14M9 2c2.4 2.2 2.4 11.8 0 14M9 2c-2.4 2.2-2.4 11.8 0 14"/></svg><select id="sprak"></select></label>
+  </header>
+  <main id="app" tabindex="-1"></main>
+  <footer class="foot" id="foot"></footer>
+</div>
+<script>
+(function(){
+'use strict';
+var L={};
+L.nb={
+name:"Norsk",dir:"ltr",sp:" ",
+ui:{
+lang:"Språk",
+home:"Til forsiden",
+h1:"Samme barn, sett fra tre steder",
+lead:"Barn kan være forskjellige hjemme og på skolen. Her svarer eleven, hjemmet og skolen på de samme spørsmålene, hver for seg. Etterpå ser dere hvor dere ser det likt, hvor dere ser det ulikt, og hva dere kan snakke om.",
+exLabel:"Eksempel",
+sampleCap:"Skolen ser lettskyet. Eleven og hjemmet ser torden. Ingen tar feil. De ser hver sin del av dagen.",
+bandH:"Hvilket trinn går eleven på?",
+bandNote:"Trinnet styrer hvordan spørsmålene til eleven er formulert.",
+bandNote1:"På 1.–4. trinn kan en voksen lese høyt, men la barnet velge været selv.",
+whoH:"Hvem svarer nå?",
+whoNote:"La eleven svare først, og alene. Eleven får seks spørsmål og velger selv om det blir fire til. Eleven kan også holde enkeltsvar for seg selv. Svarene vises ikke for de andre før dere åpner sammenligningen.",
+roleDone:"Har svart. Trykk for å svare på nytt.",
+cmpH:"Se sammenligningen",
+answered:"Har svart: {list}.",
+noneYet:"Ingen har svart ennå.",
+needTwo:"Minst to må ha svart.",
+cmpBtn:"Åpne sammenligningen",
+reset:"Slett alle svar",
+resetArm:"Trykk en gang til for å slette",
+apartH:"Sitter dere ikke sammen?",
+apartP:"Hver og en kan svare på sin egen telefon og sende svarkoden sin. Lim inn koden her.",
+codeAria:"Svarkode",
+addBtn:"Legg til svar",
+codeBad:"Koden stemmer ikke. Sjekk at alle tegnene er med, og prøv igjen.",
+codeOk:"Svarene er lagt til: {who}.",
+codeBand:"Koden er laget for {band}.",
+exH:"Slik kan en sammenligning se ut",
+exP:"Svarene under er oppdiktet. Her vises de seks første områdene.",
+exBtn:"Se hele eksempelet med tips",
+qOf:"Spørsmål {n} av {t}",
+pause:"Pause",
+lastQ:"Siste spørsmål",
+readAloud:"En voksen kan lese høyt. Du velger været selv.",
+noE:"Vil ikke svare på dette",
+noA:"Dette ser jeg ikke",
+keep:"Hold dette svaret for meg selv. De voksne får ikke se det.",
+pauseH:"Bra jobba. Seks spørsmål er unnagjort.",
+pauseP:"Du kan stoppe her. Det er helt greit. Hvis du har lyst, er det fire spørsmål til.",
+stopT:"Jeg er ferdig",
+stopS:"Seks er nok for meg",
+moreT:"Jeg tar fire til",
+moreS:"Morgen, arbeidsro, annerledes dager og nett",
+wishE:"Ditt ønske",
+wishH:"Hvem vil du helst snakke med først?",
+wishNo:"Vil ikke si det",
+back:"Tilbake",
+next:"Neste",
+finish:"Ferdig",
+thanks:"Takk. Svarene er lagt inn.",
+doneE:"Gi telefonen videre når du er klar. De voksne ser ikke svarene dine før dere åpner sammenligningen sammen.",
+doneA:"Svarene vises ikke for de andre før dere åpner sammenligningen.",
+kept1:"Du holdt 1 svar for deg selv. Det er ikke med videre.",
+keptN:"Du holdt {n} svar for deg selv. De er ikke med videre.",
+heavyH:"Du har svart at noe er tungt.",
+heavyP:"Du skal ikke ordne opp i det alene. Snakk med en voksen du stoler på. Du kan også ringe 116 111. Det er gratis, og du trenger ikke si hvem du er.",
+codeH:"Svarkoden din",
+copy:"Kopier",
+copied:"Kopiert",
+copySel:"Markert. Kopier selv",
+codeP:"Sitter dere ikke sammen, kan du sende koden til den som samler svarene. Koden inneholder bare trinn og svar, ingen navn.",
+codePE:"Du bestemmer selv om du vil sende den.",
+exBannerB:"Dette er et eksempel.",
+exBannerT:"Svarene er oppdiktet.",
+fcE:"Værmeldingen",
+fcTop:"Størst grunn til å snakke sammen: {a}.",
+fcNote:"Værmeldingen sier noe om svarene, ikke om eleven.",
+startHere:"Start her",
+sameH:"Dere ser det meste likt",
+sameP:"Det er også nyttig å vite. Spør eleven om det er noe spørsmålene ikke fanget opp.",
+unsafeH:"Noen har svart at det ikke kjennes trygt.",
+unsafeP:"Si fra til skolen. Når skolen får vite at en elev ikke har det trygt og godt, skal den undersøke saken og sette inn tiltak (opplæringsloven § 12-4).",
+areasH:"Område for område",
+askL:"Spør:",
+tipsH:"Tips til hver av dere",
+keptTipH:"Det eleven holder for seg selv",
+keptTipP:"Ikke press. Si at døra står åpen, og spør igjen en annen dag.",
+always:"Alltid",
+pathH:"Veien videre",
+again:"Ta en ny runde om fire uker, og se om været har endret seg.",
+startOwn:"Start deres egen runde",
+hidE:"Eleven holder dette for seg selv.",
+shortE:"Eleven tok den korte runden.",
+missH:"Hjemmet ser ikke dette.",
+missS:"Skolen ser ikke dette.",
+ariaKept:"holdt privat",
+ariaBlind:"ser ikke dette",
+helpH:"Trenger du en voksen å snakke med nå?",
+helpIntl:"Utenfor Norge: Ring det lokale nødnummeret hvis det er akutt. Hjelpetelefonen for barn i landet ditt finner du her:",
+notsH:"Dette gjør ikke Tre blikk",
+src:"Bygger på norske føringer for samarbeid mellom hjem og skole og for skolens aktivitetsplikt. Prototype, ikke et ferdig produkt.",
+ad:"Annonse",
+adFree:"Ledig annonseplass",
+adNote:"Vises bare til voksne. Aldri til eleven."
+},
+roles:{
+E:{n:"Eleven",l:"eleven",you:"Jeg er eleven",sub:"6 spørsmål, og 4 til hvis du vil",tab:"Til deg som er elev",as:"Du svarer som eleven"},
+H:{n:"Hjemmet",l:"hjemmet",you:"Jeg er foresatt",sub:"10 spørsmål, sett hjemmefra",tab:"Til dere hjemme",as:"Du svarer som foresatt"},
+S:{n:"Skolen",l:"skolen",you:"Jeg er lærer",sub:"10 spørsmål, sett fra skolen",tab:"Til skolen",as:"Du svarer som lærer"}
+},
+bands:["1.–4. trinn","5.–7. trinn","8.–10. trinn"],
+kid:["barnet","barnet","ungdommen"],
+scale:[["Torden","Veldig tungt"],["Regn","Ganske tungt"],["Skyet","Sånn passe"],["Lettskyet","Ganske bra"],["Sol","Veldig bra"]],
+fc:["Stort sett torden.","Stort sett regn.","Stort sett skyet.","Stort sett lettskyet.","Stort sett sol."],
+areas:[
+{n:"Trivsel",
+ e:["Hvordan er det å være på skolen?","Hvordan er det å være på skolen for tiden?","Hvordan har du det på skolen for tiden?"],
+ h:"Hvordan virker det som {b} har det med skolen, sett hjemmefra?",
+ s:"Hvordan virker det som eleven har det på skolen, sett fra klasserommet?",
+ ask:"Hva er det beste og det kjipeste med en vanlig skoledag?",
+ te:"Fortell om én ting som gjør dagen bedre og én som gjør den tyngre. To setninger holder.",
+ th:"Spør om en helt vanlig tirsdag, time for time. Konkrete dager er lettere å svare på enn «har du det bra?».",
+ ts:"Fortell hjemmet hva dere faktisk ser i løpet av en dag, også de små tingene som går bra."},
+{n:"Venner og friminutt",
+ e:["Hvordan er det å leke med de andre i friminuttene?","Hvordan er det med venner og i friminuttene?","Hvordan er det med venner, i friminuttene og ellers?"],
+ h:"Hvordan virker det med venner, ut fra det dere hører og ser hjemme?",
+ s:"Hvordan ser det ut med venner og i friminuttene?",
+ ask:"Hvem er du sammen med i friminuttene, og hvem skulle du ønske du var mer sammen med?",
+ te:"Si hvem du liker å være sammen med. Da kan de voksne hjelpe til uten å gjette.",
+ th:"Spør hvem {b} var sammen med i dag, ikke om det finnes venner.",
+ ts:"Følg med i overgangene: friminutt, garderobe og gruppearbeid. Del det dere ser med hjemmet."},
+{n:"Skolearbeid",
+ e:["Hvordan er det å jobbe med oppgavene på skolen?","Hvordan går det med skolearbeidet?","Hvordan går det med skolearbeid, prøver og innleveringer?"],
+ h:"Hvordan går det med skolearbeid og lekser hjemme?",
+ s:"Hvordan går det med oppgaver og arbeid i timene?",
+ ask:"Hvilket fag kjennes lettest akkurat nå, og hvilket kjennes tyngst?",
+ te:"Vis en oppgave du syntes var vanskelig. Det er lettere å få hjelp når de voksne ser hva du mener.",
+ th:"Fortell skolen hvor lang tid leksene faktisk tar hjemme, og hvordan stemningen er rundt dem.",
+ ts:"Vis hjemmet et eksempel på hva eleven får til i timen, og hvor det stopper opp."},
+{n:"Krefter etter skoledagen",
+ e:["Hvordan kjennes kroppen din når skoledagen er ferdig?","Hvordan er kreftene dine når skoledagen er over?","Hvordan er overskuddet ditt når skoledagen er over?"],
+ h:"Hvordan er kreftene til {b} etter skoledagen?",
+ s:"Hvordan er kreftene til eleven mot slutten av skoledagen?",
+ ask:"Når på dagen er du mest sliten, og hva hjelper da?",
+ te:"Si fra når på dagen du blir mest sliten. Det er nyttig for de voksne å vite.",
+ th:"Beskriv den første timen etter skolen for læreren. Skolen ser sjelden den delen av dagen.",
+ ts:"En elev som virker rolig i timene, kan bruke mye krefter på det. Spør hjemmet hvordan ettermiddagene er."},
+{n:"Trygghet",
+ e:["Hvor trygt kjennes det på skolen og på skoleveien?","Hvordan er det med tryggheten din på skolen og på skoleveien?","Hvor trygg kjenner du deg på skolen og på vei til og fra?"],
+ h:"Hvordan virker det med tryggheten til {b} på skolen og skoleveien?",
+ s:"Hvordan virker det med tryggheten til eleven på skolen?",
+ ask:"Er det steder eller tidspunkter på skolen som kjennes utrygge?",
+ te:"Hvis noe er utrygt, si det til en voksen du stoler på. Du trenger ikke vite akkurat hva som er galt.",
+ th:"Si fra til skolen, gjerne skriftlig. Når skolen får vite at en elev ikke har det trygt og godt, skal den undersøke saken og sette inn tiltak.",
+ ts:"Dette er aktivitetsplikten: følg med, meld fra til rektor, undersøk og sett inn tiltak. Elevens egen opplevelse er utgangspunktet."},
+{n:"Å bli hørt",
+ e:["Hvordan er det å si fra til de voksne når noe er viktig for deg?","Hvordan er det å bli hørt av de voksne når du sier noe viktig?","Hvordan er det å bli tatt på alvor av de voksne når du sier fra?"],
+ h:"Hvordan er det for {b} å bli hørt av de voksne, slik dere ser det?",
+ s:"Hvordan er det for eleven å slippe til og bli hørt, slik dere ser det?",
+ ask:"Hva skulle du ønske de voksne forsto bedre?",
+ te:"Du kan be om å få snakke med én voksen alene først. Det er lov.",
+ th:"Lytt ferdig før dere foreslår løsninger. Spør: «Vil du ha hjelp, eller vil du bare fortelle?»",
+ ts:"La eleven velge hvem som skal være med i samtalen, og hva som skal sies videre til hvem."},
+{n:"Morgen og oppmøte",
+ e:["Hvordan er morgenen før du skal på skolen?","Hvordan er morgenene før skolen?","Hvordan er det å komme seg av gårde til skolen om morgenen?"],
+ h:"Hvordan er morgenene før skolen hjemme hos dere?",
+ s:"Hvordan virker eleven når skoledagen starter?",
+ ask:"Hva er det vanskeligste med morgenen, og hva gjør den lettere?",
+ te:"Fortell hva som er verst med morgenen. Er det å stå opp, å rekke alt eller tanken på dagen?",
+ th:"Fortell læreren hvordan morgenen var på de tunge dagene. Da forstår skolen starten på dagen bedre.",
+ ts:"Fortell hjemmet hvordan de første ti minuttene på skolen ser ut. Hjemmet ser bare det som skjer før døra."},
+{n:"Arbeidsro i timene",
+ e:["Hvordan er det å få ro til å jobbe i klasserommet?","Hvordan er det å få arbeidsro i timene?","Hvordan er det å få konsentrert seg i timene?"],
+ h:"Hvordan virker det med arbeidsro i timene, ut fra det {b} forteller?",
+ s:"Hvordan er arbeidsroen rundt eleven i timene?",
+ ask:"Hvor i klasserommet og når på dagen er det lettest å jobbe?",
+ te:"Si hva som forstyrrer deg mest. Er det lyd, plassen du sitter på eller noe annet?",
+ th:"Spør hva som gjør det lett å jobbe, ikke bare hva som forstyrrer. Gi svaret videre til læreren.",
+ ts:"Prøv én endring av gangen, for eksempel plass, pauser eller kortere økter. Fortell hjemmet hva dere prøver."},
+{n:"Når dagen blir annerledes",
+ e:["Hvordan er det når noe er annerledes på skolen, som vikar eller tur?","Hvordan er det når skoledagen blir annerledes, som med vikar, tur eller nye grupper?","Hvordan er det når skoledagen blir annerledes, som med vikar, nye grupper eller endret timeplan?"],
+ h:"Hvordan går det med {b} når skoledagen blir annerledes enn vanlig?",
+ s:"Hvordan går det med eleven når dagen blir annerledes enn vanlig?",
+ ask:"Hva hjelper mest når noe blir annerledes enn du hadde tenkt?",
+ te:"Si fra hvis du liker å vite om endringer på forhånd. Det er lett for de voksne å ordne.",
+ th:"Fortell skolen hva som hjelper hjemme når planer endres.",
+ ts:"Varsle endringer så tidlig som mulig, både til eleven og hjemmet. Si hva som blir likt, ikke bare hva som blir nytt."},
+{n:"Nett, spill og mobil",
+ e:["Hvordan er det når du spiller eller chatter med andre fra skolen?","Hvordan er det på nett, i spill og i chatter med de andre i klassen?","Hvordan er det på nett og i sosiale medier med folk fra skolen?"],
+ h:"Hvordan virker det med nett, spill og chatter med andre fra skolen?",
+ s:"Hvordan virker det med det som skjer på nett mellom elevene, ut fra det dere fanger opp?",
+ ask:"Har det skjedd noe på nett som har fulgt med inn i skoledagen?",
+ te:"Du kan vise en voksen det som skjedde, i stedet for å forklare. Et skjermbilde holder.",
+ th:"Vær nysgjerrig før dere setter grenser. Spør hva som er gøy der, og hva som er kjipt.",
+ ts:"Det som skjer på nett etter skoletid, kan gjøre skoledagen utrygg. Da gjelder aktivitetsplikten også."}
+],
+wish:[
+["En hjemme","Eleven vil helst snakke med en hjemme først."],
+["Læreren min","Eleven vil helst snakke med læreren sin først."],
+["Helsesykepleieren","Eleven vil helst snakke med helsesykepleieren først."],
+["En annen voksen jeg stoler på","Eleven vil helst snakke med en annen voksen først."],
+["Vet ikke ennå","Eleven vet ikke ennå hvem det er best å snakke med. Gi det litt tid."]
+],
+stand:{
+E:["Du bestemmer hva du vil dele. Du kan si «det vil jeg ikke snakke om ennå».","Det er ikke din jobb å løse dette. Det er de voksnes jobb."],
+H:["Ulike svar betyr ikke at noen tar feil. Skolen ser {b} i en stor gruppe, dere ser det som skjer hjemme.","Spør først hva dere kan si videre til skolen. Si det etterpå."],
+S:["Foreldrene har kunnskap om eleven som skolen kan bruke. Spør etter den.","Skolen har ansvaret for å ta initiativ til samarbeidet. Foreslå et tidspunkt selv."]
+},
+chip:{elevlav:"Eleven ser mer uvær",felles:"Felles uvær",ulikt:"Ulikt syn",skjult:"Holdt privat",blind:"Ikke alle ser dette",en:"For få svar",likt:"Likt syn"},
+ex:{
+elevlav:"Eleven opplever mer uvær her enn de voksne ser. Elevens opplevelse er utgangspunktet. Begynn her.",
+felles:"Alle som har svart, ser uvær her. Da er dere enige om hva som trenger oppmerksomhet.",
+hjem:"Det ser tyngre ut hjemmefra enn på skolen. Barn kan holde seg samlet på skolen og slippe taket hjemme.",
+skole:"Skolen ser mer uvær enn hjemmet. Skolen ser eleven i en stor gruppe, og det kan gi et annet bilde.",
+elevlys:"Eleven opplever det lysere enn de voksne ser. Spør hva eleven selv legger merke til.",
+ulikt:"Dere ser dette ulikt. Ingen tar feil. Dere ser hver deres del av dagen.",
+skjult:"Eleven har valgt å holde dette for seg selv. Det er lov, og det skal respekteres.",
+blind:"Ikke alle har innsyn i dette. Den som ser det, kan fortelle de andre.",
+en:"For få har svart her til at det går an å sammenligne.",
+likt:"Dere ser dette omtrent likt."
+},
+path:[
+["Snakk sammen først.","Eleven og én voksen eleven selv har valgt. Bruk spørsmålene over."],
+["Ta det med kontaktlæreren.","Be om en samtale der eleven, hjemmet og skolen deler det de ser. Skolen har ansvaret for å legge til rette for samarbeidet."],
+["Bruk helsesykepleieren.","Skolehelsetjenesten er gratis, og eleven kan ta kontakt selv."],
+["Si fra til rektor hvis det ikke er trygt og godt.","Da skal skolen undersøke saken og sette inn tiltak. Hjelper det ikke, kan saken meldes til Statsforvalteren."],
+["La fagfolk vurdere resten.","Lurer dere på om det trengs mer hjelp, er det fastlegen eller PP-tjenesten som kan vurdere det. Det kan ikke Tre blikk."]
+],
+nots:[
+"Stiller ingen diagnoser, og vurderer verken barn, foresatte eller lærere.",
+"Lagrer ingen svar. De finnes bare på denne skjermen til siden lukkes.",
+"Spør ikke etter navn, fødselsdato eller skole.",
+"Erstatter ikke en samtale med lærer, helsesykepleier eller lege."
+],
+help:[
+"Alarmtelefonen for barn og unge. Gratis, åpen hele døgnet, og du kan være anonym.",
+"Kors på halsen fra Røde Kors, for deg under 18 år. Gratis og anonymt.",
+"Ring hvis det er akutt fare for liv og helse."
+]
+};
+Object.assign(L.nb.ui,{
+introE:"Før dere begynner",
+introH:"Tre blikk er et blikk, ikke en vurdering",
+introKid:"Eleven skal ikke bekrefte dette. En voksen bekrefter før eleven får telefonen.",
+introC1:"Jeg er voksen, og jeg har lest og forstått dette.",
+introC2:"Jeg godtar at jeg ikke kan bruke Tre blikk, eller noe den viser, mot appen, utviklerne eller eierne.",
+introBtn:"Jeg forstår og godtar",
+kidIntro:"Dette er ikke en test. Ingen svar er feil.",
+notDx:"Dette er ikke en diagnose og ikke en faglig vurdering. Det viser bare hvordan dere ser det, hver fra sitt sted.",
+terms:"Vilkår for bruk"
+});
+L.nb.intro=[
+["Ingen diagnose.","Tre blikk stiller ingen diagnose og sier ingenting om ADHD eller andre tilstander. Den sier ikke at noen har en diagnose, og heller ikke at noen ikke har det."],
+["Bare ulike oppfatninger.","Appen viser hvordan eleven, hjemmet og skolen opplever hverdagen akkurat nå, og hvor de ser det likt og ulikt. Den sier ikke hvem som har rett, og ikke hvorfor det er slik."],
+["Ikke fagfolk.","Tre blikk er ikke helsehjelp, utredning eller rådgivning, og erstatter ikke lærer, helsesykepleier, lege eller PP-tjenesten. Er dere bekymret, ta kontakt med dem."],
+["På eget ansvar.","Dere bruker Tre blikk på eget ansvar. Svar, tips og resultater kan ikke brukes som dokumentasjon, bevis eller grunnlag for krav mot noen. Det gjelder også appen og de som har utviklet eller eier den."]
+];
+
+L.en={
+name:"English",dir:"ltr",sp:" ",
+ui:{
+lang:"Language",
+home:"Back to start",
+h1:"The same child, seen from three places",
+lead:"Children can be different at home and at school. Here the student, the home and the school answer the same questions, each on their own. Afterwards you see where you agree, where you see things differently, and what you can talk about.",
+exLabel:"Example",
+sampleCap:"School sees light cloud. The student and the home see thunder. Nobody is wrong. Each sees their own part of the day.",
+bandH:"How old is the student?",
+bandNote:"The age group decides how the student’s questions are worded.",
+bandNote1:"For ages 6–9 an adult can read aloud, but let the child choose the weather.",
+whoH:"Who is answering now?",
+whoNote:"Let the student answer first, and alone. The student gets six questions and decides whether to take four more. The student can also keep single answers private. Nobody sees the answers until you open the comparison.",
+roleDone:"Answered. Tap to answer again.",
+cmpH:"See the comparison",
+answered:"Answered so far: {list}.",
+noneYet:"Nobody has answered yet.",
+needTwo:"At least two must answer.",
+cmpBtn:"Open the comparison",
+reset:"Delete all answers",
+resetArm:"Tap once more to delete",
+apartH:"Not in the same room?",
+apartP:"Each person can answer on their own phone and send their answer code. Paste the code here.",
+codeAria:"Answer code",
+addBtn:"Add answers",
+codeBad:"That code is not right. Check that every character is there and try again.",
+codeOk:"Answers added: {who}.",
+codeBand:"The code was made for {band}.",
+exH:"What a comparison can look like",
+exP:"These answers are made up. The first six areas are shown.",
+exBtn:"See the full example with tips",
+qOf:"Question {n} of {t}",
+pause:"Break",
+lastQ:"Last question",
+readAloud:"An adult can read aloud. You choose the weather.",
+noE:"I don’t want to answer this",
+noA:"I don’t see this",
+keep:"Keep this answer to myself. The adults will not see it.",
+pauseH:"Well done. Six questions finished.",
+pauseP:"You can stop here. That is completely fine. If you feel like it, there are four more.",
+stopT:"I’m done",
+stopS:"Six is enough for me",
+moreT:"I’ll take four more",
+moreS:"Mornings, quiet in class, different days and online life",
+wishE:"Your wish",
+wishH:"Who would you most like to talk to first?",
+wishNo:"I’d rather not say",
+back:"Back",
+next:"Next",
+finish:"Done",
+thanks:"Thank you. Your answers are in.",
+doneE:"Pass the phone on when you are ready. The adults will not see your answers until you open the comparison together.",
+doneA:"The others will not see your answers until you open the comparison.",
+kept1:"You kept 1 answer to yourself. It is not passed on.",
+keptN:"You kept {n} answers to yourself. They are not passed on.",
+heavyH:"You answered that something is hard.",
+heavyP:"You should not have to sort this out alone. Talk to an adult you trust. In Norway you can also call 116 111. It is free, and you do not have to say who you are. For other countries, see the bottom of this page.",
+codeH:"Your answer code",
+copy:"Copy",
+copied:"Copied",
+copySel:"Selected. Copy it yourself",
+codeP:"If you are not together, send the code to the person collecting the answers. The code holds only the age group and the answers, no names.",
+codePE:"You decide whether to send it.",
+exBannerB:"This is an example.",
+exBannerT:"The answers are made up.",
+fcE:"The forecast",
+fcTop:"Best reason to talk: {a}.",
+fcNote:"The forecast describes the answers, not the student.",
+startHere:"Start here",
+sameH:"You see most things alike",
+sameP:"That is useful to know too. Ask the student whether the questions missed anything.",
+unsafeH:"Someone answered that it does not feel safe.",
+unsafeP:"Tell the school. A school that learns a student does not feel safe should look into it and act. In Norway this is the law (Education Act § 12-4).",
+areasH:"Area by area",
+askL:"Ask:",
+tipsH:"Tips for each of you",
+keptTipH:"What the student keeps private",
+keptTipP:"Don’t push. Say the door is open, and ask again another day.",
+always:"Always",
+pathH:"The way forward",
+again:"Do another round in four weeks and see whether the weather has changed.",
+startOwn:"Start your own round",
+hidE:"The student is keeping this private.",
+shortE:"The student took the short round.",
+missH:"The home does not see this.",
+missS:"The school does not see this.",
+ariaKept:"kept private",
+ariaBlind:"does not see this",
+helpH:"Need an adult to talk to right now?",
+helpIntl:"Outside Norway: in an emergency, call your local emergency number. Find the child helpline for your country here:",
+notsH:"What Tre blikk does not do",
+src:"Based on Norwegian guidance on cooperation between home and school. A prototype, not a finished product. Translated from Norwegian and not yet checked by native speakers.",
+ad:"Advertisement",
+adFree:"Ad space available",
+adNote:"Shown to adults only. Never to the student."
+},
+roles:{
+E:{n:"The student",l:"the student",you:"I’m the student",sub:"6 questions, and 4 more if you like",tab:"For you, the student",as:"You are answering as the student"},
+H:{n:"The home",l:"the home",you:"I’m a parent or carer",sub:"10 questions, seen from home",tab:"For you at home",as:"You are answering as a parent or carer"},
+S:{n:"The school",l:"the school",you:"I’m a teacher",sub:"10 questions, seen from school",tab:"For the school",as:"You are answering as a teacher"}
+},
+bands:["Ages 6–9","Ages 10–12","Ages 13–16"],
+kid:["your child","your child","your teenager"],
+scale:[["Thunder","Very hard"],["Rain","Quite hard"],["Cloudy","So-so"],["Light cloud","Quite good"],["Sunny","Very good"]],
+fc:["Mostly thunder.","Mostly rain.","Mostly cloudy.","Mostly light cloud.","Mostly sunny."],
+areas:[
+{n:"Wellbeing",
+ e:["What is it like to be at school?","What is it like to be at school these days?","How are things for you at school these days?"],
+ h:"How does {b} seem to be doing with school, seen from home?",
+ s:"How does the student seem to be doing at school, seen from the classroom?",
+ ask:"What is the best and the worst thing about an ordinary school day?",
+ te:"Tell about one thing that makes the day better and one that makes it harder. Two sentences are enough.",
+ th:"Ask about a completely ordinary Tuesday, lesson by lesson. Concrete days are easier to answer than “are you OK?”.",
+ ts:"Tell the home what you actually see during a day, including the small things that go well."},
+{n:"Friends and breaks",
+ e:["What is it like to play with the others at break time?","How are things with friends and at break time?","How are things with friends, at break and otherwise?"],
+ h:"How do things seem with friends, from what you hear and see at home?",
+ s:"How do things look with friends and at break time?",
+ ask:"Who are you with at break, and who do you wish you were with more?",
+ te:"Say who you like to be with. Then the adults can help without guessing.",
+ th:"Ask who {b} was with today, not whether there are friends.",
+ ts:"Watch the in-between moments: breaks, the cloakroom and group work. Share what you see with the home."},
+{n:"Schoolwork",
+ e:["What is it like to work on the tasks at school?","How is schoolwork going?","How are schoolwork, tests and assignments going?"],
+ h:"How are schoolwork and homework going at home?",
+ s:"How are tasks and work going in lessons?",
+ ask:"Which subject feels easiest right now, and which feels hardest?",
+ te:"Show a task you found hard. It is easier to get help when the adults can see what you mean.",
+ th:"Tell the school how long homework really takes at home, and what the mood around it is like.",
+ ts:"Show the home an example of what the student manages in class, and where it stops."},
+{n:"Energy after school",
+ e:["How does your body feel when the school day is finished?","How much energy do you have when the school day is over?","How much energy do you have left when the school day is over?"],
+ h:"How is the energy of {b} after the school day?",
+ s:"How is the student’s energy towards the end of the school day?",
+ ask:"When in the day are you most tired, and what helps then?",
+ te:"Say when in the day you get most tired. That is useful for the adults to know.",
+ th:"Describe the first hour after school to the teacher. School rarely sees that part of the day.",
+ ts:"A student who seems calm in class may be using a lot of energy to stay that way. Ask the home what afternoons are like."},
+{n:"Feeling safe",
+ e:["How safe does it feel at school and on the way to school?","How safe do you feel at school and on the way to school?","How safe do you feel at school and on the way there and back?"],
+ h:"How safe does {b} seem to feel at school and on the way to school?",
+ s:"How safe does the student seem to feel at school?",
+ ask:"Are there places or times at school that feel unsafe?",
+ te:"If something feels unsafe, tell an adult you trust. You do not need to know exactly what is wrong.",
+ th:"Tell the school, preferably in writing. A school that learns a student does not feel safe should look into it and act.",
+ ts:"Follow your school’s routines: keep watch, tell the head teacher, look into it and act. Start from the student’s own experience."},
+{n:"Being heard",
+ e:["What is it like to tell the adults when something matters to you?","What is it like to be heard by the adults when you say something important?","What is it like to be taken seriously by the adults when you speak up?"],
+ h:"How well is {b} heard by the adults, as you see it?",
+ s:"How well does the student get to speak and be heard, as you see it?",
+ ask:"What do you wish the adults understood better?",
+ te:"You can ask to talk to one adult alone first. That is allowed.",
+ th:"Listen to the end before you suggest solutions. Ask: “Do you want help, or do you just want to tell me?”",
+ ts:"Let the student choose who joins the conversation, and what is passed on to whom."},
+{n:"Mornings and arriving",
+ e:["What is the morning like before you go to school?","What are mornings like before school?","What is it like to get yourself off to school in the morning?"],
+ h:"What are mornings before school like in your home?",
+ s:"How does the student seem when the school day starts?",
+ ask:"What is the hardest thing about the morning, and what makes it easier?",
+ te:"Say what is worst about the morning. Is it getting up, fitting everything in, or thinking about the day?",
+ th:"Tell the teacher what the morning was like on the hard days. Then the school understands the start of the day better.",
+ ts:"Tell the home what the first ten minutes at school look like. The home only sees what happens before the door."},
+{n:"Quiet to work in class",
+ e:["What is it like to get quiet to work in the classroom?","What is it like to get quiet to work in lessons?","What is it like to concentrate in lessons?"],
+ h:"How does quiet to work in class seem, from what {b} tells you?",
+ s:"How quiet is it to work around the student in lessons?",
+ ask:"Where in the classroom and when in the day is it easiest to work?",
+ te:"Say what disturbs you most. Is it noise, where you sit, or something else?",
+ th:"Ask what makes it easy to work, not only what disturbs. Pass the answer on to the teacher.",
+ ts:"Try one change at a time, such as seating, breaks or shorter sessions. Tell the home what you are trying."},
+{n:"When the day is different",
+ e:["What is it like when something is different at school, like a new teacher for the day or a trip?","What is it like when the school day is different, with a substitute teacher, a trip or new groups?","What is it like when the school day is different, with a substitute teacher, new groups or a changed timetable?"],
+ h:"How does {b} cope when the school day is different from usual?",
+ s:"How does the student cope when the day is different from usual?",
+ ask:"What helps most when something turns out different from what you expected?",
+ te:"Say so if you like to know about changes in advance. That is easy for the adults to arrange.",
+ th:"Tell the school what helps at home when plans change.",
+ ts:"Give notice of changes as early as you can, to both the student and the home. Say what stays the same, not only what is new."},
+{n:"Online, games and phone",
+ e:["What is it like when you play games or chat with others from school?","What is it like online, in games and in chats with the others in your class?","What is it like online and on social media with people from school?"],
+ h:"How do things seem online, in games and in chats with others from school?",
+ s:"How do things seem online between the students, from what you pick up?",
+ ask:"Has anything happened online that followed you into the school day?",
+ te:"You can show an adult what happened instead of explaining. A screenshot is enough.",
+ th:"Be curious before you set limits. Ask what is fun there and what is not.",
+ ts:"What happens online after school can make the school day feel unsafe. It is still the school’s concern."}
+],
+wish:[
+["Someone at home","The student would most like to talk to someone at home first."],
+["My teacher","The student would most like to talk to their teacher first."],
+["The school nurse or counsellor","The student would most like to talk to the school nurse or counsellor first."],
+["Another adult I trust","The student would most like to talk to another adult first."],
+["I don’t know yet","The student does not yet know who is best to talk to. Give it some time."]
+],
+stand:{
+E:["You decide what you want to share. You can say “I don’t want to talk about that yet”.","It is not your job to fix this. It is the adults’ job."],
+H:["Different answers do not mean anyone is wrong. School sees {b} in a large group, you see what happens at home.","Ask first what you may pass on to the school. Pass it on afterwards."],
+S:["Parents know things about the student that the school can use. Ask for them.","Suggest a time to talk yourself. Do not wait for the home to ask."]
+},
+chip:{elevlav:"Student sees more storm",felles:"Shared storm",ulikt:"Different views",skjult:"Kept private",blind:"Not everyone sees this",en:"Too few answers",likt:"Same view"},
+ex:{
+elevlav:"The student experiences more bad weather here than the adults see. The student’s experience is the starting point. Begin here.",
+felles:"Everyone who answered sees bad weather here. Then you agree on what needs attention.",
+hjem:"It looks harder from home than at school. Children can hold themselves together at school and let go at home.",
+skole:"School sees more bad weather than the home does. School sees the student in a large group, and that can give a different picture.",
+elevlys:"The student experiences it as brighter than the adults see. Ask what the student notices.",
+ulikt:"You see this differently. Nobody is wrong. Each of you sees your own part of the day.",
+skjult:"The student has chosen to keep this private. That is allowed, and it must be respected.",
+blind:"Not everyone has a view of this. Whoever sees it can tell the others.",
+en:"Too few have answered here to compare.",
+likt:"You see this about the same."
+},
+path:[
+["Talk together first.","The student and one adult the student has chosen. Use the questions above."],
+["Take it to the class teacher.","Ask for a meeting where the student, the home and the school share what they see."],
+["Use the school nurse or counsellor.","Many schools have one, and students can often make contact themselves."],
+["Tell the head teacher if school does not feel safe.","The school should look into it and act. In Norway this is a legal duty, and the case can go to the County Governor if nothing helps."],
+["Leave the rest to professionals.","If you wonder whether more help is needed, a doctor or the school’s support service can assess that. Tre blikk cannot."]
+],
+nots:[
+"It makes no diagnoses and does not judge children, parents or teachers.",
+"It stores no answers. They exist only on this screen until the page is closed.",
+"It does not ask for names, dates of birth or schools.",
+"It does not replace a conversation with a teacher, school nurse or doctor."
+],
+help:[
+"Norway: helpline for children and young people. Free, open day and night, and you can stay anonymous.",
+"Norway: Kors på halsen, run by the Red Cross, for anyone under 18. Free and anonymous.",
+"Norway: call if life or health is in immediate danger."
+]
+};
+Object.assign(L.en.ui,{
+introE:"Before you begin",
+introH:"Tre blikk is a look, not an assessment",
+introKid:"The student should not confirm this. An adult confirms before the student gets the phone.",
+introC1:"I am an adult, and I have read and understood this.",
+introC2:"I accept that I cannot use Tre blikk, or anything it shows, against the app, its developers or its owners.",
+introBtn:"I understand and accept",
+kidIntro:"This is not a test. No answer is wrong.",
+notDx:"This is not a diagnosis and not a professional assessment. It only shows how each of you sees things from where you stand.",
+terms:"Terms of use"
+});
+L.en.intro=[
+["No diagnosis.","Tre blikk makes no diagnosis and says nothing about ADHD or any other condition. It does not say that anyone has a diagnosis, and it does not say that anyone does not."],
+["Only different views.","The app shows how the student, the home and the school experience everyday life right now, and where they see it alike and differently. It does not say who is right, or why things are as they are."],
+["Not professionals.","Tre blikk is not health care, assessment or counselling, and does not replace a teacher, school nurse, doctor or school support service. If you are worried, contact them."],
+["At your own risk.","You use Tre blikk at your own risk. Answers, tips and results cannot be used as documentation, evidence or grounds for a claim against anyone. That includes the app and those who developed or own it."]
+];
+
+L.es={
+name:"Español",dir:"ltr",sp:" ",
+ui:{
+lang:"Idioma",
+home:"Volver al inicio",
+h1:"El mismo niño, visto desde tres lugares",
+lead:"Los niños pueden ser distintos en casa y en la escuela. Aquí el estudiante, la familia y la escuela responden a las mismas preguntas, cada uno por su cuenta. Después verán en qué coinciden, en qué ven las cosas de otra manera y de qué pueden hablar.",
+exLabel:"Ejemplo",
+sampleCap:"La escuela ve pocas nubes. El estudiante y la familia ven tormenta. Nadie se equivoca. Cada uno ve su parte del día.",
+bandH:"¿Qué edad tiene el estudiante?",
+bandNote:"El grupo de edad decide cómo se formulan las preguntas del estudiante.",
+bandNote1:"De 6 a 9 años, un adulto puede leer en voz alta, pero deje que el niño elija el tiempo.",
+whoH:"¿Quién responde ahora?",
+whoNote:"Dejen que el estudiante responda primero y a solas. Recibe seis preguntas y decide si quiere cuatro más. También puede guardarse alguna respuesta. Nadie ve las respuestas hasta que abran la comparación.",
+roleDone:"Ya respondió. Toque para responder de nuevo.",
+cmpH:"Ver la comparación",
+answered:"Ya respondieron: {list}.",
+noneYet:"Nadie ha respondido todavía.",
+needTwo:"Deben responder al menos dos.",
+cmpBtn:"Abrir la comparación",
+reset:"Borrar todas las respuestas",
+resetArm:"Toque otra vez para borrar",
+apartH:"¿No están juntos?",
+apartP:"Cada persona puede responder en su propio teléfono y enviar su código de respuestas. Pegue el código aquí.",
+codeAria:"Código de respuestas",
+addBtn:"Añadir respuestas",
+codeBad:"El código no es correcto. Compruebe que están todos los caracteres e inténtelo de nuevo.",
+codeOk:"Respuestas añadidas: {who}.",
+codeBand:"El código se creó para {band}.",
+exH:"Así puede verse una comparación",
+exP:"Estas respuestas son inventadas. Se muestran las seis primeras áreas.",
+exBtn:"Ver el ejemplo completo con consejos",
+qOf:"Pregunta {n} de {t}",
+pause:"Pausa",
+lastQ:"Última pregunta",
+readAloud:"Un adulto puede leer en voz alta. Tú eliges el tiempo.",
+noE:"No quiero responder a esto",
+noA:"Esto no lo veo",
+keep:"Guardar esta respuesta para mí. Los adultos no la verán.",
+pauseH:"Buen trabajo. Seis preguntas terminadas.",
+pauseP:"Puedes parar aquí. Está perfectamente bien. Si te apetece, hay cuatro preguntas más.",
+stopT:"He terminado",
+stopS:"Seis son suficientes para mí",
+moreT:"Hago cuatro más",
+moreS:"Mañanas, tranquilidad en clase, días distintos e internet",
+wishE:"Tu deseo",
+wishH:"¿Con quién te gustaría hablar primero?",
+wishNo:"Prefiero no decirlo",
+back:"Atrás",
+next:"Siguiente",
+finish:"Listo",
+thanks:"Gracias. Las respuestas están registradas.",
+doneE:"Pasa el teléfono cuando estés listo. Los adultos no verán tus respuestas hasta que abran juntos la comparación.",
+doneA:"Los demás no verán sus respuestas hasta que abran la comparación.",
+kept1:"Te guardaste 1 respuesta. No se comparte.",
+keptN:"Te guardaste {n} respuestas. No se comparten.",
+heavyH:"Has respondido que algo es difícil.",
+heavyP:"No tienes que resolverlo solo. Habla con un adulto de confianza. En Noruega también puedes llamar al 116 111. Es gratis y no tienes que decir quién eres. Para otros países, mira el final de esta página.",
+codeH:"Tu código de respuestas",
+copy:"Copiar",
+copied:"Copiado",
+copySel:"Seleccionado. Cópialo tú",
+codeP:"Si no están juntos, envíe el código a quien reúne las respuestas. El código solo contiene el grupo de edad y las respuestas, ningún nombre.",
+codePE:"Tú decides si quieres enviarlo.",
+exBannerB:"Esto es un ejemplo.",
+exBannerT:"Las respuestas son inventadas.",
+fcE:"El pronóstico",
+fcTop:"El mejor motivo para hablar: {a}.",
+fcNote:"El pronóstico describe las respuestas, no al estudiante.",
+startHere:"Empiecen aquí",
+sameH:"Ven casi todo igual",
+sameP:"Eso también es útil saberlo. Pregunten al estudiante si a las preguntas se les escapó algo.",
+unsafeH:"Alguien respondió que no se siente seguro.",
+unsafeP:"Avisen a la escuela. Una escuela que sabe que un estudiante no se siente seguro debe investigarlo y actuar. En Noruega es una obligación legal (Ley de Educación, § 12-4).",
+areasH:"Área por área",
+askL:"Pregunten:",
+tipsH:"Consejos para cada uno",
+keptTipH:"Lo que el estudiante se guarda",
+keptTipP:"No presionen. Digan que la puerta está abierta y pregunten otro día.",
+always:"Siempre",
+pathH:"El camino a seguir",
+again:"Hagan otra ronda dentro de cuatro semanas y vean si el tiempo ha cambiado.",
+startOwn:"Empezar su propia ronda",
+hidE:"El estudiante se guarda esto.",
+shortE:"El estudiante hizo la ronda corta.",
+missH:"La familia no ve esto.",
+missS:"La escuela no ve esto.",
+ariaKept:"guardado en privado",
+ariaBlind:"no lo ve",
+helpH:"¿Necesitas hablar con un adulto ahora?",
+helpIntl:"Fuera de Noruega: en una emergencia, llama al número de emergencias de tu país. Busca aquí la línea de ayuda a la infancia de tu país:",
+notsH:"Lo que Tre blikk no hace",
+src:"Basado en las orientaciones noruegas sobre la colaboración entre familia y escuela. Es un prototipo, no un producto terminado. Traducido del noruego y aún sin revisar por hablantes nativos.",
+ad:"Publicidad",
+adFree:"Espacio publicitario disponible",
+adNote:"Solo se muestra a los adultos. Nunca al estudiante."
+},
+roles:{
+E:{n:"El estudiante",l:"el estudiante",you:"Soy el estudiante",sub:"6 preguntas, y 4 más si quieres",tab:"Para ti, estudiante",as:"Respondes como estudiante"},
+H:{n:"La familia",l:"la familia",you:"Soy madre, padre o tutor",sub:"10 preguntas, visto desde casa",tab:"Para la familia",as:"Responde como madre, padre o tutor"},
+S:{n:"La escuela",l:"la escuela",you:"Soy docente",sub:"10 preguntas, visto desde la escuela",tab:"Para la escuela",as:"Responde como docente"}
+},
+bands:["6–9 años","10–12 años","13–16 años"],
+scale:[["Tormenta","Muy difícil"],["Lluvia","Bastante difícil"],["Nublado","Regular"],["Pocas nubes","Bastante bien"],["Sol","Muy bien"]],
+fc:["Sobre todo tormenta.","Sobre todo lluvia.","Sobre todo nublado.","Sobre todo pocas nubes.","Sobre todo sol."],
+areas:[
+{n:"Bienestar",
+ e:["¿Cómo es estar en la escuela?","¿Cómo es estar en la escuela últimamente?","¿Cómo te va en la escuela últimamente?"],
+ h:"¿Cómo parece que le va a su hijo o hija con la escuela, visto desde casa?",
+ s:"¿Cómo parece que le va al estudiante en la escuela, visto desde el aula?",
+ ask:"¿Qué es lo mejor y lo peor de un día normal de escuela?",
+ te:"Cuenta una cosa que mejora el día y otra que lo hace más pesado. Con dos frases basta.",
+ th:"Pregunten por un martes cualquiera, hora por hora. Es más fácil responder sobre días concretos que a «¿estás bien?».",
+ ts:"Cuenten a la familia lo que ven de verdad durante un día, también las cosas pequeñas que van bien."},
+{n:"Amigos y recreo",
+ e:["¿Cómo es jugar con los demás en el recreo?","¿Cómo te va con los amigos y en el recreo?","¿Cómo te va con los amigos, en el recreo y fuera de él?"],
+ h:"¿Cómo parece que va lo de los amigos, por lo que oyen y ven en casa?",
+ s:"¿Cómo se ve lo de los amigos y el recreo?",
+ ask:"¿Con quién estás en el recreo y con quién te gustaría estar más?",
+ te:"Di con quién te gusta estar. Así los adultos pueden ayudar sin adivinar.",
+ th:"Pregunten con quién estuvo hoy, no si tiene amigos.",
+ ts:"Observen los momentos de paso: el recreo, el guardarropa y el trabajo en grupo. Compartan con la familia lo que ven."},
+{n:"Tareas escolares",
+ e:["¿Cómo es trabajar con las tareas en la escuela?","¿Cómo te va con el trabajo escolar?","¿Cómo te va con el trabajo escolar, los exámenes y las entregas?"],
+ h:"¿Cómo van el trabajo escolar y los deberes en casa?",
+ s:"¿Cómo van las tareas y el trabajo en clase?",
+ ask:"¿Qué asignatura te resulta más fácil ahora y cuál más difícil?",
+ te:"Enseña una tarea que te pareció difícil. Es más fácil recibir ayuda cuando los adultos ven a qué te refieres.",
+ th:"Cuenten a la escuela cuánto tiempo llevan de verdad los deberes en casa y qué ambiente hay alrededor.",
+ ts:"Muestren a la familia un ejemplo de lo que el estudiante logra en clase y dónde se atasca."},
+{n:"Energía después de la escuela",
+ e:["¿Cómo sientes el cuerpo cuando termina el día de escuela?","¿Cuánta energía tienes cuando termina el día de escuela?","¿Cuánta energía te queda cuando termina el día de escuela?"],
+ h:"¿Cómo está de energía su hijo o hija después de la escuela?",
+ s:"¿Cómo está de energía el estudiante hacia el final del día?",
+ ask:"¿En qué momento del día estás más cansado y qué te ayuda entonces?",
+ te:"Di en qué momento del día te cansas más. A los adultos les sirve saberlo.",
+ th:"Describan al docente la primera hora después de la escuela. La escuela casi nunca ve esa parte del día.",
+ ts:"Un estudiante que parece tranquilo en clase puede gastar mucha energía en ello. Pregunten a la familia cómo son las tardes."},
+{n:"Seguridad",
+ e:["¿Cómo de seguro se siente estar en la escuela y en el camino?","¿Cómo de seguro te sientes en la escuela y en el camino?","¿Cómo de seguro te sientes en la escuela y en el camino de ida y vuelta?"],
+ h:"¿Cómo de seguro parece sentirse su hijo o hija en la escuela y en el camino?",
+ s:"¿Cómo de seguro parece sentirse el estudiante en la escuela?",
+ ask:"¿Hay lugares o momentos en la escuela que te hacen sentir inseguro?",
+ te:"Si algo no te hace sentir seguro, díselo a un adulto de confianza. No hace falta que sepas exactamente qué pasa.",
+ th:"Avisen a la escuela, mejor por escrito. Una escuela que sabe que un estudiante no se siente seguro debe investigarlo y actuar.",
+ ts:"Sigan las rutinas de su escuela: observar, avisar a la dirección, investigar y actuar. Partan de la vivencia del estudiante."},
+{n:"Ser escuchado",
+ e:["¿Cómo es contarles a los adultos algo que te importa?","¿Cómo es que los adultos te escuchen cuando dices algo importante?","¿Cómo es que los adultos te tomen en serio cuando avisas de algo?"],
+ h:"¿Cómo de escuchado por los adultos está su hijo o hija, según lo ven ustedes?",
+ s:"¿Cómo de bien puede el estudiante hablar y ser escuchado, según lo ven ustedes?",
+ ask:"¿Qué te gustaría que los adultos entendieran mejor?",
+ te:"Puedes pedir hablar primero a solas con un adulto. Está permitido.",
+ th:"Escuchen hasta el final antes de proponer soluciones. Pregunten: «¿Quieres ayuda o solo quieres contármelo?»",
+ ts:"Dejen que el estudiante elija quién participa en la conversación y qué se cuenta a quién."},
+{n:"Mañanas y llegada",
+ e:["¿Cómo es la mañana antes de ir a la escuela?","¿Cómo son las mañanas antes de la escuela?","¿Cómo es ponerte en marcha para ir a la escuela por la mañana?"],
+ h:"¿Cómo son las mañanas antes de la escuela en su casa?",
+ s:"¿Cómo se ve al estudiante cuando empieza el día de escuela?",
+ ask:"¿Qué es lo más difícil de la mañana y qué la hace más fácil?",
+ te:"Cuenta qué es lo peor de la mañana. ¿Levantarte, llegar a todo o pensar en el día?",
+ th:"Cuenten al docente cómo fue la mañana en los días difíciles. Así la escuela entiende mejor el comienzo del día.",
+ ts:"Cuenten a la familia cómo son los primeros diez minutos en la escuela. La familia solo ve lo que pasa antes de la puerta."},
+{n:"Tranquilidad para trabajar en clase",
+ e:["¿Cómo es conseguir tranquilidad para trabajar en el aula?","¿Cómo es conseguir tranquilidad para trabajar en clase?","¿Cómo es concentrarte en clase?"],
+ h:"¿Cómo parece que es la tranquilidad para trabajar en clase, por lo que cuenta su hijo o hija?",
+ s:"¿Cuánta tranquilidad para trabajar hay alrededor del estudiante en clase?",
+ ask:"¿En qué parte del aula y en qué momento del día es más fácil trabajar?",
+ te:"Di qué te molesta más. ¿El ruido, el sitio donde te sientas u otra cosa?",
+ th:"Pregunten qué hace fácil trabajar, no solo qué molesta. Pasen la respuesta al docente.",
+ ts:"Prueben un cambio cada vez, por ejemplo el sitio, las pausas o sesiones más cortas. Cuenten a la familia qué están probando."},
+{n:"Cuando el día es distinto",
+ e:["¿Cómo es cuando algo es distinto en la escuela, como otro maestro o una excursión?","¿Cómo es cuando el día de escuela es distinto, con un sustituto, una excursión o grupos nuevos?","¿Cómo es cuando el día de escuela es distinto, con un sustituto, grupos nuevos o cambios de horario?"],
+ h:"¿Cómo lleva su hijo o hija que el día de escuela sea distinto de lo habitual?",
+ s:"¿Cómo lleva el estudiante que el día sea distinto de lo habitual?",
+ ask:"¿Qué es lo que más ayuda cuando algo sale distinto de lo que esperabas?",
+ te:"Avisa si te gusta saber los cambios con antelación. Para los adultos es fácil de organizar.",
+ th:"Cuenten a la escuela qué ayuda en casa cuando cambian los planes.",
+ ts:"Avisen de los cambios cuanto antes, al estudiante y a la familia. Digan qué sigue igual, no solo qué es nuevo."},
+{n:"Internet, juegos y móvil",
+ e:["¿Cómo es cuando juegas o chateas con otros de la escuela?","¿Cómo es en internet, en los juegos y en los chats con los demás de tu clase?","¿Cómo es en internet y en redes sociales con gente de la escuela?"],
+ h:"¿Cómo parece que van internet, los juegos y los chats con otros de la escuela?",
+ s:"¿Cómo parece que va lo que pasa en internet entre los estudiantes, por lo que ustedes captan?",
+ ask:"¿Ha pasado algo en internet que te haya seguido hasta el día de escuela?",
+ te:"Puedes enseñarle a un adulto lo que pasó en vez de explicarlo. Basta una captura de pantalla.",
+ th:"Tengan curiosidad antes de poner límites. Pregunten qué es divertido allí y qué no.",
+ ts:"Lo que pasa en internet después de clase puede hacer que el día de escuela se sienta inseguro. Sigue siendo asunto de la escuela."}
+],
+wish:[
+["Alguien de casa","El estudiante prefiere hablar primero con alguien de casa."],
+["Mi docente","El estudiante prefiere hablar primero con su docente."],
+["La enfermera u orientador de la escuela","El estudiante prefiere hablar primero con la enfermera u orientador de la escuela."],
+["Otro adulto de confianza","El estudiante prefiere hablar primero con otro adulto."],
+["Todavía no lo sé","El estudiante aún no sabe con quién es mejor hablar. Denle un poco de tiempo."]
+],
+stand:{
+E:["Tú decides qué quieres compartir. Puedes decir «de eso no quiero hablar todavía».","No es tu tarea resolver esto. Es tarea de los adultos."],
+H:["Respuestas distintas no significan que alguien se equivoque. La escuela ve a su hijo o hija en un grupo grande, ustedes ven lo que pasa en casa.","Pregunten primero qué pueden contar a la escuela. Cuéntenlo después."],
+S:["La familia sabe cosas del estudiante que la escuela puede aprovechar. Pregunten por ellas.","Propongan ustedes un momento para hablar. No esperen a que la familia lo pida."]
+},
+chip:{elevlav:"El estudiante ve más tormenta",felles:"Tormenta compartida",ulikt:"Visiones distintas",skjult:"Guardado en privado",blind:"No todos lo ven",en:"Pocas respuestas",likt:"Misma visión"},
+ex:{
+elevlav:"El estudiante vive aquí más mal tiempo del que ven los adultos. Su vivencia es el punto de partida. Empiecen aquí.",
+felles:"Todos los que respondieron ven mal tiempo aquí. Entonces están de acuerdo en lo que necesita atención.",
+hjem:"Desde casa se ve más difícil que en la escuela. Los niños pueden aguantar en la escuela y soltarse en casa.",
+skole:"La escuela ve más mal tiempo que la familia. La escuela ve al estudiante en un grupo grande, y eso puede dar otra imagen.",
+elevlys:"El estudiante lo vive mejor de lo que ven los adultos. Pregunten qué nota el propio estudiante.",
+ulikt:"Ven esto de forma distinta. Nadie se equivoca. Cada uno ve su parte del día.",
+skjult:"El estudiante ha decidido guardarse esto. Está permitido y hay que respetarlo.",
+blind:"No todos pueden ver esto. Quien lo ve puede contárselo a los demás.",
+en:"Han respondido muy pocos aquí para poder comparar.",
+likt:"Ven esto más o menos igual."
+},
+path:[
+["Hablen primero entre ustedes.","El estudiante y un adulto que el estudiante haya elegido. Usen las preguntas de arriba."],
+["Llévenlo al tutor de la clase.","Pidan una reunión en la que el estudiante, la familia y la escuela compartan lo que ven."],
+["Acudan a la enfermera u orientador de la escuela.","Muchas escuelas tienen uno, y a menudo los estudiantes pueden contactar por su cuenta."],
+["Avisen a la dirección si la escuela no se siente segura.","La escuela debe investigarlo y actuar. En Noruega es una obligación legal, y el caso puede llevarse al Gobernador del condado si nada ayuda."],
+["Dejen el resto a los profesionales.","Si dudan de si hace falta más ayuda, eso lo puede valorar un médico o el servicio de apoyo de la escuela. Tre blikk no puede."]
+],
+nots:[
+"No hace diagnósticos ni juzga a niños, familias o docentes.",
+"No guarda respuestas. Solo existen en esta pantalla hasta que se cierra la página.",
+"No pide nombres, fechas de nacimiento ni escuelas.",
+"No sustituye una conversación con un docente, una enfermera escolar o un médico."
+],
+help:[
+"Noruega: teléfono de ayuda para niños y jóvenes. Gratis, abierto día y noche, y puedes ser anónimo.",
+"Noruega: Kors på halsen, de la Cruz Roja, para menores de 18 años. Gratis y anónimo.",
+"Noruega: llama si hay peligro inmediato para la vida o la salud."
+]
+};
+Object.assign(L.es.ui,{
+introE:"Antes de empezar",
+introH:"Tre blikk es una mirada, no una evaluación",
+introKid:"El estudiante no debe confirmar esto. Un adulto confirma antes de darle el teléfono.",
+introC1:"Soy una persona adulta, y he leído y entendido esto.",
+introC2:"Acepto que no puedo usar Tre blikk, ni nada de lo que muestra, contra la aplicación, sus desarrolladores o sus propietarios.",
+introBtn:"Entiendo y acepto",
+kidIntro:"Esto no es un examen. Ninguna respuesta es incorrecta.",
+notDx:"Esto no es un diagnóstico ni una evaluación profesional. Solo muestra cómo lo ve cada uno desde su lugar.",
+terms:"Condiciones de uso"
+});
+L.es.intro=[
+["Ningún diagnóstico.","Tre blikk no hace diagnósticos y no dice nada sobre el TDAH ni sobre ninguna otra condición. No dice que alguien tenga un diagnóstico, y tampoco que no lo tenga."],
+["Solo visiones distintas.","La aplicación muestra cómo viven el día a día el estudiante, la familia y la escuela en este momento, y en qué lo ven igual o distinto. No dice quién tiene razón ni por qué las cosas son así."],
+["No son profesionales.","Tre blikk no es atención sanitaria, evaluación ni asesoramiento, y no sustituye a un docente, una enfermera escolar, un médico o el servicio de apoyo de la escuela. Si están preocupados, pónganse en contacto con ellos."],
+["Bajo su responsabilidad.","Usan Tre blikk bajo su propia responsabilidad. Las respuestas, los consejos y los resultados no pueden usarse como documentación, prueba o base para una reclamación contra nadie. Eso incluye a la aplicación y a quienes la desarrollaron o son sus propietarios."]
+];
+
+L.fr={
+name:"Français",dir:"ltr",sp:" ",
+ui:{
+lang:"Langue",
+home:"Retour à l’accueil",
+h1:"Le même enfant, vu de trois endroits",
+lead:"Un enfant peut être différent à la maison et à l’école. Ici, l’élève, la famille et l’école répondent aux mêmes questions, chacun de son côté. Vous voyez ensuite où vous êtes d’accord, où vous voyez les choses autrement, et de quoi vous pouvez parler.",
+exLabel:"Exemple",
+sampleCap:"L’école voit un ciel peu nuageux. L’élève et la famille voient de l’orage. Personne n’a tort. Chacun voit sa partie de la journée.",
+bandH:"Quel âge a l’élève ?",
+bandNote:"La tranche d’âge détermine la formulation des questions posées à l’élève.",
+bandNote1:"De 6 à 9 ans, un adulte peut lire à voix haute, mais laissez l’enfant choisir la météo.",
+whoH:"Qui répond maintenant ?",
+whoNote:"Laissez l’élève répondre en premier, et seul. Il reçoit six questions et décide s’il en veut quatre de plus. Il peut aussi garder certaines réponses pour lui. Personne ne voit les réponses avant l’ouverture de la comparaison.",
+roleDone:"A répondu. Touchez pour répondre à nouveau.",
+cmpH:"Voir la comparaison",
+answered:"Ont répondu : {list}.",
+noneYet:"Personne n’a encore répondu.",
+needTwo:"Il faut au moins deux réponses.",
+cmpBtn:"Ouvrir la comparaison",
+reset:"Effacer toutes les réponses",
+resetArm:"Touchez encore une fois pour effacer",
+apartH:"Vous n’êtes pas ensemble ?",
+apartP:"Chacun peut répondre sur son propre téléphone et envoyer son code de réponses. Collez le code ici.",
+codeAria:"Code de réponses",
+addBtn:"Ajouter les réponses",
+codeBad:"Ce code n’est pas correct. Vérifiez que tous les caractères y sont, puis réessayez.",
+codeOk:"Réponses ajoutées : {who}.",
+codeBand:"Le code a été créé pour {band}.",
+exH:"À quoi peut ressembler une comparaison",
+exP:"Ces réponses sont inventées. Les six premiers domaines sont affichés.",
+exBtn:"Voir l’exemple complet avec les conseils",
+qOf:"Question {n} sur {t}",
+pause:"Pause",
+lastQ:"Dernière question",
+readAloud:"Un adulte peut lire à voix haute. C’est toi qui choisis la météo.",
+noE:"Je ne veux pas répondre à ça",
+noA:"Je ne vois pas cela",
+keep:"Garder cette réponse pour moi. Les adultes ne la verront pas.",
+pauseH:"Bravo. Six questions sont terminées.",
+pauseP:"Tu peux t’arrêter ici. C’est tout à fait normal. Si tu en as envie, il y a quatre questions de plus.",
+stopT:"J’ai fini",
+stopS:"Six, ça me suffit",
+moreT:"J’en fais quatre de plus",
+moreS:"Les matins, le calme en classe, les jours différents et internet",
+wishE:"Ton souhait",
+wishH:"À qui aimerais-tu parler en premier ?",
+wishNo:"Je préfère ne pas le dire",
+back:"Retour",
+next:"Suivant",
+finish:"Terminer",
+thanks:"Merci. Les réponses sont enregistrées.",
+doneE:"Passe le téléphone quand tu es prêt. Les adultes ne verront pas tes réponses avant que vous ouvriez la comparaison ensemble.",
+doneA:"Les autres ne verront pas vos réponses avant l’ouverture de la comparaison.",
+kept1:"Tu as gardé 1 réponse pour toi. Elle n’est pas transmise.",
+keptN:"Tu as gardé {n} réponses pour toi. Elles ne sont pas transmises.",
+heavyH:"Tu as répondu que quelque chose est difficile.",
+heavyP:"Tu n’as pas à régler cela tout seul. Parle à un adulte en qui tu as confiance. En Norvège, tu peux aussi appeler le 116 111. C’est gratuit, et tu n’as pas besoin de dire qui tu es. Pour les autres pays, regarde en bas de cette page.",
+codeH:"Votre code de réponses",
+copy:"Copier",
+copied:"Copié",
+copySel:"Sélectionné. Copiez-le vous-même",
+codeP:"Si vous n’êtes pas ensemble, envoyez le code à la personne qui rassemble les réponses. Le code ne contient que la tranche d’âge et les réponses, aucun nom.",
+codePE:"C’est toi qui décides de l’envoyer ou non.",
+exBannerB:"Ceci est un exemple.",
+exBannerT:"Les réponses sont inventées.",
+fcE:"La météo",
+fcTop:"La meilleure raison de se parler : {a}.",
+fcNote:"La météo décrit les réponses, pas l’élève.",
+startHere:"Commencez ici",
+sameH:"Vous voyez presque tout de la même façon",
+sameP:"C’est utile à savoir aussi. Demandez à l’élève si les questions ont oublié quelque chose.",
+unsafeH:"Quelqu’un a répondu ne pas se sentir en sécurité.",
+unsafeP:"Prévenez l’école. Une école qui apprend qu’un élève ne se sent pas en sécurité doit examiner la situation et agir. En Norvège, c’est une obligation légale (loi sur l’éducation, § 12-4).",
+areasH:"Domaine par domaine",
+askL:"Demandez :",
+tipsH:"Des conseils pour chacun",
+keptTipH:"Ce que l’élève garde pour lui",
+keptTipP:"N’insistez pas. Dites que la porte est ouverte, et reposez la question un autre jour.",
+always:"Toujours",
+pathH:"La suite",
+again:"Refaites un tour dans quatre semaines pour voir si la météo a changé.",
+startOwn:"Commencer votre propre tour",
+hidE:"L’élève garde cela pour lui.",
+shortE:"L’élève a fait le tour court.",
+missH:"La famille ne voit pas cela.",
+missS:"L’école ne voit pas cela.",
+ariaKept:"gardé pour soi",
+ariaBlind:"ne voit pas cela",
+helpH:"Besoin de parler à un adulte maintenant ?",
+helpIntl:"Hors de Norvège : en cas d’urgence, appelle le numéro d’urgence de ton pays. Trouve ici la ligne d’écoute pour enfants de ton pays :",
+notsH:"Ce que Tre blikk ne fait pas",
+src:"Fondé sur les orientations norvégiennes pour la coopération entre la famille et l’école. Prototype, pas un produit fini. Traduit du norvégien et pas encore relu par des locuteurs natifs.",
+ad:"Publicité",
+adFree:"Espace publicitaire disponible",
+adNote:"Affiché uniquement aux adultes. Jamais à l’élève."
+},
+roles:{
+E:{n:"L’élève",l:"l’élève",you:"Je suis l’élève",sub:"6 questions, et 4 de plus si tu veux",tab:"Pour toi, l’élève",as:"Tu réponds en tant qu’élève"},
+H:{n:"La famille",l:"la famille",you:"Je suis parent ou responsable",sub:"10 questions, vu de la maison",tab:"Pour la famille",as:"Vous répondez en tant que parent"},
+S:{n:"L’école",l:"l’école",you:"Je suis enseignant",sub:"10 questions, vu de l’école",tab:"Pour l’école",as:"Vous répondez en tant qu’enseignant"}
+},
+bands:["6–9 ans","10–12 ans","13–16 ans"],
+scale:[["Orage","Très difficile"],["Pluie","Assez difficile"],["Nuageux","Moyen"],["Peu nuageux","Assez bien"],["Soleil","Très bien"]],
+fc:["Surtout de l’orage.","Surtout de la pluie.","Surtout nuageux.","Surtout peu nuageux.","Surtout du soleil."],
+areas:[
+{n:"Bien-être",
+ e:["Comment c’est, d’être à l’école ?","Comment c’est, d’être à l’école en ce moment ?","Comment ça va pour toi à l’école en ce moment ?"],
+ h:"Comment votre enfant semble-t-il vivre l’école, vu de la maison ?",
+ s:"Comment l’élève semble-t-il aller à l’école, vu de la classe ?",
+ ask:"Quel est le meilleur et le pire moment d’une journée d’école ordinaire ?",
+ te:"Raconte une chose qui rend la journée meilleure et une qui la rend plus lourde. Deux phrases suffisent.",
+ th:"Demandez comment se passe un mardi tout à fait ordinaire, heure par heure. Il est plus facile de parler d’un jour précis que de répondre à « ça va ? ».",
+ ts:"Dites à la famille ce que vous voyez réellement pendant une journée, y compris les petites choses qui vont bien."},
+{n:"Amis et récréation",
+ e:["Comment c’est, de jouer avec les autres à la récréation ?","Comment ça se passe avec les amis et à la récréation ?","Comment ça se passe avec les amis, à la récréation et ailleurs ?"],
+ h:"Comment cela semble-t-il se passer avec les amis, d’après ce que vous entendez et voyez à la maison ?",
+ s:"Comment cela se passe-t-il avec les amis et à la récréation ?",
+ ask:"Avec qui es-tu à la récréation, et avec qui aimerais-tu être plus souvent ?",
+ te:"Dis avec qui tu aimes être. Les adultes pourront aider sans deviner.",
+ th:"Demandez avec qui votre enfant était aujourd’hui, pas s’il a des amis.",
+ ts:"Observez les moments de transition : la récréation, le vestiaire et le travail en groupe. Partagez ce que vous voyez avec la famille."},
+{n:"Travail scolaire",
+ e:["Comment c’est, de faire les exercices à l’école ?","Comment se passe le travail scolaire ?","Comment se passent le travail scolaire, les contrôles et les devoirs à rendre ?"],
+ h:"Comment se passent le travail scolaire et les devoirs à la maison ?",
+ s:"Comment se passent les exercices et le travail en classe ?",
+ ask:"Quelle matière te paraît la plus facile en ce moment, et laquelle la plus difficile ?",
+ te:"Montre un exercice que tu as trouvé difficile. C’est plus facile d’être aidé quand les adultes voient ce que tu veux dire.",
+ th:"Dites à l’école combien de temps les devoirs prennent vraiment à la maison, et quelle est l’ambiance autour.",
+ ts:"Montrez à la famille un exemple de ce que l’élève réussit en classe, et où cela bloque."},
+{n:"Énergie après l’école",
+ e:["Comment se sent ton corps quand la journée d’école est finie ?","Combien d’énergie as-tu quand la journée d’école est finie ?","Combien d’énergie te reste-t-il quand la journée d’école est finie ?"],
+ h:"Comment est l’énergie de votre enfant après la journée d’école ?",
+ s:"Comment est l’énergie de l’élève vers la fin de la journée ?",
+ ask:"À quel moment de la journée es-tu le plus fatigué, et qu’est-ce qui aide alors ?",
+ te:"Dis à quel moment de la journée tu es le plus fatigué. C’est utile pour les adultes.",
+ th:"Décrivez à l’enseignant la première heure après l’école. L’école voit rarement cette partie de la journée.",
+ ts:"Un élève qui paraît calme en classe peut y dépenser beaucoup d’énergie. Demandez à la famille comment se passent les fins d’après-midi."},
+{n:"Sécurité",
+ e:["Est-ce qu’on se sent en sécurité à l’école et sur le chemin de l’école ?","Te sens-tu en sécurité à l’école et sur le chemin de l’école ?","Te sens-tu en sécurité à l’école et sur le trajet aller et retour ?"],
+ h:"Votre enfant semble-t-il se sentir en sécurité à l’école et sur le chemin ?",
+ s:"L’élève semble-t-il se sentir en sécurité à l’école ?",
+ ask:"Y a-t-il des endroits ou des moments à l’école où tu ne te sens pas en sécurité ?",
+ te:"Si quelque chose ne te semble pas sûr, dis-le à un adulte en qui tu as confiance. Tu n’as pas besoin de savoir exactement ce qui ne va pas.",
+ th:"Prévenez l’école, de préférence par écrit. Une école qui apprend qu’un élève ne se sent pas en sécurité doit examiner la situation et agir.",
+ ts:"Suivez les procédures de votre école : observer, prévenir la direction, examiner et agir. Partez de ce que vit l’élève."},
+{n:"Être écouté",
+ e:["Comment c’est, de dire aux adultes quand quelque chose est important pour toi ?","Comment c’est, d’être écouté par les adultes quand tu dis quelque chose d’important ?","Comment c’est, d’être pris au sérieux par les adultes quand tu signales quelque chose ?"],
+ h:"Votre enfant est-il bien écouté par les adultes, selon vous ?",
+ s:"L’élève peut-il s’exprimer et être écouté, selon vous ?",
+ ask:"Qu’aimerais-tu que les adultes comprennent mieux ?",
+ te:"Tu peux demander à parler d’abord à un seul adulte. C’est permis.",
+ th:"Écoutez jusqu’au bout avant de proposer des solutions. Demandez : « Veux-tu de l’aide, ou veux-tu juste raconter ? »",
+ ts:"Laissez l’élève choisir qui participe à la conversation, et ce qui est transmis à qui."},
+{n:"Matins et arrivée",
+ e:["Comment se passe le matin avant d’aller à l’école ?","Comment se passent les matins avant l’école ?","Comment c’est, de se mettre en route pour l’école le matin ?"],
+ h:"Comment se passent les matins avant l’école chez vous ?",
+ s:"Comment l’élève paraît-il quand la journée d’école commence ?",
+ ask:"Qu’est-ce qui est le plus difficile le matin, et qu’est-ce qui le rend plus facile ?",
+ te:"Dis ce qui est le pire le matin. Se lever, tout faire à temps, ou penser à la journée ?",
+ th:"Racontez à l’enseignant comment s’est passé le matin les jours difficiles. L’école comprendra mieux le début de la journée.",
+ ts:"Dites à la famille à quoi ressemblent les dix premières minutes à l’école. La famille ne voit que ce qui se passe avant la porte."},
+{n:"Calme pour travailler en classe",
+ e:["Comment c’est, d’avoir du calme pour travailler dans la classe ?","Comment c’est, d’avoir du calme pour travailler pendant les cours ?","Comment c’est, de se concentrer pendant les cours ?"],
+ h:"Comment semble être le calme pour travailler en classe, d’après ce que raconte votre enfant ?",
+ s:"Y a-t-il du calme pour travailler autour de l’élève pendant les cours ?",
+ ask:"Où dans la classe et à quel moment de la journée est-il le plus facile de travailler ?",
+ te:"Dis ce qui te dérange le plus. Le bruit, ta place, ou autre chose ?",
+ th:"Demandez ce qui rend le travail facile, pas seulement ce qui dérange. Transmettez la réponse à l’enseignant.",
+ ts:"Essayez un changement à la fois, par exemple la place, les pauses ou des séances plus courtes. Dites à la famille ce que vous essayez."},
+{n:"Quand la journée est différente",
+ e:["Comment c’est, quand quelque chose est différent à l’école, comme un remplaçant ou une sortie ?","Comment c’est, quand la journée d’école est différente, avec un remplaçant, une sortie ou de nouveaux groupes ?","Comment c’est, quand la journée d’école est différente, avec un remplaçant, de nouveaux groupes ou un emploi du temps modifié ?"],
+ h:"Comment votre enfant vit-il une journée d’école différente de d’habitude ?",
+ s:"Comment l’élève vit-il une journée différente de d’habitude ?",
+ ask:"Qu’est-ce qui aide le plus quand quelque chose se passe autrement que prévu ?",
+ te:"Dis-le si tu aimes connaître les changements à l’avance. C’est facile à organiser pour les adultes.",
+ th:"Dites à l’école ce qui aide à la maison quand les plans changent.",
+ ts:"Annoncez les changements le plus tôt possible, à l’élève et à la famille. Dites ce qui reste pareil, pas seulement ce qui est nouveau."},
+{n:"Internet, jeux et téléphone",
+ e:["Comment c’est, quand tu joues ou discutes en ligne avec d’autres de l’école ?","Comment ça se passe en ligne, dans les jeux et les discussions avec les autres de ta classe ?","Comment ça se passe en ligne et sur les réseaux sociaux avec les gens de l’école ?"],
+ h:"Comment cela semble-t-il se passer en ligne, dans les jeux et les discussions avec d’autres de l’école ?",
+ s:"Comment semble se passer ce qui arrive en ligne entre les élèves, d’après ce que vous percevez ?",
+ ask:"S’est-il passé quelque chose en ligne qui t’a suivi jusque dans la journée d’école ?",
+ te:"Tu peux montrer à un adulte ce qui s’est passé au lieu d’expliquer. Une capture d’écran suffit.",
+ th:"Soyez curieux avant de fixer des limites. Demandez ce qui est amusant là-bas, et ce qui ne l’est pas.",
+ ts:"Ce qui se passe en ligne après l’école peut rendre la journée d’école peu sûre. Cela reste l’affaire de l’école."}
+],
+wish:[
+["Quelqu’un à la maison","L’élève préfère parler d’abord à quelqu’un à la maison."],
+["Mon enseignant","L’élève préfère parler d’abord à son enseignant."],
+["L’infirmière ou le conseiller de l’école","L’élève préfère parler d’abord à l’infirmière ou au conseiller de l’école."],
+["Un autre adulte de confiance","L’élève préfère parler d’abord à un autre adulte."],
+["Je ne sais pas encore","L’élève ne sait pas encore à qui il vaut mieux parler. Laissez-lui un peu de temps."]
+],
+stand:{
+E:["C’est toi qui décides ce que tu veux partager. Tu peux dire « je ne veux pas encore en parler ».","Ce n’est pas à toi de régler cela. C’est le travail des adultes."],
+H:["Des réponses différentes ne veulent pas dire que quelqu’un a tort. L’école voit votre enfant dans un grand groupe, vous voyez ce qui se passe à la maison.","Demandez d’abord ce que vous pouvez transmettre à l’école. Transmettez-le ensuite."],
+S:["Les parents savent sur l’élève des choses utiles à l’école. Demandez-les.","Proposez vous-même un moment pour parler. N’attendez pas que la famille le demande."]
+},
+chip:{elevlav:"L’élève voit plus d’orage",felles:"Orage partagé",ulikt:"Regards différents",skjult:"Gardé pour soi",blind:"Tous ne le voient pas",en:"Trop peu de réponses",likt:"Même regard"},
+ex:{
+elevlav:"L’élève vit ici plus de mauvais temps que ce que voient les adultes. Ce que vit l’élève est le point de départ. Commencez ici.",
+felles:"Tous ceux qui ont répondu voient du mauvais temps ici. Vous êtes donc d’accord sur ce qui demande de l’attention.",
+hjem:"Cela paraît plus lourd vu de la maison qu’à l’école. Un enfant peut tenir bon à l’école et lâcher prise à la maison.",
+skole:"L’école voit plus de mauvais temps que la famille. L’école voit l’élève dans un grand groupe, ce qui peut donner une autre image.",
+elevlys:"L’élève vit cela mieux que ce que voient les adultes. Demandez ce que l’élève remarque lui-même.",
+ulikt:"Vous voyez cela différemment. Personne n’a tort. Chacun voit sa partie de la journée.",
+skjult:"L’élève a choisi de garder cela pour lui. C’est permis, et cela doit être respecté.",
+blind:"Tout le monde n’a pas de vue sur cela. Celui qui le voit peut le dire aux autres.",
+en:"Trop peu de réponses ici pour comparer.",
+likt:"Vous voyez cela à peu près de la même façon."
+},
+path:[
+["Parlez d’abord ensemble.","L’élève et un adulte que l’élève a choisi. Utilisez les questions ci-dessus."],
+["Parlez-en au professeur principal.","Demandez une rencontre où l’élève, la famille et l’école partagent ce qu’ils voient."],
+["Faites appel à l’infirmière ou au conseiller de l’école.","Beaucoup d’écoles en ont un, et les élèves peuvent souvent le contacter eux-mêmes."],
+["Prévenez la direction si l’école ne semble pas sûre.","L’école doit examiner la situation et agir. En Norvège, c’est une obligation légale, et l’affaire peut être portée devant le gouverneur du comté si rien n’aide."],
+["Laissez le reste aux professionnels.","Si vous vous demandez s’il faut plus d’aide, un médecin ou le service d’accompagnement de l’école peut l’évaluer. Tre blikk ne le peut pas."]
+],
+nots:[
+"Ne pose aucun diagnostic et ne juge ni les enfants, ni les parents, ni les enseignants.",
+"N’enregistre aucune réponse. Elles n’existent que sur cet écran jusqu’à la fermeture de la page.",
+"Ne demande ni nom, ni date de naissance, ni école.",
+"Ne remplace pas une conversation avec un enseignant, une infirmière scolaire ou un médecin."
+],
+help:[
+"Norvège : ligne d’écoute pour les enfants et les jeunes. Gratuite, ouverte jour et nuit, et tu peux rester anonyme.",
+"Norvège : Kors på halsen, de la Croix-Rouge, pour les moins de 18 ans. Gratuit et anonyme.",
+"Norvège : appelle en cas de danger immédiat pour la vie ou la santé."
+]
+};
+Object.assign(L.fr.ui,{
+introE:"Avant de commencer",
+introH:"Tre blikk est un regard, pas une évaluation",
+introKid:"L’élève ne doit pas confirmer cela. Un adulte confirme avant de lui donner le téléphone.",
+introC1:"Je suis adulte, et j’ai lu et compris cela.",
+introC2:"J’accepte de ne pas pouvoir utiliser Tre blikk, ni rien de ce qu’il montre, contre l’application, ses développeurs ou ses propriétaires.",
+introBtn:"Je comprends et j’accepte",
+kidIntro:"Ce n’est pas un contrôle. Aucune réponse n’est fausse.",
+notDx:"Ce n’est ni un diagnostic ni une évaluation professionnelle. Cela montre seulement comment chacun voit les choses de là où il se trouve.",
+terms:"Conditions d’utilisation"
+});
+L.fr.intro=[
+["Aucun diagnostic.","Tre blikk ne pose aucun diagnostic et ne dit rien du TDAH ni d’aucun autre trouble. Il ne dit pas que quelqu’un a un diagnostic, et il ne dit pas non plus que quelqu’un n’en a pas."],
+["Seulement des regards différents.","L’application montre comment l’élève, la famille et l’école vivent le quotidien en ce moment, et où ils le voient de la même façon ou autrement. Elle ne dit pas qui a raison, ni pourquoi il en est ainsi."],
+["Pas des professionnels.","Tre blikk n’est ni un soin, ni un bilan, ni un conseil, et ne remplace pas un enseignant, une infirmière scolaire, un médecin ou le service d’accompagnement de l’école. Si vous êtes inquiets, contactez-les."],
+["Sous votre responsabilité.","Vous utilisez Tre blikk sous votre propre responsabilité. Les réponses, les conseils et les résultats ne peuvent pas servir de document, de preuve ou de fondement à une réclamation contre qui que ce soit. Cela vaut aussi pour l’application et pour ceux qui l’ont développée ou qui en sont propriétaires."]
+];
+
+L.de={
+name:"Deutsch",dir:"ltr",sp:" ",
+ui:{
+lang:"Sprache",
+home:"Zur Startseite",
+h1:"Dasselbe Kind, von drei Orten aus gesehen",
+lead:"Kinder können zu Hause und in der Schule verschieden sein. Hier beantworten das Kind, das Zuhause und die Schule dieselben Fragen, jeder für sich. Danach sehen Sie, wo Sie es gleich sehen, wo Sie es unterschiedlich sehen und worüber Sie sprechen können.",
+exLabel:"Beispiel",
+sampleCap:"Die Schule sieht leichte Bewölkung. Das Kind und das Zuhause sehen Gewitter. Niemand irrt sich. Jeder sieht seinen Teil des Tages.",
+bandH:"Wie alt ist das Kind?",
+bandNote:"Die Altersgruppe bestimmt, wie die Fragen an das Kind formuliert sind.",
+bandNote1:"Bei 6 bis 9 Jahren kann ein Erwachsener vorlesen, aber lassen Sie das Kind das Wetter selbst wählen.",
+whoH:"Wer antwortet jetzt?",
+whoNote:"Lassen Sie das Kind zuerst antworten, und allein. Es bekommt sechs Fragen und entscheidet selbst, ob es vier weitere möchte. Es kann einzelne Antworten auch für sich behalten. Niemand sieht die Antworten, bevor Sie den Vergleich öffnen.",
+roleDone:"Hat geantwortet. Tippen, um neu zu antworten.",
+cmpH:"Den Vergleich ansehen",
+answered:"Geantwortet haben: {list}.",
+noneYet:"Noch hat niemand geantwortet.",
+needTwo:"Mindestens zwei müssen antworten.",
+cmpBtn:"Vergleich öffnen",
+reset:"Alle Antworten löschen",
+resetArm:"Zum Löschen noch einmal tippen",
+apartH:"Sitzen Sie nicht zusammen?",
+apartP:"Jeder kann auf dem eigenen Telefon antworten und seinen Antwortcode schicken. Fügen Sie den Code hier ein.",
+codeAria:"Antwortcode",
+addBtn:"Antworten hinzufügen",
+codeBad:"Der Code stimmt nicht. Prüfen Sie, ob alle Zeichen dabei sind, und versuchen Sie es noch einmal.",
+codeOk:"Antworten hinzugefügt: {who}.",
+codeBand:"Der Code wurde für {band} erstellt.",
+exH:"So kann ein Vergleich aussehen",
+exP:"Diese Antworten sind erfunden. Gezeigt werden die ersten sechs Bereiche.",
+exBtn:"Das ganze Beispiel mit Tipps ansehen",
+qOf:"Frage {n} von {t}",
+pause:"Pause",
+lastQ:"Letzte Frage",
+readAloud:"Ein Erwachsener kann vorlesen. Das Wetter wählst du selbst.",
+noE:"Darauf möchte ich nicht antworten",
+noA:"Das sehe ich nicht",
+keep:"Diese Antwort für mich behalten. Die Erwachsenen sehen sie nicht.",
+pauseH:"Gut gemacht. Sechs Fragen sind geschafft.",
+pauseP:"Du kannst hier aufhören. Das ist völlig in Ordnung. Wenn du magst, gibt es noch vier Fragen.",
+stopT:"Ich bin fertig",
+stopS:"Sechs reichen mir",
+moreT:"Ich mache noch vier",
+moreS:"Morgen, Ruhe im Unterricht, andere Tage und Internet",
+wishE:"Dein Wunsch",
+wishH:"Mit wem möchtest du am liebsten zuerst sprechen?",
+wishNo:"Das möchte ich nicht sagen",
+back:"Zurück",
+next:"Weiter",
+finish:"Fertig",
+thanks:"Danke. Die Antworten sind eingetragen.",
+doneE:"Gib das Telefon weiter, wenn du so weit bist. Die Erwachsenen sehen deine Antworten erst, wenn ihr den Vergleich gemeinsam öffnet.",
+doneA:"Die anderen sehen Ihre Antworten erst, wenn Sie den Vergleich öffnen.",
+kept1:"Du hast 1 Antwort für dich behalten. Sie wird nicht weitergegeben.",
+keptN:"Du hast {n} Antworten für dich behalten. Sie werden nicht weitergegeben.",
+heavyH:"Du hast geantwortet, dass etwas schwer ist.",
+heavyP:"Du musst das nicht allein lösen. Sprich mit einem Erwachsenen, dem du vertraust. In Norwegen kannst du auch 116 111 anrufen. Das ist kostenlos, und du musst nicht sagen, wer du bist. Für andere Länder siehe unten auf dieser Seite.",
+codeH:"Ihr Antwortcode",
+copy:"Kopieren",
+copied:"Kopiert",
+copySel:"Markiert. Bitte selbst kopieren",
+codeP:"Wenn Sie nicht zusammensitzen, schicken Sie den Code an die Person, die die Antworten sammelt. Der Code enthält nur die Altersgruppe und die Antworten, keine Namen.",
+codePE:"Du entscheidest selbst, ob du ihn schickst.",
+exBannerB:"Das ist ein Beispiel.",
+exBannerT:"Die Antworten sind erfunden.",
+fcE:"Der Wetterbericht",
+fcTop:"Der wichtigste Grund, miteinander zu sprechen: {a}.",
+fcNote:"Der Wetterbericht beschreibt die Antworten, nicht das Kind.",
+startHere:"Hier anfangen",
+sameH:"Sie sehen das meiste gleich",
+sameP:"Auch das ist gut zu wissen. Fragen Sie das Kind, ob die Fragen etwas nicht erfasst haben.",
+unsafeH:"Jemand hat geantwortet, dass es sich nicht sicher anfühlt.",
+unsafeP:"Sagen Sie der Schule Bescheid. Eine Schule, die erfährt, dass ein Kind sich nicht sicher fühlt, muss dem nachgehen und handeln. In Norwegen ist das gesetzliche Pflicht (Schulgesetz § 12-4).",
+areasH:"Bereich für Bereich",
+askL:"Fragen Sie:",
+tipsH:"Tipps für jeden von Ihnen",
+keptTipH:"Was das Kind für sich behält",
+keptTipP:"Drängen Sie nicht. Sagen Sie, dass die Tür offen steht, und fragen Sie an einem anderen Tag noch einmal.",
+always:"Immer",
+pathH:"Der Weg weiter",
+again:"Machen Sie in vier Wochen eine neue Runde und schauen Sie, ob sich das Wetter geändert hat.",
+startOwn:"Eigene Runde starten",
+hidE:"Das Kind behält das für sich.",
+shortE:"Das Kind hat die kurze Runde gemacht.",
+missH:"Das Zuhause sieht das nicht.",
+missS:"Die Schule sieht das nicht.",
+ariaKept:"für sich behalten",
+ariaBlind:"sieht das nicht",
+helpH:"Brauchst du jetzt einen Erwachsenen zum Reden?",
+helpIntl:"Außerhalb Norwegens: Ruf im Notfall die Notrufnummer deines Landes an. Das Kindertelefon für dein Land findest du hier:",
+notsH:"Was Tre blikk nicht tut",
+src:"Beruht auf norwegischen Leitlinien für die Zusammenarbeit von Elternhaus und Schule. Ein Prototyp, kein fertiges Produkt. Aus dem Norwegischen übersetzt und noch nicht von Muttersprachlern geprüft.",
+ad:"Anzeige",
+adFree:"Freier Anzeigenplatz",
+adNote:"Wird nur Erwachsenen gezeigt. Nie dem Kind."
+},
+roles:{
+E:{n:"Das Kind",l:"das Kind",you:"Ich bin Schülerin oder Schüler",sub:"6 Fragen, und 4 weitere, wenn du magst",tab:"Für dich als Schülerin oder Schüler",as:"Du antwortest als Schülerin oder Schüler"},
+H:{n:"Das Zuhause",l:"das Zuhause",you:"Ich bin ein Elternteil",sub:"10 Fragen, von zu Hause aus gesehen",tab:"Für das Zuhause",as:"Sie antworten als Elternteil"},
+S:{n:"Die Schule",l:"die Schule",you:"Ich bin Lehrkraft",sub:"10 Fragen, von der Schule aus gesehen",tab:"Für die Schule",as:"Sie antworten als Lehrkraft"}
+},
+bands:["6–9 Jahre","10–12 Jahre","13–16 Jahre"],
+scale:[["Gewitter","Sehr schwer"],["Regen","Ziemlich schwer"],["Bewölkt","Geht so"],["Leicht bewölkt","Ziemlich gut"],["Sonne","Sehr gut"]],
+fc:["Überwiegend Gewitter.","Überwiegend Regen.","Überwiegend bewölkt.","Überwiegend leicht bewölkt.","Überwiegend Sonne."],
+areas:[
+{n:"Wohlbefinden",
+ e:["Wie ist es, in der Schule zu sein?","Wie ist es zurzeit, in der Schule zu sein?","Wie geht es dir zurzeit in der Schule?"],
+ h:"Wie scheint es Ihrem Kind mit der Schule zu gehen, von zu Hause aus gesehen?",
+ s:"Wie scheint es dem Kind in der Schule zu gehen, vom Klassenzimmer aus gesehen?",
+ ask:"Was ist das Beste und was das Blödeste an einem normalen Schultag?",
+ te:"Erzähl von einer Sache, die den Tag besser macht, und einer, die ihn schwerer macht. Zwei Sätze reichen.",
+ th:"Fragen Sie nach einem ganz normalen Dienstag, Stunde für Stunde. Über konkrete Tage lässt sich leichter sprechen als über „Geht es dir gut?“.",
+ ts:"Erzählen Sie dem Zuhause, was Sie im Lauf eines Tages wirklich sehen, auch die kleinen Dinge, die gut laufen."},
+{n:"Freunde und Pausen",
+ e:["Wie ist es, in den Pausen mit den anderen zu spielen?","Wie läuft es mit Freunden und in den Pausen?","Wie läuft es mit Freunden, in den Pausen und sonst?"],
+ h:"Wie scheint es mit Freunden zu laufen, nach dem, was Sie zu Hause hören und sehen?",
+ s:"Wie sieht es mit Freunden und in den Pausen aus?",
+ ask:"Mit wem bist du in den Pausen zusammen, und mit wem wärst du gern öfter zusammen?",
+ te:"Sag, mit wem du gern zusammen bist. Dann können die Erwachsenen helfen, ohne zu raten.",
+ th:"Fragen Sie, mit wem Ihr Kind heute zusammen war, nicht, ob es Freunde hat.",
+ ts:"Achten Sie auf die Übergänge: Pause, Garderobe und Gruppenarbeit. Teilen Sie dem Zuhause mit, was Sie sehen."},
+{n:"Schularbeit",
+ e:["Wie ist es, in der Schule an den Aufgaben zu arbeiten?","Wie läuft es mit der Schularbeit?","Wie läuft es mit Schularbeit, Tests und Abgaben?"],
+ h:"Wie läuft es zu Hause mit Schularbeit und Hausaufgaben?",
+ s:"Wie läuft es mit Aufgaben und Arbeit im Unterricht?",
+ ask:"Welches Fach fühlt sich gerade am leichtesten an, und welches am schwersten?",
+ te:"Zeig eine Aufgabe, die du schwer fandest. Hilfe bekommt man leichter, wenn die Erwachsenen sehen, was du meinst.",
+ th:"Sagen Sie der Schule, wie lange die Hausaufgaben zu Hause wirklich dauern und wie die Stimmung dabei ist.",
+ ts:"Zeigen Sie dem Zuhause ein Beispiel dafür, was das Kind im Unterricht schafft und wo es stockt."},
+{n:"Kraft nach dem Schultag",
+ e:["Wie fühlt sich dein Körper an, wenn der Schultag vorbei ist?","Wie viel Kraft hast du, wenn der Schultag vorbei ist?","Wie viel Energie hast du noch, wenn der Schultag vorbei ist?"],
+ h:"Wie viel Kraft hat Ihr Kind nach dem Schultag?",
+ s:"Wie viel Kraft hat das Kind gegen Ende des Schultags?",
+ ask:"Wann am Tag bist du am müdesten, und was hilft dann?",
+ te:"Sag, wann am Tag du am müdesten wirst. Das ist für die Erwachsenen gut zu wissen.",
+ th:"Beschreiben Sie der Lehrkraft die erste Stunde nach der Schule. Diesen Teil des Tages sieht die Schule selten.",
+ ts:"Ein Kind, das im Unterricht ruhig wirkt, braucht dafür vielleicht viel Kraft. Fragen Sie das Zuhause, wie die Nachmittage sind."},
+{n:"Sicherheit",
+ e:["Wie sicher fühlt es sich in der Schule und auf dem Schulweg an?","Wie sicher fühlst du dich in der Schule und auf dem Schulweg?","Wie sicher fühlst du dich in der Schule und auf dem Hin- und Rückweg?"],
+ h:"Wie sicher scheint sich Ihr Kind in der Schule und auf dem Schulweg zu fühlen?",
+ s:"Wie sicher scheint sich das Kind in der Schule zu fühlen?",
+ ask:"Gibt es Orte oder Zeiten in der Schule, die sich unsicher anfühlen?",
+ te:"Wenn sich etwas unsicher anfühlt, sag es einem Erwachsenen, dem du vertraust. Du musst nicht genau wissen, was los ist.",
+ th:"Sagen Sie der Schule Bescheid, am besten schriftlich. Eine Schule, die erfährt, dass ein Kind sich nicht sicher fühlt, muss dem nachgehen und handeln.",
+ ts:"Folgen Sie den Abläufen Ihrer Schule: hinschauen, die Schulleitung informieren, nachgehen und handeln. Ausgangspunkt ist das Erleben des Kindes."},
+{n:"Gehört werden",
+ e:["Wie ist es, den Erwachsenen zu sagen, wenn dir etwas wichtig ist?","Wie ist es, von den Erwachsenen gehört zu werden, wenn du etwas Wichtiges sagst?","Wie ist es, von den Erwachsenen ernst genommen zu werden, wenn du etwas ansprichst?"],
+ h:"Wie gut wird Ihr Kind von den Erwachsenen gehört, so wie Sie es sehen?",
+ s:"Wie gut kommt das Kind zu Wort und wird gehört, so wie Sie es sehen?",
+ ask:"Was sollten die Erwachsenen deiner Meinung nach besser verstehen?",
+ te:"Du kannst darum bitten, zuerst mit einem Erwachsenen allein zu sprechen. Das ist erlaubt.",
+ th:"Hören Sie bis zum Ende zu, bevor Sie Lösungen vorschlagen. Fragen Sie: „Möchtest du Hilfe, oder möchtest du nur erzählen?“",
+ ts:"Lassen Sie das Kind wählen, wer beim Gespräch dabei ist und was an wen weitergegeben wird."},
+{n:"Morgen und Ankommen",
+ e:["Wie ist der Morgen, bevor du in die Schule gehst?","Wie sind die Morgen vor der Schule?","Wie ist es, morgens zur Schule loszukommen?"],
+ h:"Wie sind die Morgen vor der Schule bei Ihnen zu Hause?",
+ s:"Wie wirkt das Kind, wenn der Schultag beginnt?",
+ ask:"Was ist am Morgen am schwierigsten, und was macht ihn leichter?",
+ te:"Erzähl, was am Morgen am schlimmsten ist. Das Aufstehen, alles zu schaffen oder der Gedanke an den Tag?",
+ th:"Erzählen Sie der Lehrkraft, wie der Morgen an den schweren Tagen war. Dann versteht die Schule den Start in den Tag besser.",
+ ts:"Erzählen Sie dem Zuhause, wie die ersten zehn Minuten in der Schule aussehen. Das Zuhause sieht nur, was vor der Tür passiert."},
+{n:"Ruhe zum Arbeiten im Unterricht",
+ e:["Wie ist es, im Klassenzimmer Ruhe zum Arbeiten zu bekommen?","Wie ist es, im Unterricht Ruhe zum Arbeiten zu bekommen?","Wie ist es, sich im Unterricht zu konzentrieren?"],
+ h:"Wie scheint es mit der Ruhe zum Arbeiten im Unterricht zu sein, nach dem, was Ihr Kind erzählt?",
+ s:"Wie ist die Arbeitsruhe um das Kind herum im Unterricht?",
+ ask:"Wo im Klassenzimmer und wann am Tag lässt es sich am leichtesten arbeiten?",
+ te:"Sag, was dich am meisten stört. Der Lärm, dein Platz oder etwas anderes?",
+ th:"Fragen Sie, was das Arbeiten leicht macht, nicht nur, was stört. Geben Sie die Antwort an die Lehrkraft weiter.",
+ ts:"Probieren Sie eine Änderung nach der anderen, zum Beispiel Sitzplatz, Pausen oder kürzere Einheiten. Sagen Sie dem Zuhause, was Sie ausprobieren."},
+{n:"Wenn der Tag anders ist",
+ e:["Wie ist es, wenn in der Schule etwas anders ist, wie eine Vertretung oder ein Ausflug?","Wie ist es, wenn der Schultag anders ist, mit Vertretung, Ausflug oder neuen Gruppen?","Wie ist es, wenn der Schultag anders ist, mit Vertretung, neuen Gruppen oder geändertem Stundenplan?"],
+ h:"Wie kommt Ihr Kind zurecht, wenn der Schultag anders ist als sonst?",
+ s:"Wie kommt das Kind zurecht, wenn der Tag anders ist als sonst?",
+ ask:"Was hilft am meisten, wenn etwas anders kommt, als du gedacht hast?",
+ te:"Sag Bescheid, wenn du Änderungen gern vorher weißt. Das können die Erwachsenen leicht einrichten.",
+ th:"Sagen Sie der Schule, was zu Hause hilft, wenn sich Pläne ändern.",
+ ts:"Kündigen Sie Änderungen so früh wie möglich an, dem Kind und dem Zuhause. Sagen Sie, was gleich bleibt, nicht nur, was neu ist."},
+{n:"Internet, Spiele und Handy",
+ e:["Wie ist es, wenn du mit anderen aus der Schule spielst oder chattest?","Wie ist es im Internet, in Spielen und in Chats mit den anderen aus deiner Klasse?","Wie ist es im Internet und in sozialen Medien mit Leuten aus der Schule?"],
+ h:"Wie scheint es im Internet, in Spielen und in Chats mit anderen aus der Schule zu laufen?",
+ s:"Wie scheint das zu laufen, was online zwischen den Kindern passiert, soweit Sie es mitbekommen?",
+ ask:"Ist online etwas passiert, das dich in den Schultag begleitet hat?",
+ te:"Du kannst einem Erwachsenen zeigen, was passiert ist, statt es zu erklären. Ein Screenshot reicht.",
+ th:"Seien Sie neugierig, bevor Sie Grenzen setzen. Fragen Sie, was dort Spaß macht und was nicht.",
+ ts:"Was nach der Schule online passiert, kann den Schultag unsicher machen. Es bleibt Sache der Schule."}
+],
+wish:[
+["Jemand zu Hause","Das Kind möchte am liebsten zuerst mit jemandem zu Hause sprechen."],
+["Meine Lehrerin oder mein Lehrer","Das Kind möchte am liebsten zuerst mit seiner Lehrkraft sprechen."],
+["Schulsozialarbeit oder Schulgesundheitsdienst","Das Kind möchte am liebsten zuerst mit der Schulsozialarbeit oder dem Schulgesundheitsdienst sprechen."],
+["Ein anderer Erwachsener, dem ich vertraue","Das Kind möchte am liebsten zuerst mit einem anderen Erwachsenen sprechen."],
+["Weiß ich noch nicht","Das Kind weiß noch nicht, mit wem es am besten spricht. Geben Sie ihm etwas Zeit."]
+],
+stand:{
+E:["Du entscheidest, was du teilen möchtest. Du kannst sagen: „Darüber möchte ich noch nicht sprechen.“","Es ist nicht deine Aufgabe, das zu lösen. Das ist Aufgabe der Erwachsenen."],
+H:["Unterschiedliche Antworten heißen nicht, dass jemand sich irrt. Die Schule sieht Ihr Kind in einer großen Gruppe, Sie sehen, was zu Hause passiert.","Fragen Sie zuerst, was Sie der Schule weitersagen dürfen. Sagen Sie es danach."],
+S:["Eltern wissen Dinge über das Kind, die die Schule nutzen kann. Fragen Sie danach.","Schlagen Sie selbst einen Gesprächstermin vor. Warten Sie nicht, bis das Zuhause fragt."]
+},
+chip:{elevlav:"Kind sieht mehr Unwetter",felles:"Gemeinsames Unwetter",ulikt:"Unterschiedliche Sicht",skjult:"Für sich behalten",blind:"Nicht alle sehen das",en:"Zu wenige Antworten",likt:"Gleiche Sicht"},
+ex:{
+elevlav:"Das Kind erlebt hier mehr Unwetter, als die Erwachsenen sehen. Ausgangspunkt ist das Erleben des Kindes. Fangen Sie hier an.",
+felles:"Alle, die geantwortet haben, sehen hier Unwetter. Dann sind Sie sich einig, was Aufmerksamkeit braucht.",
+hjem:"Von zu Hause aus sieht es schwerer aus als in der Schule. Kinder können sich in der Schule zusammennehmen und zu Hause loslassen.",
+skole:"Die Schule sieht mehr Unwetter als das Zuhause. Die Schule sieht das Kind in einer großen Gruppe, und das kann ein anderes Bild geben.",
+elevlys:"Das Kind erlebt es heller, als die Erwachsenen es sehen. Fragen Sie, was dem Kind selbst auffällt.",
+ulikt:"Sie sehen das unterschiedlich. Niemand irrt sich. Jeder sieht seinen Teil des Tages.",
+skjult:"Das Kind hat entschieden, das für sich zu behalten. Das ist erlaubt und muss respektiert werden.",
+blind:"Nicht alle haben Einblick in das. Wer es sieht, kann es den anderen erzählen.",
+en:"Hier haben zu wenige geantwortet, um zu vergleichen.",
+likt:"Sie sehen das ungefähr gleich."
+},
+path:[
+["Sprechen Sie zuerst miteinander.","Das Kind und ein Erwachsener, den das Kind selbst gewählt hat. Nutzen Sie die Fragen oben."],
+["Gehen Sie zur Klassenlehrkraft.","Bitten Sie um ein Gespräch, in dem das Kind, das Zuhause und die Schule teilen, was sie sehen."],
+["Nutzen Sie Schulsozialarbeit oder Schulgesundheitsdienst.","Viele Schulen haben so ein Angebot, und Kinder können sich oft selbst melden."],
+["Sagen Sie der Schulleitung, wenn die Schule sich nicht sicher anfühlt.","Die Schule muss dem nachgehen und handeln. In Norwegen ist das gesetzliche Pflicht, und der Fall kann an den Statsforvalter (staatliche Aufsicht) gehen, wenn nichts hilft."],
+["Überlassen Sie den Rest den Fachleuten.","Wenn Sie sich fragen, ob mehr Hilfe nötig ist, kann das eine Ärztin, ein Arzt oder der schulpsychologische Dienst beurteilen. Tre blikk kann das nicht."]
+],
+nots:[
+"Stellt keine Diagnosen und beurteilt weder Kinder noch Eltern noch Lehrkräfte.",
+"Speichert keine Antworten. Sie existieren nur auf diesem Bildschirm, bis die Seite geschlossen wird.",
+"Fragt nicht nach Namen, Geburtsdatum oder Schule.",
+"Ersetzt kein Gespräch mit Lehrkraft, Schulgesundheitsdienst oder Ärztin und Arzt."
+],
+help:[
+"Norwegen: Hilfetelefon für Kinder und Jugendliche. Kostenlos, Tag und Nacht erreichbar, und du kannst anonym bleiben.",
+"Norwegen: Kors på halsen vom Roten Kreuz, für alle unter 18 Jahren. Kostenlos und anonym.",
+"Norwegen: Ruf an, wenn Leben oder Gesundheit unmittelbar in Gefahr sind."
+]
+};
+Object.assign(L.de.ui,{
+introE:"Bevor Sie anfangen",
+introH:"Tre blikk ist ein Blick, keine Beurteilung",
+introKid:"Das Kind soll das nicht bestätigen. Ein Erwachsener bestätigt, bevor das Kind das Telefon bekommt.",
+introC1:"Ich bin erwachsen und habe das gelesen und verstanden.",
+introC2:"Ich akzeptiere, dass ich Tre blikk und alles, was es zeigt, nicht gegen die App, ihre Entwickler oder ihre Eigentümer verwenden kann.",
+introBtn:"Ich verstehe und akzeptiere",
+kidIntro:"Das ist kein Test. Keine Antwort ist falsch.",
+notDx:"Das ist keine Diagnose und keine fachliche Beurteilung. Es zeigt nur, wie Sie es sehen, jeder von seinem Ort aus.",
+terms:"Nutzungsbedingungen"
+});
+L.de.intro=[
+["Keine Diagnose.","Tre blikk stellt keine Diagnose und sagt nichts über ADHS oder andere Störungsbilder. Es sagt nicht, dass jemand eine Diagnose hat, und auch nicht, dass jemand keine hat."],
+["Nur unterschiedliche Sichtweisen.","Die App zeigt, wie das Kind, das Zuhause und die Schule den Alltag gerade erleben und wo sie ihn gleich oder unterschiedlich sehen. Sie sagt nicht, wer recht hat, und nicht, warum es so ist."],
+["Keine Fachleute.","Tre blikk ist keine Gesundheitsleistung, keine Abklärung und keine Beratung und ersetzt weder Lehrkraft noch Schulgesundheitsdienst, Ärztin, Arzt oder schulpsychologischen Dienst. Wenn Sie sich Sorgen machen, wenden Sie sich an diese."],
+["Auf eigene Verantwortung.","Sie nutzen Tre blikk auf eigene Verantwortung. Antworten, Tipps und Ergebnisse können nicht als Dokumentation, Beweis oder Grundlage für Ansprüche gegen irgendjemanden verwendet werden. Das gilt auch für die App und für alle, die sie entwickelt haben oder besitzen."]
+];
+
+L.pt={
+name:"Português",dir:"ltr",sp:" ",
+ui:{
+lang:"Idioma",
+home:"Voltar ao início",
+h1:"A mesma criança, vista de três lugares",
+lead:"As crianças podem ser diferentes em casa e na escola. Aqui o estudante, a família e a escola respondem às mesmas perguntas, cada um por si. Depois vocês veem onde concordam, onde veem as coisas de outro jeito e sobre o que podem conversar.",
+exLabel:"Exemplo",
+sampleCap:"A escola vê poucas nuvens. O estudante e a família veem trovoada. Ninguém está errado. Cada um vê a sua parte do dia.",
+bandH:"Qual é a idade do estudante?",
+bandNote:"A faixa etária define como as perguntas do estudante são formuladas.",
+bandNote1:"Dos 6 aos 9 anos, um adulto pode ler em voz alta, mas deixe a criança escolher o tempo.",
+whoH:"Quem responde agora?",
+whoNote:"Deixem o estudante responder primeiro, e sozinho. Ele recebe seis perguntas e decide se quer mais quatro. Também pode guardar algumas respostas só para si. Ninguém vê as respostas antes de abrirem a comparação.",
+roleDone:"Já respondeu. Toque para responder de novo.",
+cmpH:"Ver a comparação",
+answered:"Já responderam: {list}.",
+noneYet:"Ninguém respondeu ainda.",
+needTwo:"Pelo menos dois precisam responder.",
+cmpBtn:"Abrir a comparação",
+reset:"Apagar todas as respostas",
+resetArm:"Toque mais uma vez para apagar",
+apartH:"Não estão juntos?",
+apartP:"Cada pessoa pode responder no próprio telefone e enviar o seu código de respostas. Cole o código aqui.",
+codeAria:"Código de respostas",
+addBtn:"Adicionar respostas",
+codeBad:"O código não está certo. Confira se todos os caracteres estão lá e tente de novo.",
+codeOk:"Respostas adicionadas: {who}.",
+codeBand:"O código foi criado para {band}.",
+exH:"Como pode ficar uma comparação",
+exP:"Estas respostas são inventadas. São mostradas as seis primeiras áreas.",
+exBtn:"Ver o exemplo completo com dicas",
+qOf:"Pergunta {n} de {t}",
+pause:"Pausa",
+lastQ:"Última pergunta",
+readAloud:"Um adulto pode ler em voz alta. Você escolhe o tempo.",
+noE:"Não quero responder a isto",
+noA:"Isto eu não vejo",
+keep:"Guardar esta resposta só para mim. Os adultos não vão ver.",
+pauseH:"Muito bem. Seis perguntas feitas.",
+pauseP:"Você pode parar aqui. Não tem problema nenhum. Se quiser, há mais quatro perguntas.",
+stopT:"Terminei",
+stopS:"Seis são suficientes para mim",
+moreT:"Faço mais quatro",
+moreS:"Manhãs, sossego na aula, dias diferentes e internet",
+wishE:"O seu desejo",
+wishH:"Com quem você mais gostaria de falar primeiro?",
+wishNo:"Prefiro não dizer",
+back:"Voltar",
+next:"Seguinte",
+finish:"Concluir",
+thanks:"Obrigado. As respostas foram registradas.",
+doneE:"Passe o telefone quando estiver pronto. Os adultos só verão as suas respostas quando abrirem a comparação juntos.",
+doneA:"Os outros só verão as suas respostas quando abrirem a comparação.",
+kept1:"Você guardou 1 resposta só para si. Ela não é repassada.",
+keptN:"Você guardou {n} respostas só para si. Elas não são repassadas.",
+heavyH:"Você respondeu que alguma coisa está difícil.",
+heavyP:"Você não precisa resolver isso sozinho. Fale com um adulto em quem confia. Na Noruega, você também pode ligar para 116 111. É grátis, e você não precisa dizer quem é. Para outros países, veja o fim desta página.",
+codeH:"O seu código de respostas",
+copy:"Copiar",
+copied:"Copiado",
+copySel:"Selecionado. Copie você mesmo",
+codeP:"Se não estiverem juntos, envie o código para quem está reunindo as respostas. O código contém só a faixa etária e as respostas, nenhum nome.",
+codePE:"Você decide se quer enviar.",
+exBannerB:"Isto é um exemplo.",
+exBannerT:"As respostas são inventadas.",
+fcE:"A previsão do tempo",
+fcTop:"O melhor motivo para conversar: {a}.",
+fcNote:"A previsão descreve as respostas, não o estudante.",
+startHere:"Comecem aqui",
+sameH:"Vocês veem quase tudo igual",
+sameP:"Isso também é útil saber. Perguntem ao estudante se as perguntas deixaram algo de fora.",
+unsafeH:"Alguém respondeu que não se sente seguro.",
+unsafeP:"Avisem a escola. Uma escola que sabe que um estudante não se sente seguro deve apurar o caso e agir. Na Noruega isso é uma obrigação legal (Lei da Educação, § 12-4).",
+areasH:"Área por área",
+askL:"Perguntem:",
+tipsH:"Dicas para cada um",
+keptTipH:"O que o estudante guarda para si",
+keptTipP:"Não pressionem. Digam que a porta está aberta e perguntem de novo outro dia.",
+always:"Sempre",
+pathH:"O caminho a seguir",
+again:"Façam outra rodada daqui a quatro semanas e vejam se o tempo mudou.",
+startOwn:"Começar a sua própria rodada",
+hidE:"O estudante guarda isto para si.",
+shortE:"O estudante fez a rodada curta.",
+missH:"A família não vê isto.",
+missS:"A escola não vê isto.",
+ariaKept:"guardado em privado",
+ariaBlind:"não vê isto",
+helpH:"Precisa falar com um adulto agora?",
+helpIntl:"Fora da Noruega: em uma emergência, ligue para o número de emergência do seu país. Encontre aqui a linha de apoio à criança do seu país:",
+notsH:"O que o Tre blikk não faz",
+src:"Baseado nas orientações norueguesas sobre a colaboração entre família e escola. É um protótipo, não um produto acabado. Traduzido do norueguês e ainda não revisado por falantes nativos.",
+ad:"Publicidade",
+adFree:"Espaço publicitário disponível",
+adNote:"Mostrado só aos adultos. Nunca ao estudante."
+},
+roles:{
+E:{n:"O estudante",l:"o estudante",you:"Sou o estudante",sub:"6 perguntas, e mais 4 se quiser",tab:"Para você, estudante",as:"Você responde como estudante"},
+H:{n:"A família",l:"a família",you:"Sou mãe, pai ou responsável",sub:"10 perguntas, visto de casa",tab:"Para a família",as:"Você responde como mãe, pai ou responsável"},
+S:{n:"A escola",l:"a escola",you:"Sou professor ou professora",sub:"10 perguntas, visto da escola",tab:"Para a escola",as:"Você responde como professor ou professora"}
+},
+bands:["6–9 anos","10–12 anos","13–16 anos"],
+scale:[["Trovoada","Muito difícil"],["Chuva","Bem difícil"],["Nublado","Mais ou menos"],["Poucas nuvens","Bem bom"],["Sol","Muito bom"]],
+fc:["Na maior parte, trovoada.","Na maior parte, chuva.","Na maior parte, nublado.","Na maior parte, poucas nuvens.","Na maior parte, sol."],
+areas:[
+{n:"Bem-estar",
+ e:["Como é estar na escola?","Como tem sido estar na escola?","Como você está na escola ultimamente?"],
+ h:"Como a criança parece estar com a escola, visto de casa?",
+ s:"Como o estudante parece estar na escola, visto da sala de aula?",
+ ask:"O que é o melhor e o pior de um dia normal de escola?",
+ te:"Conte uma coisa que deixa o dia melhor e uma que o deixa mais pesado. Duas frases bastam.",
+ th:"Perguntem sobre uma terça-feira bem comum, aula por aula. É mais fácil falar de dias concretos do que responder a «está tudo bem?».",
+ ts:"Contem à família o que vocês veem de verdade durante um dia, inclusive as pequenas coisas que vão bem."},
+{n:"Amigos e recreio",
+ e:["Como é brincar com os outros no recreio?","Como estão as coisas com os amigos e no recreio?","Como estão as coisas com os amigos, no recreio e fora dele?"],
+ h:"Como parecem estar as coisas com os amigos, pelo que vocês ouvem e veem em casa?",
+ s:"Como estão as coisas com os amigos e no recreio?",
+ ask:"Com quem você fica no recreio, e com quem gostaria de ficar mais?",
+ te:"Diga com quem você gosta de estar. Assim os adultos podem ajudar sem adivinhar.",
+ th:"Perguntem com quem a criança esteve hoje, e não se ela tem amigos.",
+ ts:"Observem os momentos de transição: recreio, entrada e trabalho em grupo. Compartilhem com a família o que veem."},
+{n:"Trabalho escolar",
+ e:["Como é fazer as tarefas na escola?","Como vai o trabalho escolar?","Como vão o trabalho escolar, as provas e as entregas?"],
+ h:"Como vão o trabalho escolar e a lição de casa?",
+ s:"Como vão as tarefas e o trabalho em aula?",
+ ask:"Qual matéria parece mais fácil agora, e qual parece mais difícil?",
+ te:"Mostre uma tarefa que você achou difícil. É mais fácil receber ajuda quando os adultos veem o que você quer dizer.",
+ th:"Contem à escola quanto tempo a lição de casa leva de verdade e como fica o clima em torno dela.",
+ ts:"Mostrem à família um exemplo do que o estudante consegue em aula e onde ele trava."},
+{n:"Energia depois da escola",
+ e:["Como o seu corpo fica quando o dia de escola acaba?","Quanta energia você tem quando o dia de escola acaba?","Quanta energia sobra quando o dia de escola acaba?"],
+ h:"Como está a energia da criança depois do dia de escola?",
+ s:"Como está a energia do estudante perto do fim do dia de escola?",
+ ask:"Em que hora do dia você fica mais cansado, e o que ajuda nessa hora?",
+ te:"Diga em que hora do dia você fica mais cansado. É útil para os adultos saberem.",
+ th:"Descrevam ao professor a primeira hora depois da escola. A escola quase nunca vê essa parte do dia.",
+ ts:"Um estudante que parece calmo em aula pode gastar muita energia com isso. Perguntem à família como são as tardes."},
+{n:"Segurança",
+ e:["Dá para se sentir seguro na escola e no caminho?","Você se sente seguro na escola e no caminho?","Você se sente seguro na escola e no caminho de ida e volta?"],
+ h:"A criança parece se sentir segura na escola e no caminho?",
+ s:"O estudante parece se sentir seguro na escola?",
+ ask:"Há lugares ou horários na escola em que você não se sente seguro?",
+ te:"Se algo não parece seguro, conte a um adulto em quem confia. Você não precisa saber exatamente o que está errado.",
+ th:"Avisem a escola, de preferência por escrito. Uma escola que sabe que um estudante não se sente seguro deve apurar o caso e agir.",
+ ts:"Sigam as rotinas da sua escola: observar, avisar a direção, apurar e agir. Partam da vivência do próprio estudante."},
+{n:"Ser ouvido",
+ e:["Como é contar aos adultos quando algo é importante para você?","Como é ser ouvido pelos adultos quando você diz algo importante?","Como é ser levado a sério pelos adultos quando você avisa de algo?"],
+ h:"A criança é bem ouvida pelos adultos, na visão de vocês?",
+ s:"O estudante consegue falar e ser ouvido, na visão de vocês?",
+ ask:"O que você gostaria que os adultos entendessem melhor?",
+ te:"Você pode pedir para falar primeiro com um adulto sozinho. Isso é permitido.",
+ th:"Escutem até o fim antes de propor soluções. Perguntem: «Você quer ajuda ou só quer contar?»",
+ ts:"Deixem o estudante escolher quem participa da conversa e o que é repassado a quem."},
+{n:"Manhãs e chegada",
+ e:["Como é a manhã antes de ir para a escola?","Como são as manhãs antes da escola?","Como é conseguir sair para a escola de manhã?"],
+ h:"Como são as manhãs antes da escola na casa de vocês?",
+ s:"Como o estudante parece quando o dia de escola começa?",
+ ask:"O que é mais difícil na manhã, e o que a deixa mais fácil?",
+ te:"Conte o que é pior na manhã. Levantar, dar conta de tudo ou pensar no dia?",
+ th:"Contem ao professor como foi a manhã nos dias difíceis. Assim a escola entende melhor o começo do dia.",
+ ts:"Contem à família como são os primeiros dez minutos na escola. A família só vê o que acontece antes da porta."},
+{n:"Sossego para trabalhar em aula",
+ e:["Como é ter sossego para trabalhar na sala de aula?","Como é ter sossego para trabalhar nas aulas?","Como é conseguir se concentrar nas aulas?"],
+ h:"Como parece ser o sossego para trabalhar em aula, pelo que a criança conta?",
+ s:"Há sossego para trabalhar em volta do estudante nas aulas?",
+ ask:"Em que lugar da sala e em que hora do dia é mais fácil trabalhar?",
+ te:"Diga o que mais atrapalha você. O barulho, o lugar onde senta ou outra coisa?",
+ th:"Perguntem o que torna fácil trabalhar, não só o que atrapalha. Repassem a resposta ao professor.",
+ ts:"Tentem uma mudança de cada vez, como o lugar, as pausas ou períodos mais curtos. Contem à família o que estão tentando."},
+{n:"Quando o dia é diferente",
+ e:["Como é quando algo é diferente na escola, como outro professor ou um passeio?","Como é quando o dia de escola é diferente, com professor substituto, passeio ou grupos novos?","Como é quando o dia de escola é diferente, com professor substituto, grupos novos ou horário alterado?"],
+ h:"Como a criança lida quando o dia de escola é diferente do habitual?",
+ s:"Como o estudante lida quando o dia é diferente do habitual?",
+ ask:"O que mais ajuda quando algo sai diferente do que você esperava?",
+ te:"Avise se você gosta de saber das mudanças com antecedência. É fácil para os adultos organizarem.",
+ th:"Contem à escola o que ajuda em casa quando os planos mudam.",
+ ts:"Avisem das mudanças o mais cedo possível, ao estudante e à família. Digam o que continua igual, não só o que é novo."},
+{n:"Internet, jogos e celular",
+ e:["Como é quando você joga ou conversa on-line com outros da escola?","Como é na internet, nos jogos e nos chats com os outros da sua turma?","Como é na internet e nas redes sociais com o pessoal da escola?"],
+ h:"Como parecem estar a internet, os jogos e os chats com outros da escola?",
+ s:"Como parece estar o que acontece on-line entre os estudantes, pelo que vocês percebem?",
+ ask:"Aconteceu algo on-line que acompanhou você até o dia de escola?",
+ te:"Você pode mostrar a um adulto o que aconteceu, em vez de explicar. Uma captura de tela basta.",
+ th:"Tenham curiosidade antes de impor limites. Perguntem o que é divertido ali e o que não é.",
+ ts:"O que acontece on-line depois da aula pode deixar o dia de escola inseguro. Continua sendo assunto da escola."}
+],
+wish:[
+["Alguém de casa","O estudante prefere falar primeiro com alguém de casa."],
+["Meu professor ou professora","O estudante prefere falar primeiro com o professor ou a professora."],
+["A enfermeira ou o orientador da escola","O estudante prefere falar primeiro com a enfermeira ou o orientador da escola."],
+["Outro adulto em quem confio","O estudante prefere falar primeiro com outro adulto."],
+["Ainda não sei","O estudante ainda não sabe com quem é melhor falar. Deem um tempo."]
+],
+stand:{
+E:["Você decide o que quer compartilhar. Pode dizer «ainda não quero falar disso».","Resolver isso não é tarefa sua. É tarefa dos adultos."],
+H:["Respostas diferentes não significam que alguém está errado. A escola vê a criança em um grupo grande, vocês veem o que acontece em casa.","Perguntem primeiro o que podem contar à escola. Contem depois."],
+S:["A família sabe coisas sobre o estudante que a escola pode aproveitar. Perguntem por elas.","Proponham vocês mesmos um horário para conversar. Não esperem a família pedir."]
+},
+chip:{elevlav:"O estudante vê mais tempestade",felles:"Tempestade em comum",ulikt:"Visões diferentes",skjult:"Guardado em privado",blind:"Nem todos veem isto",en:"Poucas respostas",likt:"Mesma visão"},
+ex:{
+elevlav:"O estudante vive aqui mais tempo ruim do que os adultos veem. A vivência do estudante é o ponto de partida. Comecem aqui.",
+felles:"Todos os que responderam veem tempo ruim aqui. Então vocês concordam sobre o que precisa de atenção.",
+hjem:"Visto de casa parece mais pesado do que na escola. As crianças podem se segurar na escola e desabar em casa.",
+skole:"A escola vê mais tempo ruim do que a família. A escola vê o estudante em um grupo grande, e isso pode dar outra imagem.",
+elevlys:"O estudante vive isto de forma mais leve do que os adultos veem. Perguntem o que o próprio estudante percebe.",
+ulikt:"Vocês veem isto de formas diferentes. Ninguém está errado. Cada um vê a sua parte do dia.",
+skjult:"O estudante escolheu guardar isto para si. Isso é permitido e deve ser respeitado.",
+blind:"Nem todos conseguem ver isto. Quem vê pode contar aos outros.",
+en:"Poucos responderam aqui para poder comparar.",
+likt:"Vocês veem isto mais ou menos igual."
+},
+path:[
+["Conversem primeiro entre vocês.","O estudante e um adulto que o próprio estudante escolheu. Usem as perguntas acima."],
+["Levem ao professor responsável pela turma.","Peçam uma conversa em que o estudante, a família e a escola compartilhem o que veem."],
+["Procurem a enfermeira ou o orientador da escola.","Muitas escolas têm um, e muitas vezes o próprio estudante pode procurá-lo."],
+["Avisem a direção se a escola não parece segura.","A escola deve apurar o caso e agir. Na Noruega isso é uma obrigação legal, e o caso pode ser levado ao Governador do condado se nada ajudar."],
+["Deixem o resto para os profissionais.","Se vocês se perguntam se é preciso mais ajuda, um médico ou o serviço de apoio da escola pode avaliar. O Tre blikk não pode."]
+],
+nots:[
+"Não faz diagnósticos e não julga crianças, famílias nem professores.",
+"Não guarda respostas. Elas só existem nesta tela até a página ser fechada.",
+"Não pede nomes, datas de nascimento nem escolas.",
+"Não substitui uma conversa com um professor, uma enfermeira escolar ou um médico."
+],
+help:[
+"Noruega: linha de ajuda para crianças e jovens. Grátis, aberta dia e noite, e você pode ficar anônimo.",
+"Noruega: Kors på halsen, da Cruz Vermelha, para menores de 18 anos. Grátis e anônimo.",
+"Noruega: ligue se houver perigo imediato para a vida ou a saúde."
+]
+};
+Object.assign(L.pt.ui,{
+introE:"Antes de começar",
+introH:"O Tre blikk é um olhar, não uma avaliação",
+introKid:"O estudante não deve confirmar isto. Um adulto confirma antes de passar o telefone ao estudante.",
+introC1:"Sou adulto, e li e entendi isto.",
+introC2:"Aceito que não posso usar o Tre blikk, nem nada do que ele mostra, contra o aplicativo, seus desenvolvedores ou seus donos.",
+introBtn:"Entendo e aceito",
+kidIntro:"Isto não é uma prova. Nenhuma resposta está errada.",
+notDx:"Isto não é um diagnóstico nem uma avaliação profissional. Só mostra como cada um vê as coisas do seu lugar.",
+terms:"Termos de uso"
+});
+L.pt.intro=[
+["Nenhum diagnóstico.","O Tre blikk não faz diagnósticos e não diz nada sobre TDAH nem sobre qualquer outra condição. Não diz que alguém tem um diagnóstico, e também não diz que alguém não tem."],
+["Só visões diferentes.","O aplicativo mostra como o estudante, a família e a escola vivem o dia a dia neste momento, e onde veem igual ou diferente. Não diz quem tem razão nem por que as coisas são assim."],
+["Não são profissionais.","O Tre blikk não é atendimento de saúde, avaliação nem aconselhamento, e não substitui um professor, uma enfermeira escolar, um médico ou o serviço de apoio da escola. Se estiverem preocupados, procurem essas pessoas."],
+["Por sua conta e risco.","Vocês usam o Tre blikk por sua conta e risco. Respostas, dicas e resultados não podem ser usados como documentação, prova ou base para uma reclamação contra ninguém. Isso inclui o aplicativo e quem o desenvolveu ou é dono dele."]
+];
+
+L.ar={
+name:"العربية",dir:"rtl",sp:" ",
+ui:{
+lang:"اللغة",
+home:"العودة إلى البداية",
+h1:"الطفل نفسه، من ثلاثة أماكن",
+lead:"قد يكون الطفل مختلفًا في البيت عنه في المدرسة. هنا يجيب الطالب والأسرة والمدرسة عن الأسئلة نفسها، كلٌّ على حدة. بعد ذلك ترون أين تتفقون، وأين تختلف نظرتكم، وما الذي يمكن أن تتحدثوا عنه.",
+exLabel:"مثال",
+sampleCap:"المدرسة ترى غيومًا خفيفة. الطالب والأسرة يريان عاصفة رعدية. لا أحد مخطئ. كلٌّ يرى جزءه من اليوم.",
+bandH:"كم عمر الطالب؟",
+bandNote:"الفئة العمرية تحدد صياغة أسئلة الطالب.",
+bandNote1:"من 6 إلى 9 سنوات يمكن لشخص بالغ أن يقرأ بصوت عالٍ، لكن دعوا الطفل يختار الطقس بنفسه.",
+whoH:"من يجيب الآن؟",
+whoNote:"دعوا الطالب يجيب أولًا، ووحده. يحصل على ستة أسئلة ويقرر بنفسه إن كان يريد أربعة أخرى. يمكنه أيضًا أن يحتفظ ببعض الإجابات لنفسه. لا أحد يرى الإجابات قبل أن تفتحوا المقارنة.",
+roleDone:"تمت الإجابة. اضغط للإجابة من جديد.",
+cmpH:"عرض المقارنة",
+answered:"أجاب حتى الآن: {list}.",
+noneYet:"لم يُجب أحد بعد.",
+needTwo:"يجب أن يجيب اثنان على الأقل.",
+cmpBtn:"فتح المقارنة",
+reset:"حذف كل الإجابات",
+resetArm:"اضغط مرة أخرى للحذف",
+apartH:"لستم في المكان نفسه؟",
+apartP:"يمكن لكل شخص أن يجيب على هاتفه ويرسل رمز إجاباته. الصق الرمز هنا.",
+codeAria:"رمز الإجابات",
+addBtn:"إضافة الإجابات",
+codeBad:"الرمز غير صحيح. تأكد من وجود كل الأحرف ثم حاول مرة أخرى.",
+codeOk:"أضيفت الإجابات: {who}.",
+codeBand:"أُنشئ الرمز للفئة: {band}.",
+exH:"هكذا قد تبدو المقارنة",
+exP:"هذه الإجابات مختلَقة. تظهر هنا المجالات الستة الأولى.",
+exBtn:"عرض المثال كاملًا مع النصائح",
+qOf:"السؤال {n} من {t}",
+pause:"استراحة",
+lastQ:"السؤال الأخير",
+readAloud:"يمكن لشخص بالغ أن يقرأ بصوت عالٍ. أنت من يختار الطقس.",
+noE:"لا أريد الإجابة عن هذا",
+noA:"هذا لا أراه",
+keep:"أحتفظ بهذه الإجابة لنفسي. لن يراها الكبار.",
+pauseH:"أحسنت. انتهت ستة أسئلة.",
+pauseP:"يمكنك التوقف هنا. لا بأس بذلك أبدًا. وإن أحببت، فهناك أربعة أسئلة أخرى.",
+stopT:"انتهيت",
+stopS:"ستة أسئلة تكفيني",
+moreT:"سأجيب عن أربعة أخرى",
+moreS:"الصباح، الهدوء في الصف، الأيام المختلفة والإنترنت",
+wishE:"رغبتك",
+wishH:"مع من تحب أن تتحدث أولًا؟",
+wishNo:"لا أريد أن أقول",
+back:"رجوع",
+next:"التالي",
+finish:"إنهاء",
+thanks:"شكرًا. سُجّلت الإجابات.",
+doneE:"أعطِ الهاتف لمن بعدك عندما تكون جاهزًا. لن يرى الكبار إجاباتك حتى تفتحوا المقارنة معًا.",
+doneA:"لن يرى الآخرون إجاباتك حتى تفتحوا المقارنة.",
+kept1:"احتفظت بإجابة واحدة لنفسك. لن تُنقل إلى أحد.",
+keptN:"احتفظت بـ {n} إجابات لنفسك. لن تُنقل إلى أحد.",
+heavyH:"أجبت بأن هناك شيئًا صعبًا.",
+heavyP:"ليس عليك أن تحل هذا وحدك. تحدث مع شخص بالغ تثق به. في النرويج يمكنك أيضًا الاتصال بالرقم 116 111. الاتصال مجاني، ولا يلزمك أن تقول من أنت. للدول الأخرى، انظر أسفل هذه الصفحة.",
+codeH:"رمز إجاباتك",
+copy:"نسخ",
+copied:"تم النسخ",
+copySel:"تم التحديد. انسخه بنفسك",
+codeP:"إن لم تكونوا معًا، أرسل الرمز إلى من يجمع الإجابات. الرمز يحتوي على الفئة العمرية والإجابات فقط، دون أسماء.",
+codePE:"أنت من يقرر إن كنت تريد إرساله.",
+exBannerB:"هذا مثال.",
+exBannerT:"الإجابات مختلَقة.",
+fcE:"نشرة الطقس",
+fcTop:"أهم سبب للحديث معًا: {a}.",
+fcNote:"نشرة الطقس تصف الإجابات، لا الطالب.",
+startHere:"ابدؤوا من هنا",
+sameH:"ترون معظم الأمور بالطريقة نفسها",
+sameP:"هذا أيضًا مفيد. اسألوا الطالب إن كان هناك شيء لم تلتقطه الأسئلة.",
+unsafeH:"أجاب أحدهم بأنه لا يشعر بالأمان.",
+unsafeP:"أخبروا المدرسة. المدرسة التي تعلم أن طالبًا لا يشعر بالأمان عليها أن تتحقق من الأمر وتتصرف. في النرويج هذا واجب قانوني (قانون التعليم، المادة 12-4).",
+areasH:"مجالًا بعد مجال",
+askL:"اسألوا:",
+tipsH:"نصائح لكل واحد منكم",
+keptTipH:"ما يحتفظ به الطالب لنفسه",
+keptTipP:"لا تضغطوا عليه. قولوا إن الباب مفتوح، واسألوا مرة أخرى في يوم آخر.",
+always:"دائمًا",
+pathH:"الطريق إلى الأمام",
+again:"أعيدوا الجولة بعد أربعة أسابيع، وانظروا هل تغيّر الطقس.",
+startOwn:"ابدؤوا جولتكم",
+hidE:"الطالب يحتفظ بهذا لنفسه.",
+shortE:"الطالب اختار الجولة القصيرة.",
+missH:"الأسرة لا ترى هذا.",
+missS:"المدرسة لا ترى هذا.",
+ariaKept:"محتفَظ به",
+ariaBlind:"لا يرى هذا",
+helpH:"هل تحتاج إلى شخص بالغ تتحدث معه الآن؟",
+helpIntl:"خارج النرويج: في حالة الطوارئ اتصل برقم الطوارئ في بلدك. تجد خط مساعدة الطفل في بلدك هنا:",
+notsH:"ما لا يفعله Tre blikk",
+src:"يستند إلى التوجيهات النرويجية للتعاون بين البيت والمدرسة. نموذج أولي وليس منتجًا نهائيًا. مترجم من النرويجية ولم يراجعه بعدُ متحدثون أصليون.",
+ad:"إعلان",
+adFree:"مساحة إعلانية متاحة",
+adNote:"يظهر للكبار فقط. لا يظهر للطالب أبدًا."
+},
+roles:{
+E:{n:"الطالب",l:"الطالب",you:"أنا الطالب",sub:"6 أسئلة، و4 أخرى إن أحببت",tab:"لك أنت أيها الطالب",as:"أنت تجيب بصفتك الطالب"},
+H:{n:"الأسرة",l:"الأسرة",you:"أنا وليّ الأمر",sub:"10 أسئلة، كما يبدو من البيت",tab:"للأسرة",as:"أنت تجيب بصفتك وليّ الأمر"},
+S:{n:"المدرسة",l:"المدرسة",you:"أنا معلّم",sub:"10 أسئلة، كما يبدو من المدرسة",tab:"للمدرسة",as:"أنت تجيب بصفتك معلّمًا"}
+},
+bands:["6–9 سنوات","10–12 سنة","13–16 سنة"],
+scale:[["عاصفة رعدية","صعب جدًا"],["مطر","صعب نوعًا ما"],["غائم","لا بأس"],["غيوم خفيفة","جيد نوعًا ما"],["مشمس","جيد جدًا"]],
+fc:["الغالب عواصف رعدية.","الغالب مطر.","الغالب غائم.","الغالب غيوم خفيفة.","الغالب مشمس."],
+areas:[
+{n:"الراحة في المدرسة",
+ e:["كيف هو وجودك في المدرسة؟","كيف هو وجودك في المدرسة هذه الأيام؟","كيف حالك في المدرسة هذه الأيام؟"],
+ h:"كيف يبدو حال طفلكم مع المدرسة، كما ترونه من البيت؟",
+ s:"كيف يبدو حال الطالب في المدرسة، كما ترونه من الصف؟",
+ ask:"ما أفضل شيء وما أسوأ شيء في يوم دراسي عادي؟",
+ te:"احكِ عن شيء واحد يجعل اليوم أفضل وشيء واحد يجعله أثقل. جملتان تكفيان.",
+ th:"اسألوا عن يوم ثلاثاء عادي تمامًا، حصة بعد حصة. الحديث عن يوم محدد أسهل من الإجابة عن «هل أنت بخير؟».",
+ ts:"أخبروا الأسرة بما ترونه فعلًا خلال اليوم، ومنه الأشياء الصغيرة التي تسير جيدًا."},
+{n:"الأصدقاء والاستراحة",
+ e:["كيف هو اللعب مع الآخرين في الاستراحة؟","كيف حالك مع الأصدقاء وفي الاستراحة؟","كيف حالك مع الأصدقاء، في الاستراحة وخارجها؟"],
+ h:"كيف يبدو الأمر مع الأصدقاء، مما تسمعونه وترونه في البيت؟",
+ s:"كيف يبدو الأمر مع الأصدقاء وفي الاستراحة؟",
+ ask:"مع من تكون في الاستراحة، ومع من تتمنى أن تكون أكثر؟",
+ te:"قل مع من تحب أن تكون. عندها يستطيع الكبار المساعدة دون تخمين.",
+ th:"اسألوا مع من كان طفلكم اليوم، لا إن كان له أصدقاء.",
+ ts:"راقبوا أوقات الانتقال: الاستراحة، غرفة الملابس والعمل في مجموعات. شاركوا الأسرة ما ترونه."},
+{n:"العمل المدرسي",
+ e:["كيف هو العمل على المهام في المدرسة؟","كيف يسير العمل المدرسي؟","كيف يسير العمل المدرسي والاختبارات والواجبات المطلوب تسليمها؟"],
+ h:"كيف يسير العمل المدرسي والواجبات في البيت؟",
+ s:"كيف تسير المهام والعمل في الحصص؟",
+ ask:"أي مادة تبدو الأسهل الآن، وأيها الأصعب؟",
+ te:"أرِهم مهمة وجدتها صعبة. الحصول على المساعدة أسهل عندما يرى الكبار ما تقصده.",
+ th:"أخبروا المدرسة كم يستغرق الواجب فعلًا في البيت، وكيف يكون الجو حوله.",
+ ts:"أروا الأسرة مثالًا على ما ينجزه الطالب في الحصة، وأين يتوقف."},
+{n:"الطاقة بعد اليوم الدراسي",
+ e:["كيف يشعر جسمك عندما ينتهي اليوم الدراسي؟","كم لديك من الطاقة عندما ينتهي اليوم الدراسي؟","كم يبقى لديك من الطاقة عندما ينتهي اليوم الدراسي؟"],
+ h:"كيف تكون طاقة طفلكم بعد اليوم الدراسي؟",
+ s:"كيف تكون طاقة الطالب قرب نهاية اليوم الدراسي؟",
+ ask:"في أي وقت من اليوم تكون الأكثر تعبًا، وما الذي يساعدك حينها؟",
+ te:"قل في أي وقت من اليوم تتعب أكثر. هذا مفيد للكبار.",
+ th:"صفوا للمعلّم الساعة الأولى بعد المدرسة. المدرسة قلّما ترى هذا الجزء من اليوم.",
+ ts:"الطالب الذي يبدو هادئًا في الحصة قد يبذل طاقة كبيرة ليبقى كذلك. اسألوا الأسرة كيف تكون فترة بعد الظهر."},
+{n:"الأمان",
+ e:["كم تشعر بالأمان في المدرسة وفي الطريق إليها؟","كم تشعر بالأمان في المدرسة وفي الطريق إليها؟","كم تشعر بالأمان في المدرسة وفي طريق الذهاب والعودة؟"],
+ h:"كم يبدو أن طفلكم يشعر بالأمان في المدرسة وفي الطريق إليها؟",
+ s:"كم يبدو أن الطالب يشعر بالأمان في المدرسة؟",
+ ask:"هل هناك أماكن أو أوقات في المدرسة لا تشعر فيها بالأمان؟",
+ te:"إن كان هناك شيء لا يُشعرك بالأمان، فأخبر شخصًا بالغًا تثق به. لا يلزمك أن تعرف ما المشكلة بالضبط.",
+ th:"أخبروا المدرسة، ويفضَّل كتابةً. المدرسة التي تعلم أن طالبًا لا يشعر بالأمان عليها أن تتحقق من الأمر وتتصرف.",
+ ts:"اتبعوا إجراءات مدرستكم: الملاحظة، إبلاغ الإدارة، التحقق ثم التصرف. انطلقوا من تجربة الطالب نفسه."},
+{n:"أن يُسمَع صوته",
+ e:["كيف هو أن تخبر الكبار عندما يكون شيء مهمًّا لك؟","كيف هو أن يسمعك الكبار عندما تقول شيئًا مهمًّا؟","كيف هو أن يأخذك الكبار على محمل الجد عندما تتكلم؟"],
+ h:"إلى أي حد يسمع الكبار طفلكم، كما ترون؟",
+ s:"إلى أي حد يستطيع الطالب أن يتكلم ويُسمَع، كما ترون؟",
+ ask:"ما الذي تتمنى أن يفهمه الكبار أكثر؟",
+ te:"يمكنك أن تطلب الحديث مع شخص بالغ واحد على انفراد أولًا. هذا مسموح.",
+ th:"استمعوا حتى النهاية قبل اقتراح الحلول. اسألوا: «هل تريد مساعدة، أم تريد فقط أن تحكي؟»",
+ ts:"دعوا الطالب يختار من يحضر الحديث، وما الذي يُنقل ولمن."},
+{n:"الصباح والوصول",
+ e:["كيف يكون الصباح قبل ذهابك إلى المدرسة؟","كيف تكون الصباحات قبل المدرسة؟","كيف هو أن تنطلق إلى المدرسة في الصباح؟"],
+ h:"كيف تكون الصباحات قبل المدرسة في بيتكم؟",
+ s:"كيف يبدو الطالب عند بداية اليوم الدراسي؟",
+ ask:"ما أصعب شيء في الصباح، وما الذي يجعله أسهل؟",
+ te:"قل ما أسوأ شيء في الصباح. الاستيقاظ، أم إنجاز كل شيء في وقته، أم التفكير في اليوم؟",
+ th:"أخبروا المعلّم كيف كان الصباح في الأيام الصعبة. هكذا تفهم المدرسة بداية اليوم أفضل.",
+ ts:"أخبروا الأسرة كيف تبدو الدقائق العشر الأولى في المدرسة. الأسرة لا ترى إلا ما يحدث قبل الباب."},
+{n:"الهدوء للعمل في الصف",
+ e:["كيف هو أن تجد هدوءًا للعمل في الصف؟","كيف هو أن تجد هدوءًا للعمل في الحصص؟","كيف هو التركيز في الحصص؟"],
+ h:"كيف يبدو الهدوء للعمل في الحصص، مما يحكيه طفلكم؟",
+ s:"كم يتوفر من الهدوء للعمل حول الطالب في الحصص؟",
+ ask:"في أي مكان من الصف وفي أي وقت من اليوم يكون العمل أسهل؟",
+ te:"قل ما الذي يزعجك أكثر. الضجيج، أم مكان جلوسك، أم شيء آخر؟",
+ th:"اسألوا عما يجعل العمل سهلًا، لا عما يزعج فقط. انقلوا الإجابة إلى المعلّم.",
+ ts:"جرّبوا تغييرًا واحدًا في كل مرة، مثل مكان الجلوس أو الاستراحات أو فترات أقصر. أخبروا الأسرة بما تجرّبونه."},
+{n:"عندما يختلف اليوم",
+ e:["كيف هو عندما يكون شيء مختلفًا في المدرسة، مثل معلّم بديل أو رحلة؟","كيف هو عندما يختلف اليوم الدراسي، بمعلّم بديل أو رحلة أو مجموعات جديدة؟","كيف هو عندما يختلف اليوم الدراسي، بمعلّم بديل أو مجموعات جديدة أو تغيير في الجدول؟"],
+ h:"كيف يتعامل طفلكم مع يوم دراسي مختلف عن المعتاد؟",
+ s:"كيف يتعامل الطالب مع يوم مختلف عن المعتاد؟",
+ ask:"ما أكثر ما يساعدك عندما يحدث شيء على غير ما توقعت؟",
+ te:"قل إن كنت تحب أن تعرف بالتغييرات مسبقًا. ترتيب ذلك سهل على الكبار.",
+ th:"أخبروا المدرسة بما يساعد في البيت عندما تتغير الخطط.",
+ ts:"أبلغوا عن التغييرات في أبكر وقت ممكن، للطالب وللأسرة. قولوا ما الذي يبقى كما هو، لا ما هو جديد فقط."},
+{n:"الإنترنت والألعاب والهاتف",
+ e:["كيف هو عندما تلعب أو تتراسل مع آخرين من المدرسة؟","كيف هو الأمر على الإنترنت وفي الألعاب والمحادثات مع زملاء صفك؟","كيف هو الأمر على الإنترنت ووسائل التواصل مع أشخاص من المدرسة؟"],
+ h:"كيف يبدو الأمر على الإنترنت وفي الألعاب والمحادثات مع آخرين من المدرسة؟",
+ s:"كيف يبدو ما يحدث على الإنترنت بين الطلاب، مما تلاحظونه؟",
+ ask:"هل حدث شيء على الإنترنت ورافقك إلى اليوم الدراسي؟",
+ te:"يمكنك أن تُري شخصًا بالغًا ما حدث بدل أن تشرحه. لقطة شاشة تكفي.",
+ th:"كونوا فضوليين قبل أن تضعوا حدودًا. اسألوا عما هو ممتع هناك وما ليس ممتعًا.",
+ ts:"ما يحدث على الإنترنت بعد المدرسة قد يجعل اليوم الدراسي غير آمن. ويبقى هذا من شأن المدرسة."}
+],
+wish:[
+["شخص من البيت","الطالب يفضّل أن يتحدث أولًا مع شخص من البيت."],
+["معلّمي","الطالب يفضّل أن يتحدث أولًا مع معلّمه."],
+["الممرضة أو المرشد في المدرسة","الطالب يفضّل أن يتحدث أولًا مع الممرضة أو المرشد في المدرسة."],
+["شخص بالغ آخر أثق به","الطالب يفضّل أن يتحدث أولًا مع شخص بالغ آخر."],
+["لا أعرف بعد","الطالب لا يعرف بعد مع من الأفضل أن يتحدث. أعطوه بعض الوقت."]
+],
+stand:{
+E:["أنت من يقرر ما تريد مشاركته. يمكنك أن تقول «لا أريد الحديث عن هذا الآن».","ليس عليك أنت أن تحل هذا. هذه مهمة الكبار."],
+H:["اختلاف الإجابات لا يعني أن أحدًا مخطئ. المدرسة ترى طفلكم ضمن مجموعة كبيرة، وأنتم ترون ما يحدث في البيت.","اسألوا أولًا عما يمكنكم نقله إلى المدرسة. ثم انقلوه."],
+S:["الأهل يعرفون عن الطالب أشياء تفيد المدرسة. اسألوا عنها.","اقترحوا أنتم موعدًا للحديث. لا تنتظروا أن تطلب الأسرة ذلك."]
+},
+chip:{elevlav:"الطالب يرى عاصفة أكثر",felles:"عاصفة مشتركة",ulikt:"نظرات مختلفة",skjult:"محتفَظ به",blind:"لا يراه الجميع",en:"إجابات قليلة",likt:"نظرة واحدة"},
+ex:{
+elevlav:"الطالب يعيش هنا طقسًا أسوأ مما يراه الكبار. تجربة الطالب هي نقطة البداية. ابدؤوا من هنا.",
+felles:"كل من أجاب يرى طقسًا سيئًا هنا. إذن أنتم متفقون على ما يحتاج إلى اهتمام.",
+hjem:"يبدو الأمر أثقل من البيت منه في المدرسة. قد يتماسك الطفل في المدرسة ثم يرتخي في البيت.",
+skole:"المدرسة ترى طقسًا أسوأ مما تراه الأسرة. المدرسة ترى الطالب ضمن مجموعة كبيرة، وهذا قد يعطي صورة مختلفة.",
+elevlys:"الطالب يعيش الأمر أفضل مما يراه الكبار. اسألوا الطالب عما يلاحظه هو.",
+ulikt:"ترون هذا بشكل مختلف. لا أحد مخطئ. كلٌّ منكم يرى جزءه من اليوم.",
+skjult:"اختار الطالب أن يحتفظ بهذا لنفسه. هذا مسموح، ويجب احترامه.",
+blind:"ليس الجميع مطّلعًا على هذا. من يراه يستطيع أن يخبر الآخرين.",
+en:"الإجابات هنا أقل من أن تسمح بالمقارنة.",
+likt:"ترون هذا بالطريقة نفسها تقريبًا."
+},
+path:[
+["تحدثوا معًا أولًا.","الطالب وشخص بالغ واحد اختاره الطالب نفسه. استخدموا الأسئلة أعلاه."],
+["اعرضوا الأمر على مربّي الصف.","اطلبوا لقاءً يشارك فيه الطالب والأسرة والمدرسة ما يرونه."],
+["استعينوا بالممرضة أو المرشد في المدرسة.","في مدارس كثيرة يوجد أحدهما، وغالبًا يستطيع الطالب التواصل معه بنفسه."],
+["أخبروا مدير المدرسة إن لم تكن المدرسة آمنة.","على المدرسة أن تتحقق من الأمر وتتصرف. في النرويج هذا واجب قانوني، ويمكن رفع القضية إلى حاكم المقاطعة إن لم ينفع شيء."],
+["اتركوا الباقي للمختصين.","إن تساءلتم عن الحاجة إلى مساعدة أكثر، فالطبيب أو خدمة الدعم في المدرسة يستطيعان تقييم ذلك. Tre blikk لا يستطيع."]
+],
+nots:[
+"لا يضع أي تشخيص، ولا يحكم على الأطفال ولا الأهل ولا المعلّمين.",
+"لا يحفظ أي إجابات. توجد على هذه الشاشة فقط إلى أن تُغلق الصفحة.",
+"لا يسأل عن أسماء ولا تواريخ ميلاد ولا مدارس.",
+"لا يغني عن الحديث مع معلّم أو ممرضة المدرسة أو طبيب."
+],
+help:[
+"النرويج: خط مساعدة للأطفال والشباب. مجاني، مفتوح ليلًا ونهارًا، ويمكنك ألا تذكر اسمك.",
+"النرويج: Kors på halsen من الصليب الأحمر، لمن هم دون 18 سنة. مجاني ودون ذكر الاسم.",
+"النرويج: اتصل إن كان هناك خطر مباشر على الحياة أو الصحة."
+]
+};
+Object.assign(L.ar.ui,{
+introE:"قبل أن تبدؤوا",
+introH:"Tre blikk نظرة وليس تقييمًا",
+introKid:"لا يُطلب من الطالب تأكيد هذا. يؤكده شخص بالغ قبل أن يأخذ الطالب الهاتف.",
+introC1:"أنا شخص بالغ، وقد قرأت هذا وفهمته.",
+introC2:"أوافق على أنني لا أستطيع استخدام Tre blikk أو أي شيء يعرضه ضد التطبيق أو مطوّريه أو مالكيه.",
+introBtn:"أفهم وأوافق",
+kidIntro:"هذا ليس اختبارًا. لا توجد إجابة خاطئة.",
+notDx:"هذا ليس تشخيصًا ولا تقييمًا مهنيًا. إنه يُظهر فقط كيف يرى كلٌّ منكم الأمور من مكانه.",
+terms:"شروط الاستخدام"
+});
+L.ar.intro=[
+["لا تشخيص.","Tre blikk لا يضع أي تشخيص، ولا يقول شيئًا عن اضطراب فرط الحركة وتشتت الانتباه أو أي حالة أخرى. لا يقول إن لدى أحد تشخيصًا، ولا يقول إنه ليس لديه."],
+["اختلاف في النظرة فقط.","التطبيق يُظهر كيف يعيش الطالب والأسرة والمدرسة الحياة اليومية الآن، وأين يرونها بالطريقة نفسها وأين يختلفون. لا يقول من على حق، ولا لماذا الأمور على ما هي عليه."],
+["ليس بديلًا عن المختصين.","Tre blikk ليس رعاية صحية ولا تقييمًا ولا استشارة، ولا يغني عن المعلّم أو ممرضة المدرسة أو الطبيب أو خدمة الدعم في المدرسة. إن كنتم قلقين فتواصلوا معهم."],
+["على مسؤوليتكم.","تستخدمون Tre blikk على مسؤوليتكم الخاصة. لا يجوز استخدام الإجابات أو النصائح أو النتائج كوثيقة أو دليل أو أساس لمطالبة ضد أي أحد. ويشمل ذلك التطبيق ومن طوّره أو يملكه."]
+];
+
+L.hi={
+name:"हिन्दी",dir:"ltr",sp:" ",
+ui:{
+lang:"भाषा",
+home:"शुरुआत पर वापस",
+h1:"वही बच्चा, तीन जगहों से देखा गया",
+lead:"बच्चे घर पर और स्कूल में अलग हो सकते हैं। यहाँ विद्यार्थी, परिवार और स्कूल एक ही सवालों के जवाब देते हैं, हर कोई अलग-अलग। उसके बाद आप देखते हैं कि कहाँ आपकी राय एक है, कहाँ अलग है, और आप किस बारे में बात कर सकते हैं।",
+exLabel:"उदाहरण",
+sampleCap:"स्कूल को हल्के बादल दिखते हैं। विद्यार्थी और परिवार को आँधी-तूफ़ान दिखता है। कोई ग़लत नहीं है। हर कोई दिन का अपना हिस्सा देखता है।",
+bandH:"विद्यार्थी की उम्र कितनी है?",
+bandNote:"उम्र के समूह से तय होता है कि विद्यार्थी के सवाल किन शब्दों में पूछे जाएँ।",
+bandNote1:"6 से 9 साल के लिए कोई बड़ा ज़ोर से पढ़ सकता है, पर मौसम बच्चे को ख़ुद चुनने दें।",
+whoH:"अभी कौन जवाब दे रहा है?",
+whoNote:"पहले विद्यार्थी को जवाब देने दें, और अकेले। उसे छह सवाल मिलते हैं और वह ख़ुद तय करता है कि चार और चाहिए या नहीं। वह कुछ जवाब अपने तक भी रख सकता है। तुलना खोलने से पहले कोई भी जवाब नहीं देख सकता।",
+roleDone:"जवाब दे दिया। दोबारा जवाब देने के लिए दबाएँ।",
+cmpH:"तुलना देखें",
+answered:"अब तक जवाब दिए: {list}।",
+noneYet:"अभी तक किसी ने जवाब नहीं दिया।",
+needTwo:"कम से कम दो को जवाब देना होगा।",
+cmpBtn:"तुलना खोलें",
+reset:"सारे जवाब मिटाएँ",
+resetArm:"मिटाने के लिए एक बार और दबाएँ",
+apartH:"क्या आप साथ नहीं बैठे हैं?",
+apartP:"हर कोई अपने फ़ोन पर जवाब देकर अपना जवाब-कोड भेज सकता है। कोड यहाँ चिपकाएँ।",
+codeAria:"जवाब-कोड",
+addBtn:"जवाब जोड़ें",
+codeBad:"कोड सही नहीं है। देखें कि सारे अक्षर हैं या नहीं, और फिर कोशिश करें।",
+codeOk:"जवाब जोड़ दिए गए: {who}।",
+codeBand:"यह कोड {band} के लिए बना था।",
+exH:"तुलना कैसी दिख सकती है",
+exP:"ये जवाब काल्पनिक हैं। यहाँ पहले छह क्षेत्र दिखाए गए हैं।",
+exBtn:"सुझावों के साथ पूरा उदाहरण देखें",
+qOf:"सवाल {n} / {t}",
+pause:"विराम",
+lastQ:"आख़िरी सवाल",
+readAloud:"कोई बड़ा ज़ोर से पढ़ सकता है। मौसम तुम ख़ुद चुनो।",
+noE:"मैं इसका जवाब नहीं देना चाहता",
+noA:"यह मुझे नहीं दिखता",
+keep:"यह जवाब मैं अपने तक रखूँगा। बड़े इसे नहीं देखेंगे।",
+pauseH:"शाबाश। छह सवाल पूरे हो गए।",
+pauseP:"तुम यहीं रुक सकते हो। यह बिलकुल ठीक है। अगर मन हो, तो चार सवाल और हैं।",
+stopT:"मेरा हो गया",
+stopS:"मेरे लिए छह काफ़ी हैं",
+moreT:"मैं चार और करूँगा",
+moreS:"सुबह, कक्षा में शांति, अलग तरह के दिन और इंटरनेट",
+wishE:"तुम्हारी इच्छा",
+wishH:"तुम सबसे पहले किससे बात करना चाहोगे?",
+wishNo:"मैं नहीं बताना चाहता",
+back:"पीछे",
+next:"आगे",
+finish:"पूरा",
+thanks:"धन्यवाद। जवाब दर्ज हो गए हैं।",
+doneE:"जब तैयार हो, फ़ोन आगे दे दो। बड़े तुम्हारे जवाब तब तक नहीं देखेंगे जब तक आप सब मिलकर तुलना नहीं खोलते।",
+doneA:"तुलना खोलने से पहले दूसरे आपके जवाब नहीं देखेंगे।",
+kept1:"तुमने 1 जवाब अपने तक रखा। वह आगे नहीं जाएगा।",
+keptN:"तुमने {n} जवाब अपने तक रखे। वे आगे नहीं जाएँगे।",
+heavyH:"तुमने बताया कि कुछ मुश्किल है।",
+heavyP:"तुम्हें इसे अकेले नहीं सुलझाना है। किसी ऐसे बड़े से बात करो जिस पर तुम्हें भरोसा हो। नॉर्वे में तुम 116 111 पर फ़ोन भी कर सकते हो। यह मुफ़्त है, और तुम्हें अपना नाम बताना ज़रूरी नहीं। दूसरे देशों के लिए इस पन्ने के नीचे देखो।",
+codeH:"आपका जवाब-कोड",
+copy:"कॉपी करें",
+copied:"कॉपी हो गया",
+copySel:"चुन लिया गया। ख़ुद कॉपी करें",
+codeP:"अगर आप साथ नहीं हैं, तो कोड उस व्यक्ति को भेजें जो जवाब इकट्ठा कर रहा है। कोड में सिर्फ़ उम्र का समूह और जवाब हैं, कोई नाम नहीं।",
+codePE:"भेजना है या नहीं, यह तुम तय करो।",
+exBannerB:"यह एक उदाहरण है।",
+exBannerT:"जवाब काल्पनिक हैं।",
+fcE:"मौसम का हाल",
+fcTop:"साथ बैठकर बात करने की सबसे बड़ी वजह: {a}।",
+fcNote:"मौसम का हाल जवाबों के बारे में है, विद्यार्थी के बारे में नहीं।",
+startHere:"यहाँ से शुरू करें",
+sameH:"आप ज़्यादातर बातें एक जैसी देखते हैं",
+sameP:"यह जानना भी काम का है। विद्यार्थी से पूछें कि क्या सवालों से कुछ छूट गया।",
+unsafeH:"किसी ने जवाब दिया है कि सुरक्षित महसूस नहीं होता।",
+unsafeP:"स्कूल को बताएँ। जिस स्कूल को पता चले कि कोई विद्यार्थी सुरक्षित महसूस नहीं करता, उसे मामले की जाँच करके कदम उठाना चाहिए। नॉर्वे में यह क़ानूनी ज़िम्मेदारी है (शिक्षा क़ानून § 12-4)।",
+areasH:"एक-एक क्षेत्र",
+askL:"पूछें:",
+tipsH:"आप में से हर एक के लिए सुझाव",
+keptTipH:"जो विद्यार्थी अपने तक रखता है",
+keptTipP:"ज़ोर न डालें। कहें कि दरवाज़ा खुला है, और किसी और दिन फिर पूछें।",
+always:"हमेशा",
+pathH:"आगे का रास्ता",
+again:"चार हफ़्ते बाद एक और दौर करें और देखें कि मौसम बदला या नहीं।",
+startOwn:"अपना दौर शुरू करें",
+hidE:"विद्यार्थी इसे अपने तक रख रहा है।",
+shortE:"विद्यार्थी ने छोटा दौर चुना।",
+missH:"परिवार को यह नहीं दिखता।",
+missS:"स्कूल को यह नहीं दिखता।",
+ariaKept:"अपने तक रखा",
+ariaBlind:"यह नहीं दिखता",
+helpH:"क्या अभी किसी बड़े से बात करनी है?",
+helpIntl:"नॉर्वे के बाहर: आपात स्थिति में अपने देश के आपातकालीन नंबर पर फ़ोन करो। अपने देश की बाल हेल्पलाइन यहाँ ढूँढ़ो:",
+notsH:"Tre blikk क्या नहीं करता",
+src:"घर और स्कूल के सहयोग पर नॉर्वे के दिशानिर्देशों पर आधारित। यह एक प्रोटोटाइप है, तैयार उत्पाद नहीं। नॉर्वेजियन से अनुवादित, और अभी तक मातृभाषी लोगों ने इसे जाँचा नहीं है।",
+ad:"विज्ञापन",
+adFree:"विज्ञापन की जगह ख़ाली है",
+adNote:"सिर्फ़ बड़ों को दिखता है। विद्यार्थी को कभी नहीं।"
+},
+roles:{
+E:{n:"विद्यार्थी",l:"विद्यार्थी",you:"मैं विद्यार्थी हूँ",sub:"6 सवाल, और चाहो तो 4 और",tab:"तुम्हारे लिए, विद्यार्थी",as:"तुम विद्यार्थी के रूप में जवाब दे रहे हो"},
+H:{n:"परिवार",l:"परिवार",you:"मैं माता-पिता या अभिभावक हूँ",sub:"10 सवाल, घर से देखने पर",tab:"परिवार के लिए",as:"आप अभिभावक के रूप में जवाब दे रहे हैं"},
+S:{n:"स्कूल",l:"स्कूल",you:"मैं शिक्षक हूँ",sub:"10 सवाल, स्कूल से देखने पर",tab:"स्कूल के लिए",as:"आप शिक्षक के रूप में जवाब दे रहे हैं"}
+},
+bands:["6–9 साल","10–12 साल","13–16 साल"],
+scale:[["आँधी-तूफ़ान","बहुत मुश्किल"],["बारिश","काफ़ी मुश्किल"],["बादल","ठीक-ठाक"],["हल्के बादल","काफ़ी अच्छा"],["धूप","बहुत अच्छा"]],
+fc:["ज़्यादातर आँधी-तूफ़ान।","ज़्यादातर बारिश।","ज़्यादातर बादल।","ज़्यादातर हल्के बादल।","ज़्यादातर धूप।"],
+areas:[
+{n:"स्कूल में मन लगना",
+ e:["स्कूल में रहना कैसा लगता है?","आजकल स्कूल में रहना कैसा लगता है?","आजकल स्कूल में तुम्हारा हाल कैसा है?"],
+ h:"घर से देखने पर, आपके बच्चे का स्कूल के साथ हाल कैसा लगता है?",
+ s:"कक्षा से देखने पर, विद्यार्थी का स्कूल में हाल कैसा लगता है?",
+ ask:"स्कूल के एक आम दिन में सबसे अच्छी और सबसे बुरी बात क्या है?",
+ te:"एक ऐसी बात बताओ जो दिन को बेहतर बनाती है और एक जो उसे भारी बनाती है। दो वाक्य काफ़ी हैं।",
+ th:"किसी बिलकुल आम मंगलवार के बारे में पूछें, एक-एक घंटे का। «सब ठीक है?» की तुलना में किसी ख़ास दिन के बारे में बताना आसान होता है।",
+ ts:"परिवार को बताएँ कि आप दिन भर में सचमुच क्या देखते हैं, वे छोटी बातें भी जो अच्छी चल रही हैं।"},
+{n:"दोस्त और छुट्टी का समय",
+ e:["छुट्टी के समय दूसरों के साथ खेलना कैसा लगता है?","दोस्तों के साथ और छुट्टी के समय कैसा चल रहा है?","दोस्तों के साथ, छुट्टी के समय और बाक़ी समय कैसा चल रहा है?"],
+ h:"घर पर जो आप सुनते और देखते हैं, उससे दोस्तों के साथ कैसा चल रहा लगता है?",
+ s:"दोस्तों के साथ और छुट्टी के समय कैसा दिखता है?",
+ ask:"छुट्टी के समय तुम किसके साथ रहते हो, और किसके साथ ज़्यादा रहना चाहोगे?",
+ te:"बताओ कि तुम्हें किसके साथ रहना अच्छा लगता है। तब बड़े बिना अंदाज़ा लगाए मदद कर सकेंगे।",
+ th:"पूछें कि आज बच्चा किसके साथ था, यह नहीं कि उसके दोस्त हैं या नहीं।",
+ ts:"बीच के समय पर ध्यान दें: छुट्टी, कपड़े रखने की जगह और समूह में काम। जो दिखे, वह परिवार को बताएँ।"},
+{n:"स्कूल का काम",
+ e:["स्कूल में काम करना कैसा लगता है?","स्कूल का काम कैसा चल रहा है?","स्कूल का काम, परीक्षाएँ और जमा करने वाले काम कैसे चल रहे हैं?"],
+ h:"घर पर स्कूल का काम और होमवर्क कैसा चल रहा है?",
+ s:"कक्षा में काम कैसा चल रहा है?",
+ ask:"अभी कौन-सा विषय सबसे आसान लगता है, और कौन-सा सबसे मुश्किल?",
+ te:"कोई ऐसा काम दिखाओ जो तुम्हें मुश्किल लगा। जब बड़े देख लें कि तुम्हारा मतलब क्या है, तब मदद मिलना आसान होता है।",
+ th:"स्कूल को बताएँ कि घर पर होमवर्क में सचमुच कितना समय लगता है, और उस समय माहौल कैसा रहता है।",
+ ts:"परिवार को एक उदाहरण दिखाएँ कि विद्यार्थी कक्षा में क्या कर लेता है, और कहाँ रुक जाता है।"},
+{n:"स्कूल के बाद ऊर्जा",
+ e:["स्कूल का दिन ख़त्म होने पर तुम्हारा शरीर कैसा महसूस करता है?","स्कूल का दिन ख़त्म होने पर तुममें कितनी ताक़त रहती है?","स्कूल का दिन ख़त्म होने पर तुममें कितनी ऊर्जा बचती है?"],
+ h:"स्कूल के दिन के बाद आपके बच्चे में कितनी ऊर्जा रहती है?",
+ s:"स्कूल के दिन के आख़िर में विद्यार्थी में कितनी ऊर्जा रहती है?",
+ ask:"दिन में कब तुम सबसे ज़्यादा थकते हो, और तब क्या मदद करता है?",
+ te:"बताओ कि दिन में कब तुम सबसे ज़्यादा थक जाते हो। बड़ों के लिए यह जानना काम का है।",
+ th:"शिक्षक को बताएँ कि स्कूल के बाद का पहला घंटा कैसा होता है। स्कूल दिन का वह हिस्सा कम ही देख पाता है।",
+ ts:"जो विद्यार्थी कक्षा में शांत दिखता है, हो सकता है वह इसमें बहुत ऊर्जा लगा रहा हो। परिवार से पूछें कि दोपहर बाद का समय कैसा रहता है।"},
+{n:"सुरक्षा",
+ e:["स्कूल में और स्कूल के रास्ते में कितना सुरक्षित लगता है?","स्कूल में और स्कूल के रास्ते में तुम कितना सुरक्षित महसूस करते हो?","स्कूल में और आने-जाने के रास्ते में तुम कितना सुरक्षित महसूस करते हो?"],
+ h:"आपका बच्चा स्कूल में और रास्ते में कितना सुरक्षित महसूस करता लगता है?",
+ s:"विद्यार्थी स्कूल में कितना सुरक्षित महसूस करता लगता है?",
+ ask:"क्या स्कूल में ऐसी जगहें या ऐसे समय हैं जब सुरक्षित नहीं लगता?",
+ te:"अगर कुछ सुरक्षित नहीं लगता, तो किसी भरोसेमंद बड़े को बताओ। तुम्हें ठीक-ठीक पता होना ज़रूरी नहीं कि गड़बड़ क्या है।",
+ th:"स्कूल को बताएँ, हो सके तो लिखकर। जिस स्कूल को पता चले कि कोई विद्यार्थी सुरक्षित महसूस नहीं करता, उसे जाँच करके कदम उठाना चाहिए।",
+ ts:"अपने स्कूल के तय तरीक़े पर चलें: ध्यान रखें, प्रधानाचार्य को बताएँ, जाँच करें और कदम उठाएँ। शुरुआत विद्यार्थी के अपने अनुभव से करें।"},
+{n:"बात सुनी जाना",
+ e:["जब कोई बात तुम्हारे लिए ज़रूरी हो, तो बड़ों को बताना कैसा लगता है?","जब तुम कोई ज़रूरी बात कहते हो, तो बड़े तुम्हारी कितनी सुनते हैं?","जब तुम कुछ बताते हो, तो बड़े उसे कितनी गंभीरता से लेते हैं?"],
+ h:"आपकी नज़र में, बड़े आपके बच्चे की बात कितनी सुनते हैं?",
+ s:"आपकी नज़र में, विद्यार्थी को बोलने और सुने जाने का कितना मौक़ा मिलता है?",
+ ask:"तुम क्या चाहते हो कि बड़े बेहतर समझें?",
+ te:"तुम पहले किसी एक बड़े से अकेले में बात करने को कह सकते हो। इसकी इजाज़त है।",
+ th:"हल सुझाने से पहले पूरी बात सुनें। पूछें: «तुम्हें मदद चाहिए, या तुम सिर्फ़ बताना चाहते हो?»",
+ ts:"विद्यार्थी को चुनने दें कि बातचीत में कौन शामिल हो, और कौन-सी बात किसे बताई जाए।"},
+{n:"सुबह और स्कूल पहुँचना",
+ e:["स्कूल जाने से पहले की सुबह कैसी होती है?","स्कूल से पहले की सुबहें कैसी होती हैं?","सुबह स्कूल के लिए निकल पाना कैसा रहता है?"],
+ h:"आपके घर में स्कूल से पहले की सुबहें कैसी होती हैं?",
+ s:"स्कूल का दिन शुरू होने पर विद्यार्थी कैसा दिखता है?",
+ ask:"सुबह की सबसे मुश्किल बात क्या है, और क्या उसे आसान बनाता है?",
+ te:"बताओ कि सुबह की सबसे बुरी बात क्या है। उठना, सब कुछ समय पर करना, या दिन के बारे में सोचना?",
+ th:"शिक्षक को बताएँ कि मुश्किल दिनों में सुबह कैसी थी। तब स्कूल दिन की शुरुआत को बेहतर समझेगा।",
+ ts:"परिवार को बताएँ कि स्कूल में पहले दस मिनट कैसे दिखते हैं। परिवार सिर्फ़ दरवाज़े से पहले की बात देखता है।"},
+{n:"कक्षा में काम के लिए शांति",
+ e:["कक्षा में काम करने के लिए शांति मिलना कैसा रहता है?","कक्षा के समय काम करने के लिए शांति मिलना कैसा रहता है?","कक्षा के समय ध्यान लगा पाना कैसा रहता है?"],
+ h:"आपका बच्चा जो बताता है, उससे कक्षा में काम के लिए शांति कैसी लगती है?",
+ s:"कक्षा के समय विद्यार्थी के आसपास काम के लिए कितनी शांति रहती है?",
+ ask:"कक्षा में कहाँ और दिन में कब काम करना सबसे आसान होता है?",
+ te:"बताओ कि तुम्हें सबसे ज़्यादा क्या परेशान करता है। शोर, तुम्हारी बैठने की जगह, या कुछ और?",
+ th:"पूछें कि काम को आसान क्या बनाता है, सिर्फ़ यह नहीं कि क्या परेशान करता है। जवाब शिक्षक तक पहुँचाएँ।",
+ ts:"एक बार में एक ही बदलाव आज़माएँ, जैसे बैठने की जगह, विराम या छोटे सत्र। परिवार को बताएँ कि आप क्या आज़मा रहे हैं।"},
+{n:"जब दिन अलग हो",
+ e:["जब स्कूल में कुछ अलग हो, जैसे दूसरा शिक्षक या सैर, तो कैसा लगता है?","जब स्कूल का दिन अलग हो, जैसे बदला हुआ शिक्षक, सैर या नए समूह, तो कैसा लगता है?","जब स्कूल का दिन अलग हो, जैसे बदला हुआ शिक्षक, नए समूह या बदली हुई समय-सारणी, तो कैसा लगता है?"],
+ h:"जब स्कूल का दिन रोज़ से अलग हो, तो आपका बच्चा उसे कैसे सँभालता है?",
+ s:"जब दिन रोज़ से अलग हो, तो विद्यार्थी उसे कैसे सँभालता है?",
+ ask:"जब कुछ तुम्हारी सोच से अलग हो जाए, तो सबसे ज़्यादा क्या मदद करता है?",
+ te:"अगर तुम्हें बदलाव पहले से जानना पसंद है, तो बता दो। बड़ों के लिए इसका इंतज़ाम करना आसान है।",
+ th:"स्कूल को बताएँ कि योजना बदलने पर घर में क्या मदद करता है।",
+ ts:"बदलाव की ख़बर जितनी जल्दी हो सके दें, विद्यार्थी को भी और परिवार को भी। बताएँ कि क्या वैसा ही रहेगा, सिर्फ़ यह नहीं कि नया क्या है।"},
+{n:"इंटरनेट, गेम और फ़ोन",
+ e:["जब तुम स्कूल के दूसरों के साथ गेम खेलते या चैट करते हो, तो कैसा लगता है?","इंटरनेट पर, गेम में और चैट में अपनी कक्षा के दूसरों के साथ कैसा चल रहा है?","इंटरनेट और सोशल मीडिया पर स्कूल के लोगों के साथ कैसा चल रहा है?"],
+ h:"इंटरनेट, गेम और चैट में स्कूल के दूसरों के साथ कैसा चल रहा लगता है?",
+ s:"आपको जितना पता चलता है, उससे विद्यार्थियों के बीच इंटरनेट पर जो होता है वह कैसा लगता है?",
+ ask:"क्या इंटरनेट पर कुछ ऐसा हुआ जो स्कूल के दिन तक साथ चला आया?",
+ te:"जो हुआ, उसे समझाने के बजाय तुम किसी बड़े को दिखा सकते हो। एक स्क्रीनशॉट काफ़ी है।",
+ th:"सीमाएँ तय करने से पहले जानने की कोशिश करें। पूछें कि वहाँ क्या मज़ेदार है और क्या नहीं।",
+ ts:"स्कूल के बाद इंटरनेट पर जो होता है, वह स्कूल के दिन को असुरक्षित बना सकता है। तब भी यह स्कूल की ज़िम्मेदारी है।"}
+],
+wish:[
+["घर का कोई","विद्यार्थी सबसे पहले घर के किसी व्यक्ति से बात करना चाहता है।"],
+["मेरे शिक्षक","विद्यार्थी सबसे पहले अपने शिक्षक से बात करना चाहता है।"],
+["स्कूल की नर्स या काउंसलर","विद्यार्थी सबसे पहले स्कूल की नर्स या काउंसलर से बात करना चाहता है।"],
+["कोई और बड़ा जिस पर मुझे भरोसा है","विद्यार्थी सबसे पहले किसी और बड़े से बात करना चाहता है।"],
+["अभी पता नहीं","विद्यार्थी को अभी पता नहीं कि किससे बात करना सबसे अच्छा है। थोड़ा समय दें।"]
+],
+stand:{
+E:["क्या बताना है, यह तुम तय करते हो। तुम कह सकते हो «इस बारे में मैं अभी बात नहीं करना चाहता»।","इसे सुलझाना तुम्हारा काम नहीं है। यह बड़ों का काम है।"],
+H:["अलग-अलग जवाबों का मतलब यह नहीं कि कोई ग़लत है। स्कूल आपके बच्चे को बड़े समूह में देखता है, आप वह देखते हैं जो घर पर होता है।","पहले पूछें कि आप स्कूल को क्या बता सकते हैं। उसके बाद बताएँ।"],
+S:["माता-पिता विद्यार्थी के बारे में ऐसी बातें जानते हैं जो स्कूल के काम आ सकती हैं। उनसे पूछें।","बातचीत का समय ख़ुद सुझाएँ। परिवार के पूछने का इंतज़ार न करें।"]
+},
+chip:{elevlav:"विद्यार्थी को ज़्यादा तूफ़ान दिखता है",felles:"साझा तूफ़ान",ulikt:"अलग नज़र",skjult:"अपने तक रखा",blind:"सबको यह नहीं दिखता",en:"बहुत कम जवाब",likt:"एक जैसी नज़र"},
+ex:{
+elevlav:"विद्यार्थी यहाँ बड़ों को दिखने से ज़्यादा ख़राब मौसम महसूस करता है। शुरुआत विद्यार्थी के अनुभव से होती है। यहीं से शुरू करें।",
+felles:"जिन्होंने जवाब दिया, उन सबको यहाँ ख़राब मौसम दिखता है। यानी आप सहमत हैं कि किस पर ध्यान देना है।",
+hjem:"घर से यह स्कूल की तुलना में ज़्यादा भारी दिखता है। बच्चे स्कूल में ख़ुद को सँभाले रख सकते हैं और घर आकर ढीले पड़ सकते हैं।",
+skole:"स्कूल को परिवार से ज़्यादा ख़राब मौसम दिखता है। स्कूल विद्यार्थी को बड़े समूह में देखता है, और उससे अलग तस्वीर बन सकती है।",
+elevlys:"विद्यार्थी इसे बड़ों को दिखने से बेहतर महसूस करता है। पूछें कि विद्यार्थी ख़ुद क्या देखता है।",
+ulikt:"आप इसे अलग-अलग देखते हैं। कोई ग़लत नहीं है। हर कोई दिन का अपना हिस्सा देखता है।",
+skjult:"विद्यार्थी ने इसे अपने तक रखना चुना है। इसकी इजाज़त है, और इसका सम्मान होना चाहिए।",
+blind:"हर किसी को यह नहीं दिखता। जिसे दिखता है, वह दूसरों को बता सकता है।",
+en:"यहाँ तुलना के लिए बहुत कम जवाब हैं।",
+likt:"आप इसे लगभग एक जैसा देखते हैं।"
+},
+path:[
+["पहले आपस में बात करें।","विद्यार्थी और एक बड़ा जिसे विद्यार्थी ने ख़ुद चुना हो। ऊपर दिए सवालों का इस्तेमाल करें।"],
+["कक्षा-शिक्षक से बात करें।","ऐसी बैठक माँगें जिसमें विद्यार्थी, परिवार और स्कूल बताएँ कि वे क्या देखते हैं।"],
+["स्कूल की नर्स या काउंसलर की मदद लें।","कई स्कूलों में ये होते हैं, और अक्सर विद्यार्थी ख़ुद उनसे संपर्क कर सकते हैं।"],
+["अगर स्कूल सुरक्षित नहीं लगता, तो प्रधानाचार्य को बताएँ।","स्कूल को जाँच करके कदम उठाना चाहिए। नॉर्वे में यह क़ानूनी ज़िम्मेदारी है, और कुछ काम न आए तो मामला काउंटी गवर्नर तक ले जाया जा सकता है।"],
+["बाक़ी विशेषज्ञों पर छोड़ें।","अगर आपको लगे कि और मदद चाहिए, तो डॉक्टर या स्कूल की सहायता सेवा इसका आकलन कर सकती है। Tre blikk नहीं कर सकता।"]
+],
+nots:[
+"कोई निदान नहीं करता, और बच्चों, माता-पिता या शिक्षकों को नहीं आँकता।",
+"कोई जवाब सहेजता नहीं। वे पन्ना बंद होने तक सिर्फ़ इसी स्क्रीन पर रहते हैं।",
+"नाम, जन्म-तिथि या स्कूल नहीं पूछता।",
+"शिक्षक, स्कूल की नर्स या डॉक्टर से बातचीत की जगह नहीं लेता।"
+],
+help:[
+"नॉर्वे: बच्चों और किशोरों की हेल्पलाइन। मुफ़्त, दिन-रात खुली, और तुम अपना नाम बताए बिना बात कर सकते हो।",
+"नॉर्वे: रेड क्रॉस की Kors på halsen, 18 साल से कम उम्र वालों के लिए। मुफ़्त और बिना नाम बताए।",
+"नॉर्वे: अगर जान या सेहत को तुरंत ख़तरा हो, तो फ़ोन करो।"
+]
+};
+Object.assign(L.hi.ui,{
+introE:"शुरू करने से पहले",
+introH:"Tre blikk एक नज़र है, आकलन नहीं",
+introKid:"विद्यार्थी को इसकी पुष्टि नहीं करनी है। विद्यार्थी को फ़ोन देने से पहले कोई बड़ा पुष्टि करे।",
+introC1:"मैं वयस्क हूँ, और मैंने यह पढ़ और समझ लिया है।",
+introC2:"मैं मानता हूँ कि मैं Tre blikk या उसमें दिखाई गई किसी भी चीज़ का इस्तेमाल ऐप, उसके डेवलपर या मालिकों के ख़िलाफ़ नहीं कर सकता।",
+introBtn:"मैं समझता हूँ और स्वीकार करता हूँ",
+kidIntro:"यह कोई परीक्षा नहीं है। कोई जवाब ग़लत नहीं है।",
+notDx:"यह न कोई निदान है और न कोई पेशेवर आकलन। यह सिर्फ़ दिखाता है कि आप में से हर कोई अपनी जगह से इसे कैसे देखता है।",
+terms:"उपयोग की शर्तें"
+});
+L.hi.intro=[
+["कोई निदान नहीं।","Tre blikk कोई निदान नहीं करता और ADHD या किसी और स्थिति के बारे में कुछ नहीं कहता। यह न तो कहता है कि किसी को कोई निदान है, और न यह कि नहीं है।"],
+["सिर्फ़ अलग-अलग नज़रिए।","ऐप दिखाता है कि विद्यार्थी, परिवार और स्कूल इस समय रोज़मर्रा को कैसे महसूस करते हैं, और कहाँ उनकी नज़र एक जैसी या अलग है। यह नहीं बताता कि कौन सही है, और न यह कि ऐसा क्यों है।"],
+["विशेषज्ञों की जगह नहीं।","Tre blikk स्वास्थ्य सेवा, जाँच या परामर्श नहीं है, और शिक्षक, स्कूल की नर्स, डॉक्टर या स्कूल की सहायता सेवा की जगह नहीं लेता। अगर आपको चिंता है, तो उनसे संपर्क करें।"],
+["अपनी ज़िम्मेदारी पर।","आप Tre blikk का इस्तेमाल अपनी ज़िम्मेदारी पर करते हैं। जवाबों, सुझावों और नतीजों को किसी के ख़िलाफ़ दस्तावेज़, सबूत या दावे के आधार के रूप में इस्तेमाल नहीं किया जा सकता। इसमें ऐप और उसे बनाने वाले या उसके मालिक भी शामिल हैं।"]
+];
+
+L.zh={
+name:"中文",dir:"ltr",sp:"",
+ui:{
+lang:"语言",
+home:"回到首页",
+h1:"同一个孩子，从三个地方看",
+lead:"孩子在家里和在学校可能不一样。在这里，学生、家庭和学校各自回答同样的问题。之后你们可以看到哪里看法一致，哪里看法不同，以及可以一起聊些什么。",
+exLabel:"示例",
+sampleCap:"学校看到的是少云。学生和家庭看到的是雷雨。没有人错。每个人看到的是一天中自己的那一部分。",
+bandH:"学生多大了？",
+bandNote:"年龄段决定学生问题的措辞。",
+bandNote1:"6 到 9 岁的孩子可以由大人朗读，但天气要让孩子自己选。",
+whoH:"现在由谁回答？",
+whoNote:"请让学生先回答，并且独自回答。学生有六个问题，并自己决定要不要再答四个。学生也可以把某些回答留给自己。在打开对比之前，谁也看不到别人的回答。",
+roleDone:"已回答。点一下可重新回答。",
+cmpH:"查看对比",
+answered:"已回答：{list}。",
+noneYet:"还没有人回答。",
+needTwo:"至少要有两方回答。",
+cmpBtn:"打开对比",
+reset:"删除全部回答",
+resetArm:"再点一次即可删除",
+apartH:"你们不在一起？",
+apartP:"每个人都可以在自己的手机上回答，然后发送自己的回答码。请把回答码粘贴到这里。",
+codeAria:"回答码",
+addBtn:"添加回答",
+codeBad:"回答码不正确。请检查字符是否齐全，然后再试一次。",
+codeOk:"已添加回答：{who}。",
+codeBand:"这个回答码是为{band}生成的。",
+exH:"对比大概是这样",
+exP:"下面的回答是虚构的。这里显示前六个方面。",
+exBtn:"查看带建议的完整示例",
+qOf:"第 {n} 题，共 {t} 题",
+pause:"休息一下",
+lastQ:"最后一题",
+readAloud:"可以请大人朗读。天气由你自己选。",
+noE:"这个我不想回答",
+noA:"这个我看不到",
+keep:"这个回答我自己留着。大人看不到。",
+pauseH:"做得好。六个问题已经完成。",
+pauseP:"你可以在这里停下。完全没问题。如果愿意，还有四个问题。",
+stopT:"我答完了",
+stopS:"六个对我来说够了",
+moreT:"我再答四个",
+moreS:"早晨、课堂安静、不一样的日子和网络",
+wishE:"你的愿望",
+wishH:"你最想先和谁谈？",
+wishNo:"我不想说",
+back:"返回",
+next:"下一步",
+finish:"完成",
+thanks:"谢谢。回答已记录。",
+doneE:"准备好了就把手机交给下一个人。在你们一起打开对比之前，大人看不到你的回答。",
+doneA:"在打开对比之前，其他人看不到您的回答。",
+kept1:"你把 1 个回答留给了自己。它不会被传出去。",
+keptN:"你把 {n} 个回答留给了自己。它们不会被传出去。",
+heavyH:"你回答说有些事情很难。",
+heavyP:"你不必一个人解决。请找一位你信任的大人谈谈。在挪威，你也可以拨打 116 111。电话免费，也不用说出你是谁。其他国家请看本页底部。",
+codeH:"你的回答码",
+copy:"复制",
+copied:"已复制",
+copySel:"已选中，请自行复制",
+codeP:"如果你们不在一起，请把回答码发给收集回答的人。回答码只包含年龄段和回答，不含姓名。",
+codePE:"要不要发送，由你自己决定。",
+exBannerB:"这是一个示例。",
+exBannerT:"回答是虚构的。",
+fcE:"天气预报",
+fcTop:"最值得一起聊的是：{a}。",
+fcNote:"天气预报说的是这些回答，不是学生本人。",
+startHere:"从这里开始",
+sameH:"你们的看法大多一致",
+sameP:"知道这一点也有用。问问学生，这些问题有没有漏掉什么。",
+unsafeH:"有人回答说感觉不安全。",
+unsafeP:"请告诉学校。学校得知学生感觉不安全后，应当调查并采取措施。在挪威，这是法律规定的义务（教育法第 12-4 条）。",
+areasH:"逐个方面看",
+askL:"可以问：",
+tipsH:"给每一方的建议",
+keptTipH:"学生留给自己的内容",
+keptTipP:"不要逼问。告诉孩子门一直开着，改天再问。",
+always:"始终",
+pathH:"接下来怎么做",
+again:"四周后再做一轮，看看天气有没有变化。",
+startOwn:"开始你们自己的一轮",
+hidE:"学生把这一项留给了自己。",
+shortE:"学生做的是短的一轮。",
+missH:"家庭看不到这一项。",
+missS:"学校看不到这一项。",
+ariaKept:"留给自己",
+ariaBlind:"看不到这一项",
+helpH:"现在需要找一位大人谈谈吗？",
+helpIntl:"在挪威以外：遇到紧急情况，请拨打当地的紧急电话。你所在国家的儿童求助热线可以在这里找到：",
+notsH:"Tre blikk 不做什么",
+src:"依据挪威关于家校合作的指导原则。这是原型，不是成品。由挪威语翻译而来，尚未经母语者审校。",
+ad:"广告",
+adFree:"广告位空缺",
+adNote:"只向成年人显示。绝不向学生显示。"
+},
+roles:{
+E:{n:"学生",l:"学生",you:"我是学生",sub:"6 个问题，愿意的话再加 4 个",tab:"给你，学生",as:"你以学生的身份回答"},
+H:{n:"家庭",l:"家庭",you:"我是家长或监护人",sub:"10 个问题，从家里看",tab:"给家庭",as:"您以家长的身份回答"},
+S:{n:"学校",l:"学校",you:"我是老师",sub:"10 个问题，从学校看",tab:"给学校",as:"您以老师的身份回答"}
+},
+bands:["6–9 岁","10–12 岁","13–16 岁"],
+scale:[["雷雨","非常难"],["下雨","比较难"],["多云","一般"],["少云","比较好"],["晴天","非常好"]],
+fc:["大部分是雷雨。","大部分是下雨。","大部分是多云。","大部分是少云。","大部分是晴天。"],
+areas:[
+{n:"在校感受",
+ e:["在学校的感觉怎么样？","最近在学校的感觉怎么样？","你最近在学校过得怎么样？"],
+ h:"从家里看，孩子对上学的感受怎么样？",
+ s:"从课堂上看，学生在学校过得怎么样？",
+ ask:"普通的一个上学日里，最好的和最糟的事情是什么？",
+ te:"说一件让这一天变好的事，和一件让它变难的事。两句话就够了。",
+ th:"问问一个再普通不过的星期二，一节课一节课地问。比起“你还好吗？”，具体的某一天更容易回答。",
+ ts:"告诉家庭你们一天里实际看到了什么，包括那些进展顺利的小事。"},
+{n:"朋友和课间",
+ e:["课间和别人一起玩的感觉怎么样？","和朋友相处、课间休息时怎么样？","和朋友相处怎么样，课间和其他时候都算？"],
+ h:"从你们在家听到和看到的来看，孩子和朋友相处得怎么样？",
+ s:"学生和朋友相处、课间休息时看起来怎么样？",
+ ask:"课间你和谁在一起？你希望多和谁在一起？",
+ te:"说说你喜欢和谁在一起。这样大人不用猜就能帮上忙。",
+ th:"问孩子今天和谁在一起，而不是问有没有朋友。",
+ ts:"留意过渡的时段：课间、更衣处和小组活动。把看到的告诉家庭。"},
+{n:"学业",
+ e:["在学校做作业和练习的感觉怎么样？","学习上的事进行得怎么样？","功课、测验和要交的作业进行得怎么样？"],
+ h:"在家里，功课和家庭作业进行得怎么样？",
+ s:"课堂上的练习和学习进行得怎么样？",
+ ask:"现在哪一科觉得最容易，哪一科觉得最难？",
+ te:"拿一道你觉得难的题给大人看。大人看到你指的是什么，就更容易帮你。",
+ th:"告诉学校，家庭作业在家实际要花多长时间，做作业时气氛怎么样。",
+ ts:"给家庭看一个例子：学生在课堂上能做到什么，又在哪里卡住。"},
+{n:"放学后的精力",
+ e:["一天的课上完后，你的身体感觉怎么样？","一天的课上完后，你还有多少力气？","一天的课上完后，你还剩多少精力？"],
+ h:"放学后，孩子的精力怎么样？",
+ s:"快放学的时候，学生的精力怎么样？",
+ ask:"一天当中你什么时候最累？那时候什么能帮到你？",
+ te:"说说你一天当中什么时候最累。这对大人很有用。",
+ th:"向老师描述放学后的第一个小时。学校很少能看到一天中的这一段。",
+ ts:"在课堂上显得安静的学生，可能为此花了很多力气。问问家庭，下午是什么样子。"},
+{n:"安全感",
+ e:["在学校和上学路上，感觉有多安全？","你在学校和上学路上感觉有多安全？","你在学校和上下学的路上感觉有多安全？"],
+ h:"孩子在学校和上学路上看起来有多安全？",
+ s:"学生在学校看起来有多安全？",
+ ask:"学校里有没有让你觉得不安全的地方或时间？",
+ te:"如果有什么让你觉得不安全，请告诉一位你信任的大人。你不需要确切知道问题出在哪里。",
+ th:"请告诉学校，最好用书面形式。学校得知学生感觉不安全后，应当调查并采取措施。",
+ ts:"按照你们学校的流程去做：留意、报告校长、调查、采取措施。以学生自己的感受为出发点。"},
+{n:"被倾听",
+ e:["有重要的事时，告诉大人的感觉怎么样？","你说重要的事时，大人有没有认真听？","你提出问题时，大人有没有把你的话当真？"],
+ h:"在你们看来，大人有没有认真听孩子说话？",
+ s:"在你们看来，学生有没有机会表达并被倾听？",
+ ask:"你希望大人能更明白什么？",
+ te:"你可以要求先单独和一位大人谈。这是可以的。",
+ th:"先听完，再提办法。可以问：“你是想要帮忙，还是只想说给我听？”",
+ ts:"让学生自己选择谁参加谈话，以及哪些内容转告给谁。"},
+{n:"早晨和到校",
+ e:["去学校之前的早晨是什么样的？","上学前的早晨是什么样的？","早上出门去学校，对你来说怎么样？"],
+ h:"在你们家，上学前的早晨是什么样的？",
+ s:"一天开始时，学生看起来怎么样？",
+ ask:"早晨最难的是什么？什么能让它容易一些？",
+ te:"说说早晨最糟的是什么。是起床，是来不及，还是想到这一天？",
+ th:"告诉老师，在那些难熬的日子里早晨是怎样的。这样学校能更好地理解一天的开头。",
+ ts:"告诉家庭，学生到校后的头十分钟是什么样子。家庭只看得到出门之前的事。"},
+{n:"课堂上的安静",
+ e:["在教室里能安静地做事吗？感觉怎么样？","上课时能安静地学习吗？感觉怎么样？","上课时集中注意力，对你来说怎么样？"],
+ h:"从孩子讲的来看，课堂上能安静学习的情况怎么样？",
+ s:"上课时，学生周围能安静学习的情况怎么样？",
+ ask:"在教室的哪个位置、一天中的什么时候，最容易学得进去？",
+ te:"说说什么最打扰你。是声音，是你的座位，还是别的？",
+ th:"问问什么让学习变得容易，而不只是什么在打扰。把答案转告老师。",
+ ts:"一次只试一种改变，比如座位、休息或更短的时段。告诉家庭你们在试什么。"},
+{n:"当这一天不一样时",
+ e:["学校里有不一样的事时，比如换了老师或出去活动，感觉怎么样？","上学的日子和平时不一样时，比如代课老师、外出活动或新的分组，感觉怎么样？","上学的日子和平时不一样时，比如代课老师、新的分组或课表变动，感觉怎么样？"],
+ h:"上学的日子和平时不一样时，孩子应对得怎么样？",
+ s:"这一天和平时不一样时，学生应对得怎么样？",
+ ask:"事情和你想的不一样时，什么最能帮到你？",
+ te:"如果你喜欢提前知道变动，就说出来。这对大人来说很容易安排。",
+ th:"告诉学校，计划有变时，在家里什么办法管用。",
+ ts:"尽早把变动告诉学生和家庭。说明哪些不变，而不只是哪些是新的。"},
+{n:"网络、游戏和手机",
+ e:["你和学校里的人一起玩游戏或聊天时，感觉怎么样？","在网上、游戏里和聊天群里，和班上同学相处得怎么样？","在网上和社交媒体上，和学校里的人相处得怎么样？"],
+ h:"孩子在网上、游戏里和聊天中与学校里的人相处，看起来怎么样？",
+ s:"就你们了解到的情况，学生之间在网上发生的事看起来怎么样？",
+ ask:"有没有网上发生的事，一直跟着你到了学校？",
+ te:"你可以把发生的事给大人看，而不用解释。一张截图就够了。",
+ th:"先好奇，再立规矩。问问那里什么好玩，什么不好。",
+ ts:"放学后网上发生的事，可能让上学的日子变得不安全。这仍然是学校要管的事。"}
+],
+wish:[
+["家里的人","学生最想先和家里的人谈。"],
+["我的老师","学生最想先和自己的老师谈。"],
+["校医或心理老师","学生最想先和校医或心理老师谈。"],
+["另一位我信任的大人","学生最想先和另一位大人谈。"],
+["还不知道","学生还不知道和谁谈最好。请给一点时间。"]
+],
+stand:{
+E:["分享什么由你决定。你可以说“这个我现在还不想谈”。","解决这件事不是你的任务。这是大人的任务。"],
+H:["回答不同，并不表示有人错了。学校看到的是孩子在一大群人里的样子，你们看到的是家里发生的事。","先问清楚哪些可以转告学校，然后再转告。"],
+S:["家长了解学生的一些情况，学校可以用得上。请主动去问。","请主动提出谈话的时间。不要等家庭来问。"]
+},
+chip:{elevlav:"学生看到更多风雨",felles:"共同的风雨",ulikt:"看法不同",skjult:"留给自己",blind:"不是人人都看得到",en:"回答太少",likt:"看法一致"},
+ex:{
+elevlav:"在这一项上，学生感受到的坏天气比大人看到的多。学生的感受是出发点。从这里开始。",
+felles:"所有回答的人在这里都看到了坏天气。这说明你们对需要关注什么是一致的。",
+hjem:"从家里看，比在学校看要沉重。孩子可能在学校撑着，回到家才放松下来。",
+skole:"学校看到的坏天气比家庭多。学校看到的是学生在一大群人里的样子，这可能呈现出不同的画面。",
+elevlys:"学生的感受比大人看到的要明亮。问问学生自己注意到了什么。",
+ulikt:"你们对这一项看法不同。没有人错。每个人看到的是一天中自己的那一部分。",
+skjult:"学生选择把这一项留给自己。这是可以的，应当得到尊重。",
+blind:"不是每个人都看得到这一项。看得到的人可以告诉其他人。",
+en:"这一项回答的人太少，无法对比。",
+likt:"你们对这一项的看法大致相同。"
+},
+path:[
+["先一起谈。","学生和一位学生自己选的大人。用上面的问题来谈。"],
+["找班主任。","请求安排一次会面，让学生、家庭和学校分享各自看到的情况。"],
+["找校医或心理老师。","很多学校都有，学生通常可以自己去联系。"],
+["如果在学校感觉不安全，请告诉校长。","学校应当调查并采取措施。在挪威这是法律规定的义务，如果都不管用，可以向郡长办公室申诉。"],
+["其余的交给专业人员。","如果你们想知道是否需要更多帮助，可以由医生或学校的支持服务来评估。Tre blikk 做不到这一点。"]
+],
+nots:[
+"不做任何诊断，也不评判孩子、家长或老师。",
+"不保存任何回答。回答只存在于这块屏幕上，页面关闭后就没有了。",
+"不询问姓名、出生日期或学校。",
+"不能代替与老师、校医或医生的谈话。"
+],
+help:[
+"挪威：儿童和青少年求助热线。免费，昼夜开放，可以匿名。",
+"挪威：红十字会的 Kors på halsen，面向 18 岁以下的人。免费且匿名。",
+"挪威：生命或健康面临紧急危险时请拨打。"
+]
+};
+Object.assign(L.zh.ui,{
+introE:"开始之前",
+introH:"Tre blikk 是一种观察，不是评估",
+introKid:"学生不需要确认这些内容。由一位成年人确认后，再把手机交给学生。",
+introC1:"我是成年人，已阅读并理解以上内容。",
+introC2:"我同意不能用 Tre blikk 或它显示的任何内容来针对本应用、其开发者或所有者。",
+introBtn:"我理解并同意",
+kidIntro:"这不是考试。没有错误的回答。",
+notDx:"这不是诊断，也不是专业评估。它只显示你们各自从自己的位置看到的情况。",
+terms:"使用条款"
+});
+L.zh.intro=[
+["不做诊断。","Tre blikk 不做任何诊断，也不涉及多动症（ADHD）或其他任何状况。它不会说某人有某种诊断，也不会说某人没有。"],
+["只是不同的看法。","这个应用显示学生、家庭和学校眼下各自如何感受日常，以及哪里看法一致、哪里不同。它不判断谁对，也不解释为什么会这样。"],
+["不能代替专业人员。","Tre blikk 不是医疗服务、测评或咨询，不能代替老师、校医、医生或学校的支持服务。如果你们感到担心，请联系他们。"],
+["风险自负。","使用 Tre blikk 的风险由你们自行承担。回答、建议和结果不能用作针对任何人的文件、证据或索赔依据。这也包括本应用及其开发者和所有者。"]
+];
+
+/* ---------- grunnoppsett ---------- */
+var ORDER=['E','H','S'];
+var LANG_ORDER=['nb','en','es','fr','de','pt','ar','hi','zh'];
+var N=10, CORE=6, TRYGG=4;
+var HELP_NUMS=['116 111','800 333 21','113'];
+
+/* Annonser. Vises bare på de voksnes skjermer, aldri på elevens.
+   on:false skrur av alt. En plass med null vises som ledig.
+   En solgt plass fylles slik: {title:'…', text:'…', url:'https://…', by:'Navn på annonsør'} */
+var ADS={on:true,slots:{adultDone:null,adultTips:null}};
+
+/* Oppdiktet eksempel: eleven tok den korte runden. */
+var EXAMPLE={E:[3,3,4,1,4,3,null,null,null,null],H:[2,0,3,1,4,3,2,0,3,4],S:[5,4,4,4,5,4,4,4,2,0],wish:2};
+
+/* Fransk: harde mellomrom foran ? ! : ; og innenfor « » */
+(function(){
+  var f=function(o){for(var k in o){ if(typeof o[k]==='string') o[k]=o[k].replace(/ ([?!:;»])/g,'\u00a0$1').replace(/« /g,'«\u00a0'); else if(o[k]&&typeof o[k]==='object') f(o[k]); }};
+  ['ui','roles','areas','wish','stand','chip','ex','path','nots','help','fc','scale','intro'].forEach(function(k){f(L.fr[k]);});
+})();
+
+function pickLang(){
+  try{ var s=localStorage.getItem('tb-lang'); if(s&&L[s]) return s; }catch(e){}
+  var list=(navigator.languages&&navigator.languages.length)?navigator.languages:[navigator.language||'nb'];
+  for(var i=0;i<list.length;i++){
+    var c=String(list[i]).toLowerCase().split('-')[0];
+    if(c==='no'||c==='nn') c='nb';
+    if(L[c]) return c;
+  }
+  return 'nb';
+}
+
+var state={view:'intro',accepted:false,ck:[false,false],lang:pickLang(),band:2,ans:{E:null,H:null,S:null},wish:0,role:null,step:0,more:false,draft:[],hide:[],wishDraft:null,
+  code:'',heavy:false,hidden:0,example:false,tab:'E',msg:null,armed:false};
+
+function D(){return L[state.lang]||L.nb;}
+function t(k,vars){
+  var s=D().ui[k]; if(s===undefined) s=L.nb.ui[k];
+  if(vars) for(var x in vars) s=s.split('{'+x+'}').join(vars[x]);
+  return s;
+}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function sp(){return D().sp;}
+function fill(s){var k=D().kid; return k?s.replace(/\{b\}/g,k[state.band-1]):s;}
+function role(r){return D().roles[r];}
+function area(i){return D().areas[i];}
+function qText(i,r){var a=area(i); return r==='E'?a.e[state.band-1]:fill(r==='H'?a.h:a.s);}
+function tip(i,r){var a=area(i); return fill(r==='E'?a.te:(r==='H'?a.th:a.ts));}
+function scaleName(n){return D().scale[n-1][0];}
+function listFmt(arr){
+  try{ return new Intl.ListFormat(state.lang==='zh'?'zh-Hans':state.lang,{style:'long',type:'conjunction'}).format(arr); }
+  catch(e){ return arr.join(', '); }
+}
+
+/* ---------- værikoner ---------- */
+function cloud(cls,dx,dy){
+  return '<g class="'+cls+'" transform="translate('+dx+' '+dy+')"><circle cx="8.5" cy="14" r="4"/><circle cx="13" cy="11.5" r="5"/><circle cx="17.5" cy="14.5" r="3.5"/><rect x="8.5" y="13" width="9" height="5"/></g>';
+}
+function rays(cx,cy,r1,r2,n){
+  var s='';
+  for(var i=0;i<n;i++){
+    var a=Math.PI*2*i/n, c=Math.cos(a), d=Math.sin(a);
+    s+='<line x1="'+(cx+c*r1).toFixed(2)+'" y1="'+(cy+d*r1).toFixed(2)+'" x2="'+(cx+c*r2).toFixed(2)+'" y2="'+(cy+d*r2).toFixed(2)+'"/>';
+  }
+  return '<g class="w-ray">'+s+'</g>';
+}
+function wx(n,size){
+  var b='';
+  if(n===5) b='<circle class="w-sun" cx="12" cy="12" r="4.6"/>'+rays(12,12,7.2,9.8,8);
+  else if(n===4) b='<circle class="w-sun" cx="16.5" cy="8" r="3.6"/>'+rays(16.5,8,5.4,7.2,8)+cloud('w-cloud',-2,2.5);
+  else if(n===3) b=cloud('w-cloud',-1,-1);
+  else if(n===2) b=cloud('w-cloud2',-1,-4)+'<g class="w-drop"><line x1="8" y1="16.5" x2="7" y2="20.5"/><line x1="12.5" y1="16.5" x2="11.5" y2="20.5"/><line x1="17" y1="16.5" x2="16" y2="20.5"/></g>';
+  else b=cloud('w-cloud2',-1,-5)+'<polygon class="w-sun" points="13.4,13.4 9.2,18.6 12,18.6 10.8,22.8 15.8,16.6 12.8,16.6 14.4,13.4"/>';
+  return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 24 24" aria-hidden="true" focusable="false">'+b+'</svg>';
+}
+
+/* ---------- merker: elev, hjem, skole (uten bokstaver, så de virker på alle språk) ---------- */
+var ICON={
+  E:'<circle cx="9" cy="5.6" r="3.1"/><path d="M3 15.6c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5z"/>',
+  H:'<path d="M9 2.2 2.2 8.4h1.9v6.9h3.6v-4.2h2.6v4.2h3.6V8.4h1.9z"/>',
+  S:'<path d="M2.2 3.8h4.5c1 0 1.8.4 2.3 1.1.5-.7 1.3-1.1 2.3-1.1h4.5v10h-4.7c-.8 0-1.5.3-2.1.9-.6-.6-1.3-.9-2.1-.9H2.2z"/>'
+};
+function mk(r,big){
+  var z=big?22:15;
+  return '<span class="mk mk-'+r+(big?' big':'')+'" aria-hidden="true"><svg width="'+z+'" height="'+z+'" viewBox="0 0 18 18" fill="currentColor" focusable="false">'+ICON[r]+'</svg></span>';
+}
+
+/* ---------- annonseplass ---------- */
+function adSlot(id){
+  if(!ADS.on) return '';
+  var ad=ADS.slots[id], inner;
+  if(ad&&ad.url) inner='<a href="'+esc(ad.url)+'" target="_blank" rel="sponsored noopener"><b>'+esc(ad.title||'')+'</b><span>'+esc(ad.text||'')+'</span></a>'+(ad.by?'<span class="ad-by">'+esc(ad.by)+'</span>':'');
+  else inner='<b>'+t('adFree')+'</b><span class="ad-by">'+t('adNote')+'</span>';
+  return '<aside class="ad"><span class="ad-l">'+t('ad')+'</span>'+inner+'</aside>';
+}
+
+/* ---------- svarkode: rolle, alderstrinn, svar, (ønske), kontrollsiffer ---------- */
+function checksum(r,d){
+  var s=r.charCodeAt(0);
+  for(var i=0;i<d.length;i++) s+=(i+3)*Number(d.charAt(i));
+  return s%10;
+}
+function encode(r,band,arr,wish){
+  var d=arr.filter(function(x){return x!==null&&x!==undefined;}).join('')+(r==='E'?String(wish||0):'');
+  return r+band+'-'+d+'-'+checksum(r,String(band)+d);
+}
+function decode(str){
+  var s=String(str||'').toUpperCase().replace(/[^A-Z0-9]/g,'');
+  var r=s.charAt(0), band=Number(s.charAt(1));
+  if(r!=='E'&&r!=='H'&&r!=='S') return null;
+  if(!(band>=1&&band<=3)) return null;
+  var rest=s.slice(2), d=rest.slice(0,-1), n=r==='E'?d.length-1:d.length;
+  var okLen=r==='E'?(n===CORE||n===N):(n===N);
+  if(!okLen||!/^[0-5]+$/.test(d)||!/^[0-9]$/.test(rest.slice(-1))) return null;
+  if(checksum(r,String(band)+d)!==Number(rest.slice(-1))) return null;
+  var arr=d.slice(0,n).split('').map(Number);
+  while(arr.length<N) arr.push(null);
+  return {role:r,band:band,arr:arr,wish:r==='E'?Number(d.charAt(n)):0};
+}
+
+/* ---------- sammenligning ---------- */
+function has(A,r,i){return !!A[r]&&A[r][i]!==null&&A[r][i]!==undefined;}
+function analyse(i,A){
+  var v={},vals=[],adults=[],blind=[],shortE=false;
+  ORDER.forEach(function(r){
+    if(!A[r]) return;
+    if(!has(A,r,i)){ if(r==='E') shortE=true; return; }
+    v[r]=A[r][i];
+    if(v[r]>0){vals.push(v[r]); if(r!=='E') adults.push(v[r]);}
+    else if(r!=='E') blind.push(r);
+  });
+  var hidden=v.E===0;
+  var min=Math.min.apply(null,vals), max=Math.max.apply(null,vals);
+  var kind,dir='ulikt';
+  if(vals.length<2) kind=hidden?'skjult':(blind.length?'blind':'en');
+  else if(v.E>0&&v.E<=2&&adults.some(function(a){return a-v.E>=2;})) kind='elevlav';
+  else if(max<=2) kind='felles';
+  else if(max-min>=2){
+    kind='ulikt';
+    if(v.H>0&&v.S>0&&v.S-v.H>=2) dir='hjem';
+    else if(v.H>0&&v.S>0&&v.H-v.S>=2) dir='skole';
+    else if(v.E>0&&adults.length&&v.E-Math.max.apply(null,adults)>=2) dir='elevlys';
+  }
+  else if(hidden) kind='skjult';
+  else if(blind.length) kind='blind';
+  else kind='likt';
+  var pri={elevlav:5,felles:4,ulikt:3,skjult:2,blind:1,en:0,likt:0}[kind];
+  if(i===TRYGG&&pri>=3) pri+=0.5;
+  return {i:i,kind:kind,dir:dir,pri:pri,blind:blind,hidden:hidden,shortE:shortE,v:v};
+}
+var CHIPG={elevlav:'!',felles:'↓',ulikt:'≠',skjult:'·',blind:'?',en:'1',likt:'='};
+function chip(a){return '<span class="chip chip-'+a.kind+'"><i aria-hidden="true">'+CHIPG[a.kind]+'</i>'+D().chip[a.kind]+'</span>';}
+function explain(a){return D().ex[a.kind==='ulikt'?a.dir:a.kind];}
+function missing(a){
+  var m=[];
+  if(a.shortE) m.push(t('shortE'));
+  if(a.hidden&&a.kind!=='skjult') m.push(t('hidE'));
+  a.blind.forEach(function(r){m.push(t(r==='H'?'missH':'missS'));});
+  return m.length?'<p class="row-miss">'+m.join(sp())+'</p>':'';
+}
+function track(a,A){
+  var cells='';
+  for(var n=1;n<=5;n++){
+    cells+='<div class="cell">'+ORDER.filter(function(r){return has(A,r,a.i)&&A[r][a.i]===n;}).map(function(r){return mk(r);}).join('')+'</div>';
+  }
+  var label=ORDER.filter(function(r){return has(A,r,a.i);}).map(function(r){
+    var x=A[r][a.i];
+    return role(r).n+': '+(x?scaleName(x):t(r==='E'?'ariaKept':'ariaBlind'));
+  }).join('. ');
+  return '<div class="track" role="img" aria-label="'+esc(label)+'">'+cells+'</div>';
+}
+function scaleHead(){
+  var s='';
+  for(var n=1;n<=5;n++) s+='<div>'+wx(n,26)+'<span>'+scaleName(n)+'</span></div>';
+  return '<div class="scale" aria-hidden="true">'+s+'</div>';
+}
+function legend(A){
+  return '<div class="legend">'+ORDER.filter(function(r){return A[r];}).map(function(r){return '<span>'+mk(r)+role(r).n+'</span>';}).join('')+'</div>';
+}
+function chart(A,full,limit){
+  var rows='';
+  for(var i=0;i<(limit||N);i++){
+    var a=analyse(i,A);
+    rows+='<div class="row"><div class="row-h"><h3>'+area(i).n+'</h3>'+chip(a)+'</div>'+track(a,A)+missing(a)+
+      (full?'<p class="row-t">'+explain(a)+'</p>'+(a.pri>=1&&a.kind!=='skjult'?'<p class="row-ask"><b>'+t('askL')+'</b> '+area(i).ask+'</p>':''):'')+'</div>';
+  }
+  return '<section class="chart">'+legend(A)+scaleHead()+rows+'</section>';
+}
+function forecast(A){
+  var sum=0,c=0;
+  ORDER.forEach(function(r){ if(A[r]) A[r].forEach(function(x){ if(x>0){sum+=x;c++;} }); });
+  if(!c) return t('noneYet');
+  return D().fc[Math.min(5,Math.max(1,Math.round(sum/c)))-1];
+}
+function answered(){return ORDER.filter(function(r){return state.ans[r];});}
+function whoList(rs){return listFmt(rs.map(function(r){return role(r).l;}));}
+
+/* ---------- rekkefølgen i en runde ---------- */
+function seq(){
+  var s=[],i;
+  if(state.role==='E'){
+    for(i=0;i<CORE;i++) s.push({t:'q',i:i});
+    s.push({t:'pause'});
+    if(state.more) for(i=CORE;i<N;i++) s.push({t:'q',i:i});
+    s.push({t:'wish'});
+  } else {
+    for(i=0;i<N;i++) s.push({t:'q',i:i});
+  }
+  return s;
+}
+
+/* ---------- visninger ---------- */
+function viewIntro(){
+  var d=D();
+  return '<section><span class="eyebrow">'+t('introE')+'</span><h1>'+t('introH')+'</h1></section>'+
+  '<ul class="terms">'+d.intro.map(function(p){return '<li><b>'+p[0]+'</b><span>'+p[1]+'</span></li>';}).join('')+'</ul>'+
+  '<section class="agree"><label class="keep" for="vilkar-1"><input type="checkbox" id="vilkar-1"'+(state.ck[0]?' checked':'')+'><span>'+t('introC1')+'</span></label>'+
+  '<label class="keep" for="vilkar-2"><input type="checkbox" id="vilkar-2"'+(state.ck[1]?' checked':'')+'><span>'+t('introC2')+'</span></label>'+
+  '<p class="small muted">'+t('introKid')+'</p>'+
+  '<div class="btnrow"><button class="btn" id="godta" data-act="accept"'+(state.ck[0]&&state.ck[1]?'':' disabled')+'>'+t('introBtn')+'</button></div></section>';
+}
+function viewHome(){
+  var got=answered(), d=D();
+  var bands='';
+  for(var b=1;b<=3;b++) bands+='<button class="segb" id="trinn-'+b+'" data-act="band" data-band="'+b+'" aria-pressed="'+(state.band===b)+'">'+d.bands[b-1]+'</button>';
+  var roles=ORDER.map(function(r){
+    return '<button class="role" data-act="start" data-role="'+r+'">'+mk(r,true)+'<span><b>'+role(r).you+'</b><span class="sub">'+role(r).sub+'</span>'+
+      (state.ans[r]?'<span class="done">'+t('roleDone')+'</span>':'')+'</span></button>';
+  }).join('');
+  var sampleA=analyse(3,EXAMPLE);
+  var msg=state.msg?'<p class="msg '+state.msg[0]+'" role="status">'+state.msg[1]+'</p>':'';
+  return ''+
+  '<section class="hero">'+
+    '<h1>'+t('h1')+'</h1>'+
+    '<p class="lead">'+t('lead')+'</p>'+
+    '<section class="sample"><div class="row-h"><span class="eyebrow">'+t('exLabel')+'</span><h3>'+area(3).n+'</h3></div>'+scaleHead()+track(sampleA,EXAMPLE)+
+    '<p class="small muted">'+t('sampleCap')+'</p></section>'+
+  '</section>'+
+  '<section><h2>'+t('bandH')+'</h2><div class="seg" role="group" aria-label="'+esc(t('bandH'))+'">'+bands+'</div>'+
+    '<p class="small muted">'+t('bandNote')+(state.band===1?sp()+t('bandNote1'):'')+'</p></section>'+
+  '<section><h2>'+t('whoH')+'</h2><div class="roles">'+roles+'</div>'+
+    '<p class="small muted">'+t('whoNote')+'</p></section>'+
+  '<section><h2>'+t('cmpH')+'</h2>'+
+    '<p class="small muted">'+(got.length?t('answered',{list:whoList(got)}):t('noneYet'))+(got.length<2?sp()+t('needTwo'):'')+'</p>'+
+    '<div class="btnrow"><button class="btn" data-act="compare"'+(got.length<2?' disabled':'')+'>'+t('cmpBtn')+'</button>'+
+    (got.length?'<button class="btn ghost" data-act="reset">'+t(state.armed?'resetArm':'reset')+'</button>':'')+'</div></section>'+
+  '<section><h3>'+t('apartH')+'</h3>'+
+    '<p class="small muted">'+t('apartP')+'</p>'+
+    '<form class="codeform" data-form="code"><input id="svarkode" name="svarkode" type="text" dir="ltr" inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="H2-3425134253-7" aria-label="'+esc(t('codeAria'))+'">'+
+    '<button class="btn ghost" type="submit">'+t('addBtn')+'</button></form>'+msg+'</section>'+
+  '<section><span class="eyebrow">'+t('exLabel')+'</span><h2>'+t('exH')+'</h2>'+
+    '<p class="small muted">'+t('exP')+'</p>'+chart(EXAMPLE,false,CORE)+
+    '<div class="btnrow"><button class="btn ghost" data-act="example">'+t('exBtn')+'</button></div></section>';
+}
+
+function viewAsk(){
+  var r=state.role, s=seq(), it=s[state.step], last=state.step===s.length-1, d=D();
+  var tot=(r==='E'&&!state.more)?CORE:N;
+  var where=it.t==='q'?t('qOf',{n:it.i+1,t:tot}):(it.t==='pause'?t('pause'):t('lastQ'));
+  var dots='';
+  if(it.t==='q') for(var i=0;i<tot;i++) dots+='<i'+(i<=it.i?' class="on"':'')+'></i>';
+  var head='<div class="who">'+mk(r,true)+'<span>'+role(r).as+'<br>'+where+'</span><span class="steps" aria-hidden="true">'+dots+'</span></div>';
+
+  if(it.t==='pause'){
+    return '<section>'+head+'</section>'+
+      '<section><span class="eyebrow">'+t('pause')+'</span><h1>'+t('pauseH')+'</h1>'+
+      '<p>'+t('pauseP')+'</p>'+
+      '<div class="opts"><button class="opt" data-act="more" data-val="0"><span><b>'+t('stopT')+'</b><br><span class="hint">'+t('stopS')+'</span></span></button>'+
+      '<button class="opt" data-act="more" data-val="1"><span><b>'+t('moreT')+'</b><br><span class="hint">'+t('moreS')+'</span></span></button></div></section>'+
+      '<div class="btnrow"><button class="btn ghost" data-act="prev">'+t('back')+'</button></div>';
+  }
+  var body, cur;
+  if(it.t==='q'){
+    cur=state.draft[it.i];
+    var opts='';
+    for(var n=5;n>=1;n--){
+      opts+='<button class="opt" data-act="pick" data-val="'+n+'" aria-pressed="'+(cur===n)+'">'+wx(n,36)+'<span><b>'+d.scale[n-1][0]+'</b><br><span class="hint">'+d.scale[n-1][1]+'</span></span><span class="tick" aria-hidden="true">✓</span></button>';
+    }
+    opts+='<button class="opt plain" data-act="pick" data-val="0" aria-pressed="'+(cur===0)+'"><span>'+t(r==='E'?'noE':'noA')+'</span><span class="tick" aria-hidden="true">✓</span></button>';
+    body='<span class="eyebrow">'+area(it.i).n+'</span><h1>'+qText(it.i,r)+'</h1>'+
+      (r==='E'&&it.i===0?'<p class="small muted">'+t('kidIntro')+(state.band===1?sp()+t('readAloud'):'')+'</p>':'')+
+      '<div class="opts">'+opts+'</div>'+
+      (r==='E'?'<label class="keep" for="hold-privat"><input type="checkbox" id="hold-privat"'+(state.hide[it.i]?' checked':'')+'><span>'+t('keep')+'</span></label>':'');
+  } else {
+    cur=state.wishDraft;
+    var w='';
+    for(var k=1;k<=5;k++) w+='<button class="opt plain" data-act="pick" data-val="'+k+'" aria-pressed="'+(cur===k)+'"><span><b>'+d.wish[k-1][0]+'</b></span><span class="tick" aria-hidden="true">✓</span></button>';
+    w+='<button class="opt plain" data-act="pick" data-val="0" aria-pressed="'+(cur===0)+'"><span>'+t('wishNo')+'</span><span class="tick" aria-hidden="true">✓</span></button>';
+    body='<span class="eyebrow">'+t('wishE')+'</span><h1>'+t('wishH')+'</h1><div class="opts">'+w+'</div>';
+  }
+  var chosen=cur!==null&&cur!==undefined;
+  return '<section>'+head+'</section><section>'+body+'</section>'+
+    '<div class="btnrow"><button class="btn ghost" data-act="prev">'+t('back')+'</button><button class="btn" id="neste" data-act="next"'+(chosen?'':' disabled')+'>'+t(last?'finish':'next')+'</button></div>';
+}
+
+function viewDone(){
+  var r=state.role, got=answered();
+  var extra='';
+  if(r==='E'){
+    if(state.hidden) extra+='<p>'+(state.hidden===1?t('kept1'):t('keptN',{n:state.hidden}))+'</p>';
+    if(state.heavy) extra+='<div class="callout"><b>'+t('heavyH')+'</b><span>'+t('heavyP')+'</span></div>';
+  }
+  return ''+
+  '<section>'+mk(r,true)+'<h1>'+t('thanks')+'</h1>'+
+    '<p>'+t(r==='E'?'doneE':'doneA')+'</p>'+extra+'</section>'+
+  '<section><h3>'+t('codeH')+'</h3>'+
+    '<div class="codebox"><span class="code" id="kode" dir="ltr">'+state.code+'</span><button class="btn ghost" data-act="copy" id="kopier">'+t('copy')+'</button></div>'+
+    '<p class="small muted">'+t('codeP')+(r==='E'?sp()+t('codePE'):'')+'</p></section>'+
+  '<div class="btnrow"><button class="btn" data-act="home">'+t('home')+'</button>'+(got.length>=2?'<button class="btn ghost" data-act="compare">'+t('cmpBtn')+'</button>':'')+'</div>'+
+  (r!=='E'?adSlot('adultDone'):'');
+}
+
+function tipsHtml(A,list){
+  var r=state.tab, d=D();
+  var flagged=list.filter(function(a){return a.pri>=1&&a.kind!=='skjult';}).slice(0,3);
+  var li=flagged.map(function(a){return '<li><span class="eyebrow">'+area(a.i).n+'</span><span>'+tip(a.i,r)+'</span></li>';});
+  if(r!=='E'&&list.some(function(a){return a.hidden;})) li.push('<li><span class="eyebrow">'+t('keptTipH')+'</span><span>'+t('keptTipP')+'</span></li>');
+  d.stand[r].forEach(function(x){li.push('<li><span class="eyebrow">'+t('always')+'</span><span>'+fill(x)+'</span></li>');});
+  var tabs=ORDER.map(function(x){
+    return '<button class="tab" role="tab" id="tab-'+x+'" data-act="tab" data-role="'+x+'" aria-selected="'+(x===r)+'">'+mk(x)+role(x).tab+'</button>';
+  }).join('');
+  return '<h2>'+t('tipsH')+'</h2><div class="tabs" role="tablist" aria-label="'+esc(t('tipsH'))+'">'+tabs+'</div>'+
+    '<ul class="tips" role="tabpanel" aria-labelledby="tab-'+r+'">'+li.join('')+'</ul>'+
+    (r!=='E'?adSlot('adultTips'):'');
+}
+
+function viewResult(){
+  var A=state.example?EXAMPLE:state.ans, wish=state.example?EXAMPLE.wish:state.wish, d=D();
+  var got=ORDER.filter(function(r){return A[r];});
+  var list=[]; for(var i=0;i<N;i++) list.push(analyse(i,A));
+  var sorted=list.slice().sort(function(a,b){return b.pri-a.pri||a.i-b.i;});
+  var top=sorted[0];
+  var first;
+  if(top.pri>=3){
+    first='<section class="first"><span class="eyebrow">'+t('startHere')+'</span><h2>'+area(top.i).n+'</h2><p>'+explain(top)+'</p><p class="ask">'+area(top.i).ask+'</p></section>';
+  } else {
+    first='<section class="first"><span class="eyebrow">'+t('startHere')+'</span><h2>'+t('sameH')+'</h2><p>'+t('sameP')+'</p></section>';
+  }
+  var tv=[]; got.forEach(function(r){ if(A[r][TRYGG]>0) tv.push(A[r][TRYGG]); });
+  var unsafe=tv.length&&Math.min.apply(null,tv)<=2;
+  var safety=unsafe?'<div class="callout"><b>'+t('unsafeH')+'</b><span>'+t('unsafeP')+'</span></div>':'';
+  var head=forecast(A)+(top.pri>=3?sp()+t('fcTop',{a:area(top.i).n}):'');
+  return ''+
+  (state.example?'<p class="banner"><b>'+t('exBannerB')+'</b>'+sp()+t('exBannerT')+'</p>':'')+
+  '<section><span class="eyebrow">'+t('fcE')+'</span><h1>'+head+'</h1>'+
+    '<p class="muted">'+t('answered',{list:whoList(got)})+sp()+t('fcNote')+'</p>'+
+    (A.E&&wish?'<p><b>'+d.wish[wish-1][1]+'</b></p>':'')+'</section>'+
+  '<p class="banner">'+t('notDx')+'</p>'+
+  first+safety+
+  '<section><h2>'+t('areasH')+'</h2>'+chart(A,true)+'</section>'+
+  '<section id="tips">'+tipsHtml(A,sorted)+'</section>'+
+  '<section><h2>'+t('pathH')+'</h2><ol class="ladder">'+
+    d.path.map(function(p){return '<li><b>'+p[0]+'</b>'+sp()+p[1]+'</li>';}).join('')+
+  '</ol><p class="small muted">'+t('again')+'</p></section>'+
+  '<div class="btnrow"><button class="btn" data-act="home">'+t(state.example?'startOwn':'home')+'</button></div>';
+}
+
+var app=document.getElementById('app'), foot=document.getElementById('foot'), sel=document.getElementById('sprak'), brand=document.getElementById('brand');
+function renderFoot(){
+  var d=D();
+  foot.innerHTML=
+    '<section><h2>'+t('helpH')+'</h2><div class="help">'+
+      HELP_NUMS.map(function(n,i){return '<div><b dir="ltr">'+n+'</b><span>'+d.help[i]+'</span></div>';}).join('')+
+    '</div><p class="small muted">'+t('helpIntl')+' <a href="https://childhelplineinternational.org/helplines/" dir="ltr">childhelplineinternational.org</a></p></section>'+
+    '<section><h2>'+t('notsH')+'</h2><ul class="nots">'+d.nots.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul><div class="btnrow"><button class="btn ghost" data-act="terms">'+t('terms')+'</button></div></section>'+
+    '<p class="src">'+t('src')+' <span dir="ltr"><a href="https://www.udir.no/lk20/overordnet-del/3.-prinsipper-for-skolens-praksis/3.3-samarbeid-mellom-hjem-og-skole">Udir 3.3</a> · <a href="https://www.udir.no/regelverk-og-tilsyn/skole-og-opplaring/rundskriv-om-skolemiljo/6.-skolen-har-en-aktivitetsplikt">Udir § 12-4</a> · <a href="https://www.116111.no/">116111.no</a></span></p>';
+}
+function applyLang(){
+  var root=document.documentElement;
+  root.lang=state.lang==='zh'?'zh-Hans':state.lang;
+  root.dir=D().dir;
+  sel.value=state.lang;
+  sel.setAttribute('aria-label',t('lang'));
+  brand.setAttribute('aria-label','Tre blikk. '+t('home'));
+  renderFoot();
+}
+function render(keep){
+  var v=state.view;
+  app.innerHTML=v==='intro'?viewIntro():v==='ask'?viewAsk():v==='done'?viewDone():v==='result'?viewResult():viewHome();
+  if(!keep){ try{window.scrollTo(0,0); app.focus({preventScroll:true});}catch(e){} }
+}
+
+/* ---------- handlinger ---------- */
+function finish(){
+  var r=state.role, d=state.draft, arr=[];
+  for(var i=0;i<N;i++){
+    var asked=r!=='E'||i<CORE||state.more;
+    arr.push(asked?(state.hide[i]?0:d[i]):null);
+  }
+  state.ans[r]=arr;
+  if(r==='E'){
+    state.wish=state.wishDraft||0;
+    state.hidden=d.filter(function(x,i){return x>0&&state.hide[i];}).length;
+    state.heavy=d.some(function(x){return x===1;})||(d[TRYGG]>0&&d[TRYGG]<=2);
+  }
+  state.code=encode(r,state.band,arr,state.wish);
+  state.view='done';
+}
+function act(name,el){
+  if(name==='accept'){
+    if(state.ck[0]&&state.ck[1]){state.accepted=true; state.view='home'; render();}
+    return;
+  }
+  if(name==='terms'){state.accepted=false; state.ck=[false,false]; state.view='intro'; render(); return;}
+  if(!state.accepted) return;
+  if(name!=='reset') state.armed=false;
+  var it, i;
+  switch(name){
+    case 'home': state.view='home'; state.example=false; state.msg=null; render(); break;
+    case 'band':
+      state.band=Number(el.getAttribute('data-band')); render(true);
+      var bb=document.getElementById('trinn-'+state.band); if(bb) bb.focus();
+      break;
+    case 'start':
+      state.role=el.getAttribute('data-role'); state.step=0; state.more=false; state.wishDraft=null;
+      state.draft=[]; state.hide=[];
+      for(i=0;i<N;i++){state.draft.push(null); state.hide.push(false);}
+      state.view='ask'; state.msg=null; render(); break;
+    case 'pick':
+      var val=Number(el.getAttribute('data-val'));
+      it=seq()[state.step];
+      if(it.t==='q') state.draft[it.i]=val; else state.wishDraft=val;
+      Array.prototype.forEach.call(app.querySelectorAll('.opt'),function(b){b.setAttribute('aria-pressed',String(b===el));});
+      var nx=document.getElementById('neste'); if(nx) nx.disabled=false;
+      break;
+    case 'more':
+      state.more=el.getAttribute('data-val')==='1';
+      if(!state.more) for(i=CORE;i<N;i++){state.draft[i]=null; state.hide[i]=false;}
+      state.step++; render(); break;
+    case 'next':
+      if(state.step<seq().length-1){state.step++; render();} else {finish(); render();}
+      break;
+    case 'prev':
+      if(state.step>0){state.step--;} else {state.view='home';}
+      render(); break;
+    case 'compare': if(answered().length>=2){state.view='result'; state.example=false; state.tab='E'; render();} break;
+    case 'example': state.view='result'; state.example=true; state.tab='E'; render(); break;
+    case 'tab':
+      state.tab=el.getAttribute('data-role');
+      var A=state.example?EXAMPLE:state.ans, list=[];
+      for(i=0;i<N;i++) list.push(analyse(i,A));
+      list.sort(function(a,b){return b.pri-a.pri||a.i-b.i;});
+      document.getElementById('tips').innerHTML=tipsHtml(A,list);
+      var tb=document.getElementById('tab-'+state.tab); if(tb) tb.focus();
+      break;
+    case 'reset':
+      if(state.armed){state.ans={E:null,H:null,S:null}; state.wish=0; state.armed=false; state.msg=null;}
+      else state.armed=true;
+      render(true); break;
+    case 'copy':
+      var done=function(){el.textContent=t('copied');};
+      var fallback=function(){
+        try{var rg=document.createRange(); rg.selectNodeContents(document.getElementById('kode')); var s=window.getSelection(); s.removeAllRanges(); s.addRange(rg);}catch(e){}
+        el.textContent=t('copySel');
+      };
+      try{navigator.clipboard.writeText(state.code).then(done,fallback);}catch(e){fallback();}
+      break;
+  }
+}
+document.addEventListener('click',function(ev){
+  var el=ev.target.closest&&ev.target.closest('[data-act]');
+  if(!el||el.disabled) return;
+  act(el.getAttribute('data-act'),el);
+});
+document.addEventListener('change',function(ev){
+  var x=ev.target; if(!x) return;
+  if(x.id==='hold-privat'&&state.view==='ask'){
+    var it=seq()[state.step];
+    if(it&&it.t==='q') state.hide[it.i]=x.checked;
+  }
+  if(x.id==='vilkar-1'||x.id==='vilkar-2'){
+    state.ck[x.id==='vilkar-1'?0:1]=x.checked;
+    var g=document.getElementById('godta'); if(g) g.disabled=!(state.ck[0]&&state.ck[1]);
+  }
+  if(x.id==='sprak'&&L[x.value]){
+    state.lang=x.value; state.msg=null;
+    try{localStorage.setItem('tb-lang',state.lang);}catch(e){}
+    applyLang(); render(true);
+  }
+});
+document.addEventListener('submit',function(ev){
+  ev.preventDefault();
+  var inp=document.getElementById('svarkode'); if(!inp) return;
+  var res=decode(inp.value);
+  if(!res) state.msg=['bad',t('codeBad')];
+  else {
+    var note='';
+    if(!answered().length) state.band=res.band;
+    else if(res.band!==state.band) note=sp()+t('codeBand',{band:D().bands[res.band-1]});
+    state.ans[res.role]=res.arr;
+    if(res.role==='E') state.wish=res.wish;
+    state.msg=['ok',t('codeOk',{who:role(res.role).l})+note];
+  }
+  state.armed=false;
+  render(true);
+});
+
+function start(data){
+  try{
+    if(data&&data.ans&&data.view&&data.band){ for(var k in data){ if(Object.prototype.hasOwnProperty.call(state,k)) state[k]=data[k]; } }
+    if(!L[state.lang]) state.lang='nb';
+    if(!state.accepted) state.view='intro';
+  }catch(e){}
+  sel.innerHTML=LANG_ORDER.map(function(c){return '<option value="'+c+'" lang="'+(c==='zh'?'zh-Hans':c)+'">'+L[c].name+'</option>';}).join('');
+  applyLang();
+  render(true);
+}
+var hot=window.claude&&window.claude.hot;
+try{ if(hot&&hot.snapshot) hot.snapshot(function(){return state;}); }catch(e){}
+if(hot&&hot.ready) hot.ready(start); else start((hot&&hot.data)||{});
+
+})();
+</script>
+</body>
+</html>
