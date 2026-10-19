@@ -443,6 +443,37 @@ svg .arm{transform-box:view-box}
 .ad-face.wc-1{background:#E9DFFB}.ad-face.wc-2{background:#DCE8FD}.ad-face.wc-3{background:#ECEFF3}.ad-face.wc-4{background:#D9F4E5}.ad-face.wc-5{background:#FFF0C2}
 .ad-face{color:#1D1838}
 .adetail > .chip,.ideas .trykid{align-self:flex-start}
+
+/* ---------- forsiden som dashbord ---------- */
+.dash{gap:16px}
+.dash-h{font-size:clamp(24px,6.4vw,34px);line-height:1.12}
+.dash-band,.dash-who{display:flex;flex-direction:column;gap:8px}
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.tile{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0;padding:14px 6px 12px;border-radius:18px;border:2px solid var(--line);background:var(--paper);color:var(--ink);font:inherit;text-align:center;cursor:pointer}
+.tile:hover{border-color:var(--ink)}
+.tile:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.tile b{font-family:var(--font-display);font-size:18px;line-height:1.15}
+.tile .tsub{font-size:12.5px;color:var(--ink-2);line-height:1.2}
+.tile .tstat{margin-top:4px;padding:2px 8px;border-radius:999px;font-size:12px;font-weight:700;background:var(--wash);color:var(--ink-2)}
+.tile.done{border-color:var(--school)}
+.tile.done .tstat{background:var(--school);color:#FFFFFF}
+.dash-cmp{width:100%;min-height:56px;font-size:18px}
+.dash-need{margin-top:-8px;text-align:center}
+.dash-more{display:flex;flex-wrap:wrap;gap:8px}
+.dash-more .btn{flex:1 1 30%;min-width:0;padding-inline:10px;font-size:14.5px}
+.dash-reset{text-align:center;margin:0}
+.linkbtn{background:none;border:0;padding:4px;color:var(--ink-2);font:inherit;font-size:14px;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.foot-mini{padding:12px 14px;border-radius:14px;background:var(--wash);gap:4px}
+.foot-mini p{margin:0;font-size:15px;line-height:1.4}
+
+.consent{display:flex;flex-direction:column;gap:6px;padding:12px 14px;border-radius:16px;border:2px solid var(--sun);background:var(--paper)}
+.consent.ok{border-color:var(--line)}
+.consent label{display:flex;gap:10px;align-items:flex-start;cursor:pointer;font-weight:700;line-height:1.35}
+.consent input{flex:none;width:22px;height:22px;margin-top:1px;accent-color:var(--school)}
+.consent .linkbtn{align-self:flex-start;padding:2px 0 0 32px}
+.dash-lock{margin:-6px 0 0;font-weight:700;color:var(--ink-2)}
+.dash.locked .tiles,.dash.locked .dash-band,.dash.locked .dash-more .btn:not([data-sub="about"]){opacity:.45}
+.tile[disabled],.segb[disabled]{cursor:not-allowed}
 </style>
 </head>
 <body>
@@ -801,6 +832,30 @@ resHome:"Hjemmet:",
 resPrev:"Forrige",
 resNext:"Neste",
 resKidPicked:"Eleven valgte denne"
+});
+Object.assign(L.nb.ui,{
+hmBand:"Trinn",
+hmWho:"Hvem svarer?",
+hmE:"Eleven",hmH:"Hjemmet",hmS:"Skolen",
+hmEsub:"6 + 6 spørsmål",hmAsub:"12 spørsmål",
+hmDone:"Har svart",hmNot:"Ikke svart",
+hmFirst:"La eleven svare først, og alene.",
+hmCmp:"Se sammenligningen",
+hmNeed:"Minst to må ha svart.",
+hmCode:"Legg inn svarkode",
+hmEx:"Se et eksempel",
+hmAbout:"Slik virker det",
+hmHelp:"Trenger du noen å snakke med?",
+hmHelpP:"Ring {a}, gratis og åpent hele døgnet. Ved akutt fare: {b}.",
+hmHelpMore:"Flere numre",
+hmBack:"Tilbake"
+});
+Object.assign(L.nb.ui,{
+hmAgree:"Jeg er voksen, og jeg har lest og godtar vilkårene for bruk.",
+hmRead:"Les vilkårene",
+hmLocked:"Kryss av for vilkårene for å starte.",
+hmTermsBtn:"Godta og gå tilbake",
+hmTermsC2:"Ved å godta bekrefter du også at du ikke kan bruke Tre blikk, eller noe den viser, mot appen, utviklerne eller eierne."
 });
 
 L.en={
@@ -3205,7 +3260,7 @@ function pickLang(){
   return 'nb';
 }
 
-var state={view:'intro',accepted:false,ck:[false,false],game:false,avatar:0,warm:0,fun:null,crown:false,mscore:[0,0,0],mphase:['','ready','ready'],lvlup:false,bounce:false,lang:pickLang(),band:2,ans:{E:null,H:null,S:null},wish:0,role:null,step:0,more:false,draft:[],hide:[],feel:[],helpDraft:null,tryS:null,tryH:null,rsub:null,rarea:0,wishDraft:null,
+var state={view:'home',accepted:false,ck:[false,false],game:false,avatar:0,warm:0,fun:null,crown:false,mscore:[0,0,0],mphase:['','ready','ready'],lvlup:false,bounce:false,lang:pickLang(),band:2,ans:{E:null,H:null,S:null},wish:0,role:null,step:0,more:false,draft:[],hide:[],feel:[],hsub:null,helpDraft:null,tryS:null,tryH:null,rsub:null,rarea:0,wishDraft:null,
   code:'',heavy:false,hidden:0,example:false,tab:'E',msg:null,armed:false};
 
 function D(){return L[state.lang]||L.nb;}
@@ -3551,36 +3606,44 @@ function viewIntro(){
 }
 function viewHome(){
   var got=answered(), d=D();
-  var bands='';
-  for(var b=1;b<=3;b++) bands+='<button class="segb" id="trinn-'+b+'" data-act="band" data-band="'+b+'" aria-pressed="'+(state.band===b)+'">'+d.bands[b-1]+'</button>';
-  var roles=ORDER.map(function(r){
-    return '<button class="role" data-act="start" data-role="'+r+'">'+mk(r,true)+'<span><b>'+role(r).you+'</b><span class="sub">'+role(r).sub+'</span>'+
-      (state.ans[r]?'<span class="done">'+t('roleDone')+'</span>':'')+'</span></button>';
-  }).join('');
-  var sampleA=analyse(5,EXAMPLE);
   var msg=state.msg?'<p class="msg '+state.msg[0]+'" role="status">'+state.msg[1]+'</p>':'';
+  var back='<div class="btnrow"><button class="btn ghost" data-act="hsub" data-sub="">← '+t('hmBack')+'</button></div>';
+  if(state.hsub==='terms') return back+'<section><span class="eyebrow">'+t('terms')+'</span><h1>'+t('introH')+'</h1></section>'+
+    '<ul class="terms">'+d.intro.map(function(p){return '<li><b>'+p[0]+'</b><span>'+p[1]+'</span></li>';}).join('')+'</ul>'+
+    '<p class="small">'+t('hmTermsC2')+'</p><p class="small muted">'+t('introKid')+'</p>'+
+    '<div class="btnrow">'+(state.accepted?'':'<button class="btn" data-act="agree">'+t('hmTermsBtn')+'</button>')+'<button class="btn ghost" data-act="hsub" data-sub="">← '+t('hmBack')+'</button></div>';
+  if(state.hsub==='code'&&state.accepted) return back+'<section><h1>'+t('hmCode')+'</h1><p>'+t('apartP')+'</p>'+
+    '<form class="codeform" data-form="code"><input id="svarkode" name="svarkode" type="text" dir="ltr" inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="H5-342513425312-7" aria-label="'+esc(t('codeAria'))+'">'+
+    '<button class="btn" type="submit">'+t('addBtn')+'</button></form>'+msg+'</section>';
+  if(state.hsub==='about') return back+'<section class="hero"><h1>'+t('h1')+'</h1><p class="lead">'+t('lead')+'</p>'+
+    '<section class="sample"><span class="eyebrow">'+t('exLabel')+'</span>'+wtable(EXAMPLE,false,[5])+'<p class="small muted">'+t('sampleCap')+'</p></section></section>'+
+    '<section><p class="small muted">'+t('bandNote')+sp()+t('bandNote1')+'</p><p class="small muted">'+t('whoNote')+'</p></section>'+back;
+  var bands='';
+  for(var b=1;b<=3;b++) bands+='<button class="segb" id="trinn-'+b+'" data-act="band" data-band="'+b+'" aria-pressed="'+(state.band===b)+'"'+(state.accepted?'':' disabled')+'>'+d.bands[b-1]+'</button>';
+  var tiles=ORDER.map(function(r){
+    var done=!!state.ans[r];
+    return '<button class="tile'+(done?' done':'')+'" data-act="start" data-role="'+r+'"'+(state.accepted?'':' disabled')+' aria-label="'+esc(role(r).you+'. '+(done?t('hmDone'):t('hmNot')))+'">'+
+      mk(r,true)+'<b>'+t('hm'+r)+'</b><span class="tsub">'+t(r==='E'?'hmEsub':'hmAsub')+'</span>'+
+      '<span class="tstat">'+(done?'✓ '+t('hmDone'):t('hmNot'))+'</span></button>';
+  }).join('');
+  var ok=state.accepted, dis=ok?'':' disabled';
+  var consent='<div class="consent'+(ok?' ok':'')+'"><label for="vilkar"><input type="checkbox" id="vilkar"'+(ok?' checked':'')+'><span>'+t('hmAgree')+'</span></label>'+
+    '<button class="linkbtn" data-act="hsub" data-sub="terms">'+t('hmRead')+'</button></div>';
   return ''+
-  '<section class="hero">'+
-    '<h1>'+t('h1')+'</h1>'+
-    '<p class="lead">'+t('lead')+'</p>'+
-    '<section class="sample"><span class="eyebrow">'+t('exLabel')+'</span>'+wtable(EXAMPLE,false,[5])+
-    '<p class="small muted">'+t('sampleCap')+'</p></section>'+
-  '</section>'+
-  '<section><h2>'+t('bandH')+'</h2><div class="seg" role="group" aria-label="'+esc(t('bandH'))+'">'+bands+'</div>'+
-    '<p class="small muted">'+t('bandNote')+(state.band===1?sp()+t('bandNote1'):'')+'</p></section>'+
-  '<section><h2>'+t('whoH')+'</h2><div class="roles">'+roles+'</div>'+
-    '<p class="small muted">'+t('whoNote')+'</p></section>'+
-  '<section><h2>'+t('cmpH')+'</h2>'+
-    '<p class="small muted">'+(got.length?t('answered',{list:whoList(got)}):t('noneYet'))+(got.length<2?sp()+t('needTwo'):'')+'</p>'+
-    '<div class="btnrow"><button class="btn" data-act="compare"'+(got.length<2?' disabled':'')+'>'+t('cmpBtn')+'</button>'+
-    (got.length?'<button class="btn ghost" data-act="reset">'+t(state.armed?'resetArm':'reset')+'</button>':'')+'</div></section>'+
-  '<section><h3>'+t('apartH')+'</h3>'+
-    '<p class="small muted">'+t('apartP')+'</p>'+
-    '<form class="codeform" data-form="code"><input id="svarkode" name="svarkode" type="text" dir="ltr" inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="H2-3425134253-7" aria-label="'+esc(t('codeAria'))+'">'+
-    '<button class="btn ghost" type="submit">'+t('addBtn')+'</button></form>'+msg+'</section>'+
-  '<section><span class="eyebrow">'+t('exLabel')+'</span><h2>'+t('exH')+'</h2>'+
-    '<p class="small muted">'+t('exP')+'</p>'+chart(EXAMPLE,false,CORE)+
-    '<div class="btnrow"><button class="btn ghost" data-act="example">'+t('exBtn')+'</button></div></section>';
+  '<section class="dash'+(ok?'':' locked')+'"><h1 class="dash-h">'+t('h1')+'</h1>'+consent+
+    (ok?'':'<p class="small dash-lock" role="status">'+t('hmLocked')+'</p>')+
+    '<div class="dash-band"><span class="eyebrow">'+t('hmBand')+'</span><div class="seg" role="group" aria-label="'+esc(t('bandH'))+'">'+bands+'</div></div>'+
+    '<div class="dash-who"><span class="eyebrow">'+t('hmWho')+'</span><div class="tiles">'+tiles+'</div><p class="small muted">'+t('hmFirst')+'</p></div>'+
+    msg+
+    '<button class="btn dash-cmp" data-act="compare"'+(got.length<2||!ok?' disabled':'')+'>'+t('hmCmp')+'</button>'+
+    (got.length<2?'<p class="small muted dash-need">'+t('hmNeed')+'</p>':'')+
+    '<div class="dash-more">'+
+      '<button class="btn ghost" data-act="hsub" data-sub="code"'+dis+'>'+t('hmCode')+'</button>'+
+      '<button class="btn ghost" data-act="example"'+dis+'>'+t('hmEx')+'</button>'+
+      '<button class="btn ghost" data-act="hsub" data-sub="about">'+t('hmAbout')+'</button>'+
+    '</div>'+
+    (got.length?'<p class="dash-reset"><button class="linkbtn" data-act="reset">'+t(state.armed?'resetArm':'reset')+'</button></p>':'')+
+  '</section>';
 }
 
 function viewAsk(){
@@ -3744,6 +3807,11 @@ function areaDetail(A,i){
 var app=document.getElementById('app'), foot=document.getElementById('foot'), sel=document.getElementById('sprak'), brand=document.getElementById('brand');
 function renderFoot(){
   var d=D();
+  if(state.view==='home'&&!state.hsub){
+    foot.innerHTML='<section class="foot-mini"><p><b>'+t('hmHelp')+'</b> '+t('hmHelpP',{a:'<b dir="ltr">116 111</b>',b:'<b dir="ltr">113</b>'})+'</p>'+
+      '<button class="linkbtn" data-act="hsub" data-sub="about">'+t('hmHelpMore')+'</button></section>';
+    return;
+  }
   foot.innerHTML=
     '<section><h2>'+t('helpH')+'</h2><div class="help">'+
       HELP_NUMS.map(function(n,i){return '<div><b dir="ltr">'+n+'</b><span>'+d.help[i]+'</span></div>';}).join('')+
@@ -3763,6 +3831,7 @@ function applyLang(){
 function render(keep){
   var v=state.view;
   app.innerHTML=v==='intro'?viewIntro():v==='ask'?viewAsk():v==='done'?viewDone():v==='result'?viewResult():viewHome();
+  renderFoot();
   document.documentElement.classList.toggle('kid',!!(state.game&&state.role==='E'&&(v==='ask'||v==='done')));
   state.lvlup=false; state.bounce=false;
   gameAfter();
@@ -3789,16 +3858,20 @@ function finish(){
 }
 function act(name,el){
   if(name==='accept'){
-    if(state.ck[0]&&state.ck[1]){state.accepted=true; state.view='home'; render();}
+    if(state.ck[0]&&state.ck[1]){state.accepted=true; state.view='home'; state.hsub=null; render();}
     return;
   }
-  if(name==='terms'){state.accepted=false; state.ck=[false,false]; state.view='intro'; render(); return;}
+  if(name==='terms'){state.view='home'; state.hsub='terms'; state.example=false; render(); return;}
+  if(name==='hsub'&&!state.accepted){state.hsub=el.getAttribute('data-sub')||null; render(); return;}
+  if(name==='agree'){state.accepted=true; state.hsub=null; render(); return;}
+  if(name==='sound'){toggleSound(); return;}
   if(!state.accepted) return;
   if(name!=='mstart') stopMini();
   if(name!=='reset') state.armed=false;
   var it, i;
   switch(name){
-    case 'home': state.view='home'; state.example=false; state.msg=null; render(); break;
+    case 'home': state.view='home'; state.hsub=null; state.example=false; state.msg=null; render(); break;
+    case 'hsub': state.hsub=el.getAttribute('data-sub')||null; if(!state.hsub) state.msg=null; render(); break;
     case 'band':
       state.band=Number(el.getAttribute('data-band')); render(true);
       var bb=document.getElementById('trinn-'+state.band); if(bb) bb.focus();
@@ -3902,6 +3975,7 @@ document.addEventListener('change',function(ev){
     var A=state.example?EXAMPLE:state.ans, fa=focusArea(A.E), av=document.getElementById('avtale');
     if(av&&fa>=0) av.textContent=dealText(fa,A.T||0);
   }
+  if(x.id==='vilkar'){ state.accepted=x.checked; render(true); var vk=document.getElementById('vilkar'); if(vk) vk.focus(); }
   if(x.id==='vilkar-1'||x.id==='vilkar-2'){
     state.ck[x.id==='vilkar-1'?0:1]=x.checked;
     var g=document.getElementById('godta'); if(g) g.disabled=!(state.ck[0]&&state.ck[1]);
@@ -3923,7 +3997,7 @@ document.addEventListener('submit',function(ev){
     else if(res.band!==state.band) note=sp()+t('codeBand',{band:D().bands[res.band-1]});
     state.ans[res.role]=res.arr;
     if(res.role==='E'){ state.wish=res.wish; state.ans.F=res.feel; state.ans.T=res.help; }
-    state.msg=['ok',t('codeOk',{who:role(res.role).l})+note];
+    state.msg=['ok',t('codeOk',{who:role(res.role).l})+note]; state.hsub=null;
   }
   state.armed=false;
   render(true);
@@ -3933,7 +4007,7 @@ function start(data){
   try{
     if(data&&data.ans&&data.view&&data.band){ for(var k in data){ if(Object.prototype.hasOwnProperty.call(state,k)) state[k]=data[k]; } }
     if(LANG_ORDER.indexOf(state.lang)<0) state.lang='nb';
-    if(!state.accepted) state.view='intro';
+    if(!state.accepted) state.view='home';
   }catch(e){}
   if(LANG_ORDER.length<2){ var lp=sel.parentNode; if(lp) lp.hidden=true; }
   sel.innerHTML=LANG_ORDER.map(function(c){return '<option value="'+c+'" lang="'+(c==='zh'?'zh-Hans':c)+'">'+L[c].name+'</option>';}).join('');
